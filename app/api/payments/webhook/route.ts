@@ -12,25 +12,30 @@ export async function POST(req: NextRequest) {
 
     const mpData = await mpPayment.get({ id: data.id })
 
-    if (!mpData.preference_id) return NextResponse.json({ ok: true })
+    // El SDK v2 de MP devuelve los datos directamente
+    const preferenceId = (mpData as any).preference_id
+    const mpStatus = (mpData as any).status
+    const mpStatusDetail = (mpData as any).status_detail
+
+    if (!preferenceId) return NextResponse.json({ ok: true })
 
     const payment = await prisma.payment.findUnique({
-      where: { mpPreferenceId: mpData.preference_id },
+      where: { mpPreferenceId: preferenceId },
     })
 
     if (!payment) return NextResponse.json({ ok: true })
 
     const status =
-      mpData.status === 'approved' ? 'APPROVED' :
-      mpData.status === 'rejected' ? 'REJECTED' : 'PENDING'
+      mpStatus === 'approved' ? 'APPROVED' :
+      mpStatus === 'rejected' ? 'REJECTED' : 'PENDING'
 
     await prisma.$transaction([
       prisma.payment.update({
         where: { id: payment.id },
         data: {
           mpPaymentId: String(data.id),
-          mpStatus: mpData.status,
-          mpStatusDetail: mpData.status_detail,
+          mpStatus,
+          mpStatusDetail,
           status,
           paidAt: status === 'APPROVED' ? new Date() : undefined,
         },
@@ -42,8 +47,6 @@ export async function POST(req: NextRequest) {
           })]
         : []),
     ])
-
-    // TODO: disparar email/SMS de confirmación con Resend/Twilio
 
     return NextResponse.json({ ok: true })
   } catch (err) {
