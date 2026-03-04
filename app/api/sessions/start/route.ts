@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Generar token personal
-  const token = await createDailyToken(roomName!, session.user.id, isTherapist)
+  const token = await createDailyToken(roomName!, session.user.id as string, isTherapist)
 
   // Marcar quien se unió
   await prisma.session.updateMany({

@@ -30,9 +30,9 @@ export async function POST(req: NextRequest) {
 
   await prisma.payment.create({
     data: {
-      patientId: session.user.id,
+      patientId: session.user.id as string,
       appointmentId,
-      mpPreferenceId: preference.id,
+      mpPreferenceId: preference.id ?? null,
       amount: price,
       currency: 'ARS',
       paymentType: 'SINGLE_SESSION',
