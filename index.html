@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guía de Prompting para Claude</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #1a1a2e;
+      --sage: #4a7c59;
+      --sage-light: #7ab893;
+      --cream: #f5f0e8;
+      --warm: #e8dcc8;
+      --gold: #c9a84c;
+      --mist: #e2ede6;
+      --text: #2d2d2d;
+      --text-muted: #6b7280;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--ink);
+      color: #fff;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+      min-height: 340px;
+      display: flex;
+      align-items: center;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 80% 50%, rgba(74,124,89,0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 10% 80%, rgba(201,168,76,0.15) 0%, transparent 60%);
+    }
+
+    .header-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 64px 32px;
+    }
+
+    .header-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--sage-light);
+      border: 1px solid var(--sage-light);
+      border-radius: 2px;
+      padding: 4px 12px;
+      margin-bottom: 24px;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+      color: #fff;
+      max-width: 680px;
+      margin-bottom: 20px;
+    }
+
+    header p {
+      font-size: 1.05rem;
+      color: rgba(255,255,255,0.65);
+      max-width: 540px;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: #fff;
+      border-bottom: 1px solid var(--warm);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-inner {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 32px;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+    }
+
+    .nav-inner a {
+      display: inline-block;
+      padding: 16px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .nav-inner a:hover {
+      color: var(--sage);
+      border-bottom-color: var(--sage);
+    }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 60px 32px 100px;
+    }
+
+    /* ── SECTION HEADINGS ── */
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.9rem;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      border-bottom: 1px solid var(--warm);
+      padding-bottom: 20px;
+    }
+
+    section { margin-bottom: 72px; }
+
+    /* ── TIP CARDS ── */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .tip-card {
+      background: #fff;
+      border: 1px solid var(--warm);
+      border-radius: 8px;
+      padding: 28px 26px;
+      transition: box-shadow 0.25s, transform 0.25s;
+    }
+
+    .tip-card:hover {
+      box-shadow: 0 8px 30px rgba(26,26,46,0.09);
+      transform: translateY(-3px);
+    }
+
+    .tip-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: var(--mist);
+      color: var(--sage);
+      border-radius: 50%;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .tip-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+
+    .tip-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ── PROMPT COMPARISON ── */
+    .comparison {
+      background: #fff;
+      border: 1px solid var(--warm);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .comparison-header {
+      background: var(--mist);
+      padding: 14px 24px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      color: var(--sage);
+      border-bottom: 1px solid var(--warm);
+    }
+
+    .comparison-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media (max-width: 600px) {
+      .comparison-body { grid-template-columns: 1fr; }
+    }
+
+    .prompt-bad, .prompt-good {
+      padding: 24px;
+    }
+
+    .prompt-bad { border-right: 1px solid var(--warm); }
+
+    .prompt-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .prompt-label.bad { color: #c0392b; }
+    .prompt-label.good { color: var(--sage); }
+
+    .prompt-label::before {
+      content: '';
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+
+    .prompt-label.bad::before { background: #c0392b; }
+    .prompt-label.good::before { background: var(--sage); }
+
+    .prompt-text {
+      font-family: 'DM Sans', monospace;
+      font-size: 0.875rem;
+      color: var(--text);
+      background: var(--cream);
+      border: 1px solid var(--warm);
+      border-radius: 6px;
+      padding: 14px 16px;
+      line-height: 1.6;
+    }
+
+    .why-better {
+      margin-top: 14px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding-left: 12px;
+      border-left: 3px solid var(--sage-light);
+      line-height: 1.6;
+    }
+
+    /* ── ACCORDION ── */
+    .accordion {
+      border: 1px solid var(--warm);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px;
+      background: #fff;
+    }
+
+    .accordion summary {
+      padding: 18px 24px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 0.97rem;
+      color: var(--ink);
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    .accordion summary:hover { background: var(--mist); }
+
+    .accordion summary::after {
+      content: '+';
+      font-size: 1.2rem;
+      color: var(--sage);
+      font-weight: 300;
+      flex-shrink: 0;
+      transition: transform 0.2s;
+    }
+
+    .accordion[open] summary::after { transform: rotate(45deg); }
+
+    .accordion-body {
+      padding: 0 24px 22px;
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .accordion-body ul {
+      padding-left: 20px;
+      margin-top: 8px;
+    }
+
+    .accordion-body li { margin-bottom: 6px; }
+
+    /* ── CALLOUT ── */
+    .callout {
+      background: var(--mist);
+      border-left: 4px solid var(--sage);
+      border-radius: 0 8px 8px 0;
+      padding: 20px 24px;
+      margin: 28px 0;
+      font-size: 0.93rem;
+      color: var(--text);
+    }
+
+    .callout strong { color: var(--sage); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 40px 32px;
+      font-size: 0.85rem;
+    }
+
+    footer span { color: var(--sage-light); }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="header-tag">Documentación</div>
+    <h1>Guía de Prompting<br />para Claude</h1>
+    <p>Principios, técnicas y ejemplos para obtener respuestas más precisas, creativas y útiles.</p>
+  </div>
+</header>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#general">Consejos Generales</a>
+    <a href="#contenido">Creación de Contenido</a>
+    <a href="#documentos">Documentos y Q&A</a>
+    <a href="#datos">Análisis de Datos</a>
+    <a href="#brainstorming">Brainstorming</a>
+    <a href="#troubleshooting">Solución de Problemas</a>
+    <a href="#ejemplos">Ejemplos Completos</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- GENERAL TIPS -->
+  <section id="general">
+    <h2 class="section-title">Consejos Generales</h2>
+    <p class="section-subtitle">Principios fundamentales para formular prompts efectivos con Claude.</p>
+
+    <div class="tips-grid">
+      <div class="tip-card">
+        <div class="tip-number">1</div>
+        <h3>Sé claro y específico</h3>
+        <p>Indica tu tarea al inicio. Proporciona contexto y divide tareas complejas en pasos manejables.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-number">2</div>
+        <h3>Usa ejemplos</h3>
+        <p>Muestra el formato o estilo deseado. Un buen ejemplo vale más que mil descripciones.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-number">3</div>
+        <h3>Estimula el razonamiento</h3>
+        <p>Pide a Claude que "piense paso a paso" en tareas complejas para obtener respuestas más precisas.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-number">4</div>
+        <h3>Refinamiento iterativo</h3>
+        <p>Si la primera respuesta no es perfecta, pide ajustes específicos. La colaboración mejora los resultados.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-number">5</div>
+        <h3>Aprovecha el conocimiento</h3>
+        <p>Claude tiene amplio conocimiento. Incluye contexto relevante para obtener respuestas dirigidas.</p>
+      </div>
+      <div class="tip-card">
+        <div class="tip-number">6</div>
+        <h3>Usa role-playing</h3>
+        <p>Pide a Claude que adopte un rol específico para explorar perspectivas y obtener análisis más ricos.</p>
+      </div>
+    </div>
+
+    <!-- Example 1 -->
+    <div style="margin-top:40px;">
+      <div class="comparison">
+        <div class="comparison-header">Ejemplo — Ser claro y específico</div>
+        <div class="comparison-body">
+          <div class="prompt-bad">
+            <div class="prompt-label bad">Prompt débil</div>
+            <div class="prompt-text">"Ayúdame con una presentación."</div>
+          </div>
+          <div class="prompt-good">
+            <div class="prompt-label good">Prompt efectivo</div>
+            <div class="prompt-text">"Necesito crear una presentación de 10 diapositivas para nuestra reunión de ventas trimestral. Debe cubrir el rendimiento de ventas del Q2, los productos más vendidos y los objetivos de ventas para el Q3. Proporciona un esquema con los puntos clave para cada diapositiva."</div>
+            <div class="why-better">El buen prompt especifica el número de diapositivas, el propósito y los temas clave a cubrir.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="comparison">
+        <div class="comparison-header">Ejemplo — Role-playing</div>
+        <div class="comparison-body">
+          <div class="prompt-bad">
+            <div class="prompt-label bad">Prompt débil</div>
+            <div class="prompt-text">"Ayúdame a prepararme para una negociación."</div>
+          </div>
+          <div class="prompt-good">
+            <div class="prompt-label good">Prompt efectivo</div>
+            <div class="prompt-text">"Eres un proveedor de telas para mi empresa de mochilas. Me estoy preparando para negociar una reducción de precios del 10%. Como proveedor, proporciona: 1) Tres posibles objeciones, 2) Un contraargumento para cada una, 3) Dos propuestas alternativas. Luego cambia de rol y aconseja cómo abordar mejor esta negociación como comprador."</div>
+            <div class="why-better">El role-playing permite explorar múltiples perspectivas y enriquece el análisis.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTENT CREATION -->
+  <section id="contenido">
+    <h2 class="section-title">Creación de Contenido</h2>
+    <p class="section-subtitle">Técnicas para generar contenido de alta calidad adaptado a tu audiencia.</p>
+
+    <details class="accordion">
+      <summary>1. Especifica tu audiencia</summary>
+      <div class="accordion-body">
+        <p>Decirle a Claude quién leerá el contenido cambia completamente el resultado. Incluye nivel de conocimiento, intereses y contexto del lector.</p>
+        <ul>
+          <li>¿Es técnico o no técnico?</li>
+          <li>¿Qué edad o industria?</li>
+          <li>¿Qué problema están tratando de resolver?</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>2. Define el tono y estilo</summary>
+      <div class="accordion-body">
+        <p>Describe el tono deseado: profesional, casual, humorístico, inspirador. Si tienes una guía de estilo de marca, menciona los puntos clave.</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>3. Define la estructura de salida</summary>
+      <div class="accordion-body">
+        <p>Proporciona un esquema básico o lista de puntos a cubrir. Indica longitud deseada, número de secciones y cualquier elemento específico como llamadas a la acción.</p>
+      </div>
+    </details>
+
+    <div class="comparison" style="margin-top:28px;">
+      <div class="comparison-header">Ejemplo — Descripción de producto</div>
+      <div class="comparison-body">
+        <div class="prompt-bad">
+          <div class="prompt-label bad">Prompt débil</div>
+          <div class="prompt-text">"Escribe una descripción de producto."</div>
+        </div>
+        <div class="prompt-good">
+          <div class="prompt-label good">Prompt efectivo</div>
+          <div class="prompt-text">"Escribe una descripción para nuestra nueva silla de oficina ergonómica. Tono profesional pero atractivo. La voz de la marca es amigable, innovadora y orientada a la salud. Incluye: 1) Características ergonómicas clave, 2) Beneficios para la salud y productividad, 3) Mención breve de materiales sostenibles, 4) Llamada a la acción. Aprox. 200 palabras."</div>
+          <div class="why-better">Proporciona tono, estilo y elementos específicos para incluir en la descripción.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOCUMENTS Q&A -->
+  <section id="documentos">
+    <h2 class="section-title">Resumen de Documentos y Q&A</h2>
+    <p class="section-subtitle">Cómo extraer el máximo valor de documentos adjuntos.</p>
+
+    <div class="callout">
+      <strong>Consejo clave:</strong> Siempre referencia los documentos por nombre, pide citas específicas y define el formato del resumen (número de párrafos, secciones).
+    </div>
+
+    <div class="comparison">
+      <div class="comparison-header">Ejemplo — Resumen de informe</div>
+      <div class="comparison-body">
+        <div class="prompt-bad">
+          <div class="prompt-label bad">Prompt débil</div>
+          <div class="prompt-text">"Resume este informe para mí."</div>
+        </div>
+        <div class="prompt-good">
+          <div class="prompt-label good">Prompt efectivo</div>
+          <div class="prompt-text">"He adjuntado un informe de 50 páginas llamado 'Tech Industry Trends 2023'. Proporciona un resumen de 2 párrafos enfocado en IA y machine learning. Luego responde: 1) ¿Cuáles son las 3 principales aplicaciones de IA en negocios este año? 2) ¿Cómo impacta el ML en los roles laborales? 3) ¿Qué riesgos menciona el informe sobre adopción de IA? Cita secciones o números de página específicos."</div>
+          <div class="why-better">Especifica el enfoque del resumen, preguntas concretas y pide citas para respuestas más verificables.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DATA ANALYSIS -->
+  <section id="datos">
+    <h2 class="section-title">Análisis de Datos y Visualización</h2>
+    <p class="section-subtitle">Estructura tus solicitudes de análisis para obtener insights accionables.</p>
+
+    <div class="comparison">
+      <div class="comparison-header">Ejemplo — Análisis de ventas</div>
+      <div class="comparison-body">
+        <div class="prompt-bad">
+          <div class="prompt-label bad">Prompt débil</div>
+          <div class="prompt-text">"Analiza nuestros datos de ventas."</div>
+        </div>
+        <div class="prompt-good">
+          <div class="prompt-label good">Prompt efectivo</div>
+          <div class="prompt-text">"He adjuntado 'Sales Data 2023'. Presenta los hallazgos así: 1) Resumen ejecutivo (2-3 oraciones), 2) Métricas clave: ventas por trimestre, categoría top, región de mayor crecimiento, 3) 3 tendencias notables con explicación, 4) 3 recomendaciones basadas en datos con justificación. Sugiere 3 visualizaciones para comunicar estos hallazgos."</div>
+          <div class="why-better">Estructura clara, métricas específicas y solicita visualizaciones para presentar bien los datos.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRAINSTORMING -->
+  <section id="brainstorming">
+    <h2 class="section-title">Brainstorming</h2>
+    <p class="section-subtitle">Genera ideas estructuradas y accionables con parámetros claros.</p>
+
+    <div class="comparison">
+      <div class="comparison-header">Ejemplo — Actividades de equipo remoto</div>
+      <div class="comparison-body">
+        <div class="prompt-bad">
+          <div class="prompt-label bad">Prompt débil</div>
+          <div class="prompt-text">"Dame ideas para team building."</div>
+        </div>
+        <div class="prompt-good">
+          <div class="prompt-label good">Prompt efectivo</div>
+          <div class="prompt-text">"Necesito ideas de team building para un equipo remoto de 20 personas. Sugiere 10 actividades virtuales que promuevan la colaboración. Para cada una: explica cómo fomenta el trabajo en equipo, indica si es mejor para romper el hielo, mejorar comunicación o resolución de problemas. Sugiere una opción económica y una premium."</div>
+          <div class="why-better">Parámetros específicos (número de ideas, criterios de categorización) producen resultados más estructurados y útiles.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout" style="margin-top: 28px;">
+      <strong>Tip:</strong> Pide respuestas en formatos específicos como viñetas, listas numeradas o tablas para facilitar la lectura y comparación.
+    </div>
+  </section>
+
+  <!-- TROUBLESHOOTING -->
+  <section id="troubleshooting">
+    <h2 class="section-title">Solución de Problemas y Maximizar Rendimiento</h2>
+    <p class="section-subtitle">Cómo minimizar errores y obtener el mejor desempeño de Claude.</p>
+
+    <details class="accordion">
+      <summary>Permitir que Claude reconozca la incertidumbre</summary>
+      <div class="accordion-body">
+        <p>Dile a Claude que está bien admitir que no sabe algo: <em>"Si no estás seguro, está bien decirlo."</em> Esto reduce las alucinaciones y mejora la confiabilidad de las respuestas.</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>Divide las tareas complejas</summary>
+      <div class="accordion-body">
+        <p>Si una tarea es demasiado grande y Claude omite pasos, divídela en subtareas más pequeñas y trabájalas una a la vez en mensajes separados.</p>
+      </div>
+    </details>
+
+    <details class="accordion">
+      <summary>Incluye todo el contexto en cada conversación nueva</summary>
+      <div class="accordion-body">
+        <p>Claude no retiene información de conversaciones anteriores. Siempre incluye el contexto necesario en cada nueva sesión.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- FULL EXAMPLES -->
+  <section id="ejemplos">
+    <h2 class="section-title">Ejemplos Completos</h2>
+    <p class="section-subtitle">Casos de uso que combinan múltiples técnicas de prompting.</p>
+
+    <div class="comparison">
+      <div class="comparison-header">Ejemplo Completo 1 — Estrategia de Marketing</div>
+      <div class="comparison-body">
+        <div class="prompt-bad">
+          <div class="prompt-label bad">Prompt débil</div>
+          <div class="prompt-text">"Ayúdame a crear una estrategia de marketing."</div>
+        </div>
+        <div class="prompt-good">
+          <div class="prompt-label good">Prompt efectivo</div>
+          <div class="prompt-text">"Como consultor senior de marketing, necesito tu ayuda para desarrollar una estrategia completa para nuestra nueva línea de accesorios para smartphones eco-amigables. Audiencia objetivo: millennials y Gen Z conscientes del medio ambiente. La estrategia debe incluir: 1) Análisis de mercado (tendencias, 2-3 competidores, tamaño del mercado), 2) Persona del cliente ideal, 3) Marketing mix (producto, precio, plaza, promoción con 5 canales y 3 ideas de campaña), 4) Estrategia de contenido (5 temas, tipos de contenido), 5) KPIs y herramientas de medición. Identifica desafíos potenciales y estrategias de mitigación."</div>
+          <div class="why-better">Combina asignación de rol, desglose de tareas, solicitud de estructura, brainstorming y pedido de análisis de riesgos.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comparison" style="margin-top:20px;">
+      <div class="comparison-header">Ejemplo Completo 2 — Análisis de Informe Financiero</div>
+      <div class="comparison-body">
+        <div class="prompt-bad">
+          <div class="prompt-label bad">Prompt débil</div>
+          <div class="prompt-text">"Analiza este informe financiero."</div>
+        </div>
+        <div class="prompt-good">
+          <div class="prompt-label good">Prompt efectivo</div>
+          <div class="prompt-text">"He adjuntado 'Q2_2023_Financial_Report.pdf'. Actúa como un CFO experimentado y prepara un informe para la junta directiva con: 1) Resumen ejecutivo (3-4 oraciones), 2) Rendimiento financiero (ingresos, márgenes, flujo de caja), 3) KPIs en formato tabla, 4) Análisis por segmento, 5) Balance general, 6) 3 predicciones para Q3, 7) Evaluación de riesgos, 8) Comparación con 2-3 competidores. Genera 5 preguntas que los miembros de la junta podrían hacer, con respuestas sugeridas. Finaliza con un párrafo de apertura para la reunión."</div>
+          <div class="why-better">Combina role-playing, análisis estructurado, análisis predictivo, evaluación de riesgos y anticipación de preguntas.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Guía de Prompting para Claude &nbsp;·&nbsp; <span>Claude Prompting Guide</span> &nbsp;·&nbsp; Basado en documentación oficial de Anthropic</p>
+</footer>
+
+</body>
+</html>
