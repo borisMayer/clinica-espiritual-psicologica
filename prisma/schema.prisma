@@ -1,0 +1,310 @@
+// prisma/schema.prisma
+// Clínica Espiritual — Prisma Schema para Neon Postgres
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") // Para migraciones en Neon
+}
+
+// ─── ENUMS ───────────────────────────────────────────────────
+
+enum UserRole {
+  PATIENT
+  THERAPIST
+  ADMIN
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  REFUNDED
+  IN_MEDIATION
+}
+
+enum PaymentType {
+  SINGLE_SESSION
+  PACKAGE_4
+  PACKAGE_8
+  PACKAGE_12
+}
+
+enum SessionType {
+  VIDEO
+  CHAT
+  HYBRID
+}
+
+enum TherapySpecialty {
+  BURNOUT_ESPIRITUAL
+  TERAPIA_FAMILIAR
+  SANACION_ALMA
+  TRANSFORMACION_PERSONAL
+  LIDERAZGO_ESPIRITUAL
+  DUELO
+  ANSIEDAD_ESPIRITUAL
+}
+
+enum MessageStatus {
+  SENT
+  DELIVERED
+  READ
+}
+
+// ─── MODELOS ─────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String?   @map("password_hash")
+  name          String
+  role          UserRole  @default(PATIENT)
+  phone         String?
+  avatarUrl     String?   @map("avatar_url")
+  timezone      String    @default("America/Argentina/Buenos_Aires")
+  language      String    @default("es")
+
+  // Paciente
+  dateOfBirth     DateTime? @map("date_of_birth") @db.Date
+  emergencyContact String?  @map("emergency_contact")
+  medicalNotes    String?   @map("medical_notes")
+  gdprConsent     Boolean   @default(false) @map("gdpr_consent")
+  gdprConsentAt   DateTime? @map("gdpr_consent_at")
+
+  // Terapeuta
+  bio             String?
+  specialties     TherapySpecialty[]
+  sessionPrice    Decimal?  @map("session_price") @db.Decimal(10, 2)
+  sessionDuration Int       @default(60) @map("session_duration")
+  isVerified      Boolean   @default(false) @map("is_verified")
+  licenseNumber   String?   @map("license_number")
+
+  // Metadata
+  isActive        Boolean   @default(true) @map("is_active")
+  lastLoginAt     DateTime? @map("last_login_at")
+  emailVerifiedAt DateTime? @map("email_verified_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  // Relaciones
+  patientAppointments   Appointment[] @relation("PatientAppointments")
+  therapistAppointments Appointment[] @relation("TherapistAppointments")
+  sentMessages          Message[]     @relation("SentMessages")
+  receivedMessages      Message[]     @relation("ReceivedMessages")
+  payments              Payment[]
+  notifications         Notification[]
+  availability          TherapistAvailability[]
+  patientSessions       Session[]     @relation("PatientSessions")
+  therapistSessions     Session[]     @relation("TherapistSessions")
+  packages              Package[]
+
+  @@map("users")
+}
+
+model TherapistAvailability {
+  id          String   @id @default(uuid())
+  therapistId String   @map("therapist_id")
+  dayOfWeek   Int      @map("day_of_week") // 0=Dom, 6=Sab
+  startTime   DateTime @map("start_time") @db.Time()
+  endTime     DateTime @map("end_time") @db.Time()
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  therapist   User     @relation(fields: [therapistId], references: [id])
+
+  @@map("therapist_availability")
+}
+
+model Appointment {
+  id           String            @id @default(uuid())
+  patientId    String            @map("patient_id")
+  therapistId  String            @map("therapist_id")
+
+  scheduledAt  DateTime          @map("scheduled_at")
+  duration     Int               @default(60)
+  status       AppointmentStatus @default(PENDING)
+  sessionType  SessionType       @default(VIDEO) @map("session_type")
+  specialty    TherapySpecialty?
+
+  // Daily.co
+  dailyRoomUrl          String?  @map("daily_room_url")
+  dailyRoomName         String?  @map("daily_room_name")
+  dailyTokenPatient     String?  @map("daily_token_patient")
+  dailyTokenTherapist   String?  @map("daily_token_therapist")
+
+  // Notas
+  patientNotes    String? @map("patient_notes")
+  therapistNotes  String? @map("therapist_notes")
+  sessionSummary  String? @map("session_summary")
+
+  // Cancelación
+  cancelledAt   DateTime? @map("cancelled_at")
+  cancelledBy   String?   @map("cancelled_by")
+  cancelReason  String?   @map("cancel_reason")
+
+  reminderSent  Boolean   @default(false) @map("reminder_sent")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relaciones
+  patient       User      @relation("PatientAppointments", fields: [patientId], references: [id])
+  therapist     User      @relation("TherapistAppointments", fields: [therapistId], references: [id])
+  payment       Payment?
+  session       Session?
+  messages      Message[]
+  notifications Notification[]
+
+  @@map("appointments")
+}
+
+model Payment {
+  id              String        @id @default(uuid())
+  patientId       String        @map("patient_id")
+  appointmentId   String?       @unique @map("appointment_id")
+
+  mpPreferenceId  String?       @unique @map("mp_preference_id")
+  mpPaymentId     String?       @unique @map("mp_payment_id")
+  mpMerchantOrderId String?     @map("mp_merchant_order_id")
+  mpStatus        String?       @map("mp_status")
+  mpStatusDetail  String?       @map("mp_status_detail")
+
+  amount          Decimal       @db.Decimal(10, 2)
+  currency        String        @default("ARS")
+  paymentType     PaymentType   @default(SINGLE_SESSION) @map("payment_type")
+  sessionsIncluded Int          @default(1) @map("sessions_included")
+  sessionsUsed    Int           @default(0) @map("sessions_used")
+
+  status          PaymentStatus @default(PENDING)
+  paidAt          DateTime?     @map("paid_at")
+  refundedAt      DateTime?     @map("refunded_at")
+  refundReason    String?       @map("refund_reason")
+  metadata        Json          @default("{}")
+
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  patient         User          @relation(fields: [patientId], references: [id])
+  appointment     Appointment?  @relation(fields: [appointmentId], references: [id])
+  package         Package?
+
+  @@map("payments")
+}
+
+model Session {
+  id              String      @id @default(uuid())
+  appointmentId   String      @unique @map("appointment_id")
+  patientId       String      @map("patient_id")
+  therapistId     String      @map("therapist_id")
+
+  startedAt       DateTime?   @map("started_at")
+  endedAt         DateTime?   @map("ended_at")
+  durationActual  Int?        @map("duration_actual")
+
+  dailySessionId  String?     @map("daily_session_id")
+  recordingUrl    String?     @map("recording_url")
+
+  patientJoined   Boolean     @default(false) @map("patient_joined")
+  therapistJoined Boolean     @default(false) @map("therapist_joined")
+  wasCompleted    Boolean     @default(false) @map("was_completed")
+
+  patientRating   Int?        @map("patient_rating")
+  patientFeedback String?     @map("patient_feedback")
+
+  createdAt       DateTime    @default(now()) @map("created_at")
+
+  appointment     Appointment @relation(fields: [appointmentId], references: [id])
+  patient         User        @relation("PatientSessions", fields: [patientId], references: [id])
+  therapist       User        @relation("TherapistSessions", fields: [therapistId], references: [id])
+
+  @@map("sessions")
+}
+
+model Message {
+  id              String        @id @default(uuid())
+  senderId        String        @map("sender_id")
+  receiverId      String        @map("receiver_id")
+  appointmentId   String?       @map("appointment_id")
+
+  content         String        // encriptado en app layer
+  status          MessageStatus @default(SENT)
+  isDeleted       Boolean       @default(false) @map("is_deleted")
+  sentAt          DateTime      @default(now()) @map("sent_at")
+  readAt          DateTime?     @map("read_at")
+
+  sender          User          @relation("SentMessages", fields: [senderId], references: [id])
+  receiver        User          @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  appointment     Appointment?  @relation(fields: [appointmentId], references: [id])
+
+  @@map("messages")
+}
+
+model Notification {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  appointmentId   String?   @map("appointment_id")
+
+  type            String    // EMAIL, SMS, PUSH
+  subject         String?
+  body            String?
+  templateId      String?   @map("template_id")
+
+  sentAt          DateTime? @map("sent_at")
+  deliveredAt     DateTime? @map("delivered_at")
+  failedAt        DateTime? @map("failed_at")
+  errorMessage    String?   @map("error_message")
+
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  user            User        @relation(fields: [userId], references: [id])
+  appointment     Appointment? @relation(fields: [appointmentId], references: [id])
+
+  @@map("notifications")
+}
+
+model Package {
+  id              String    @id @default(uuid())
+  patientId       String    @map("patient_id")
+  paymentId       String    @unique @map("payment_id")
+  therapistId     String?   @map("therapist_id")
+
+  totalSessions   Int       @map("total_sessions")
+  usedSessions    Int       @default(0) @map("used_sessions")
+  expiresAt       DateTime? @map("expires_at")
+  isActive        Boolean   @default(true) @map("is_active")
+
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  patient         User      @relation(fields: [patientId], references: [id])
+  payment         Payment   @relation(fields: [paymentId], references: [id])
+
+  @@map("packages")
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  userId      String?  @map("user_id")
+  action      String
+  resource    String?
+  resourceId  String?  @map("resource_id")
+  oldValue    Json?    @map("old_value")
+  newValue    Json?    @map("new_value")
+  ipAddress   String?  @map("ip_address")
+  userAgent   String?  @map("user_agent")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("audit_logs")
+}
