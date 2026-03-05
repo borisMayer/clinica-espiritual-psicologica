@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const protectedRoutes = ['/dashboard', '/agenda', '/sesiones', '/mensajes', '/reportes', '/admin']
+const protectedRoutes = ['/paciente', '/admin']
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
+
+  // Redirect old /dashboard to /paciente/dashboard
+  if (pathname === '/dashboard') {
+    return NextResponse.redirect(new URL('/paciente/dashboard', req.url))
+  }
+
   const isProtected = protectedRoutes.some(route => pathname.startsWith(route))
   if (!isProtected) return NextResponse.next()
 
@@ -21,12 +27,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/dashboard/:path*',
-    '/agenda/:path*',
-    '/sesiones/:path*',
-    '/mensajes/:path*',
-    '/reportes/:path*',
-    '/admin/:path*',
-  ],
+  matcher: ['/dashboard', '/paciente/:path*', '/admin/:path*'],
 }
