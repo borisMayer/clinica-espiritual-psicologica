@@ -1,17 +1,11 @@
-import { auth } from '@/lib/auth'
-import { redirect } from 'next/navigation'
 import Link from 'next/link'
 
-export default async function PacienteLayout({ children }: { children: React.ReactNode }) {
-  const session = await auth()
-  if (!session?.user) redirect('/login?callbackUrl=/paciente/dashboard')
-
+export default function PacienteLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-[#f5f3ef] flex">
 
       {/* ── SIDEBAR ── */}
       <aside className="w-64 bg-[#1a2e1e] text-white flex flex-col fixed h-full z-40">
-        {/* Logo */}
         <div className="p-6 border-b border-white/10">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-7 h-7 rounded-full bg-[#4a7c59] flex items-center justify-center text-xs">✦</div>
@@ -20,20 +14,6 @@ export default async function PacienteLayout({ children }: { children: React.Rea
           <p className="text-[#7ab893] text-xs mt-3">Portal Paciente</p>
         </div>
 
-        {/* User info */}
-        <div className="p-5 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#4a7c59]/40 flex items-center justify-center text-[#7ab893] font-bold text-sm">
-              {session.user.name?.[0] ?? 'P'}
-            </div>
-            <div>
-              <p className="text-sm font-medium text-white truncate max-w-[140px]">{session.user.name}</p>
-              <p className="text-[#5a7a64] text-xs">Paciente</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Nav links */}
         <nav className="flex-1 p-4 space-y-1">
           {[
             { href:'/paciente/dashboard', icon:'⊞', label:'Dashboard' },
@@ -52,7 +32,6 @@ export default async function PacienteLayout({ children }: { children: React.Rea
           ))}
         </nav>
 
-        {/* Bottom links */}
         <div className="p-4 border-t border-white/10 space-y-1">
           <Link href="/" className="flex items-center gap-3 px-3 py-2 rounded-lg text-[#5a7a64] hover:text-[#7ab893] transition-colors text-xs">
             ← Volver al sitio
@@ -63,7 +42,6 @@ export default async function PacienteLayout({ children }: { children: React.Rea
         </div>
       </aside>
 
-      {/* ── MAIN CONTENT ── */}
       <main className="ml-64 flex-1 p-8">
         {children}
       </main>
