@@ -1,6 +1,5 @@
 // lib/auth.ts — NextAuth v5 Config
 import NextAuth from 'next-auth'
-import { PrismaAdapter } from '@auth/prisma-adapter'
 import Credentials from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import { z } from 'zod'
@@ -12,7 +11,6 @@ const loginSchema = z.object({
 })
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
   pages: { signIn: '/login', error: '/login' },
   providers: [
@@ -32,17 +30,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           data: { lastLoginAt: new Date() },
         })
 
-        return { id: user.id, email: user.email, name: user.name, role: user.role, image: user.avatarUrl }
+        return { id: user.id, email: user.email, name: user.name, role: user.role, image: user.avatarUrl ?? null }
       },
     }),
   ],
   callbacks: {
     jwt({ token, user }) {
-      if (user) { token.role = (user as any).role; token.id = user.id }
+      if (user) {
+        token.role = (user as any).role
+        token.id = user.id
+      }
       return token
     },
     session({ session, token }) {
-      if (token) { session.user.id = token.id as string; session.user.role = token.role as string }
+      if (token) {
+        session.user.id = token.id as string
+        session.user.role = token.role as string
+      }
       return session
     },
   },
