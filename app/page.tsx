@@ -136,9 +136,9 @@ export default function HomePage() {
           </div>
           <div className="grid md:grid-cols-3 gap-6 items-start">
             {[
-              { name:'Sesión única', price:'USD 22', period:'por sesión', desc:'Ideal para comenzar o consultas puntuales.', features:['60 min por sesión','Video o chat','Notas de sesión','Acceso a tu dashboard'], cta:'Reservar sesión', featured:false },
-              { name:'Paquete Mensual', price:'USD 77', period:'4 sesiones / mes', desc:'El más elegido. Ahorrás USD 11 vs precio individual.', features:['4 sesiones de 60 min','Video o chat','Mensajes entre sesiones','Reportes de progreso','Prioridad en agenda'], cta:'Comenzar proceso', featured:true },
-              { name:'Proceso Intensivo', price:'USD 141', period:'8 sesiones / mes', desc:'Ahorrás USD 35 vs precio individual.', features:['8 sesiones de 60 min','Video o chat','Chat ilimitado','Reportes detallados','Terapeuta dedicado'], cta:'Iniciar proceso', featured:false },
+              { name:'Sesión única', price:'USD 10', period:'por sesión', desc:'Ideal para comenzar o consultas puntuales.', features:['60 min por sesión','Video o chat','Notas de sesión','Acceso a tu dashboard'], cta:'Reservar sesión', featured:false },
+              { name:'Paquete Mensual', price:'USD 35', period:'4 sesiones / mes', desc:'El más elegido. Ahorrás USD 5 vs precio individual.', features:['4 sesiones de 60 min','Video o chat','Mensajes entre sesiones','Reportes de progreso','Prioridad en agenda'], cta:'Comenzar proceso', featured:true },
+              { name:'Proceso Intensivo', price:'USD 64', period:'8 sesiones / mes', desc:'Ahorrás USD 16 vs precio individual.', features:['8 sesiones de 60 min','Video o chat','Chat ilimitado','Reportes detallados','Terapeuta dedicado'], cta:'Iniciar proceso', featured:false },
             ].map(p => (
               <div key={p.name} className={`rounded-2xl p-7 border-2 flex flex-col ${p.featured ? 'border-[#4a7c59] bg-[#4a7c59] text-white shadow-xl shadow-[#4a7c59]/20' : 'border-[#e8dfd0] bg-white'}`}>
                 {p.featured && <div className="text-xs font-bold tracking-widest uppercase bg-white/20 w-fit px-3 py-1 rounded-full mb-4">Más popular</div>}
@@ -146,7 +146,7 @@ export default function HomePage() {
                 <p className={`text-sm mb-4 ${p.featured?'text-[#b8d4c0]':'text-[#8a9b8e]'}`}>{p.desc}</p>
                 <div className="mb-6">
                   <span style={{fontFamily:'Georgia,serif'}} className={`text-4xl font-bold ${p.featured?'text-white':'text-[#1a2e1e]'}`}>{p.price}</span>
-                  <span className={`text-sm ml-2 ${p.featured?'text-[#b8d4c0]':'text-[#8a9b8e]'}`}>ARS {p.period}</span>
+                  <span className={`text-sm ml-2 ${p.featured?'text-[#b8d4c0]':'text-[#8a9b8e]'}`}>{p.period}</span>
                 </div>
                 <ul className="space-y-2.5 mb-8 flex-1">
                   {p.features.map(f => (
