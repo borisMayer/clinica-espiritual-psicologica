@@ -295,36 +295,120 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── TESTIMONIOS ── */}
+      {/* ── PROCESO TERAPÉUTICO ── */}
       <section className="py-28 px-6 bg-[#0e1a12] text-white">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">Transformación real</p>
-            <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold">No palabras vacías.<br/>Historias reales.</h2>
+            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">Claridad antes de comenzar</p>
+            <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold">Cómo trabajamos contigo</h2>
+            <p className="text-white/40 mt-4 max-w-xl mx-auto">La gente no compra historias. Necesita entender si este enfoque puede realmente ayudarle.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-4 gap-4 mb-16">
             {[
-              { q:'"Después de 15 años en el ministerio, había perdido todo sentido de quién era. El proceso no fue cómodo. Fue verdadero. Y eso lo cambió todo."', n:'Pastor R.M.', r:'Buenos Aires', rol:'Pastor de iglesia reformada' },
-              { q:'"Venía de tres terapias anteriores que me enseñaron a funcionar mejor pero no a sanar de verdad. Aquí tocaron capas que nadie había querido tocar."', n:'Valentina G.', r:'Córdoba', rol:'Profesional en crisis vocacional' },
-              { q:'"Mi matrimonio estaba fracturado en lo más profundo. Lo que pareció imposible fue posible cuando empezamos a trabajar desde las raíces."', n:'Familia Herrera', r:'Mendoza', rol:'Proceso de restauración familiar' },
-            ].map(t => (
-              <div key={t.n} className="border border-white/10 rounded-2xl p-6">
-                <div className="flex gap-1 mb-5">
-                  {[1,2,3,4,5].map(s => <span key={s} className="text-[#c9a84c] text-sm">★</span>)}
-                </div>
-                <p className="text-white/70 text-sm leading-relaxed mb-6 italic">{t.q}</p>
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-[#4a7c59]/30 flex items-center justify-center text-[#7ab893] font-bold text-sm">{t.n[0]}</div>
-                  <div>
-                    <p className="font-semibold text-white text-sm">{t.n}</p>
-                    <p className="text-white/30 text-xs">{t.rol} · {t.r}</p>
-                  </div>
-                </div>
+              { n:'01', title:'Diagnóstico profundo', desc:'Historia personal, estructura interna, conflictos centrales. Sin atajos. Sin suponer. Sin improvisar.', icon:'🔍' },
+              { n:'02', title:'Identificación del conflicto real', desc:'No el síntoma que traes. El nudo que lo genera. Psicoanalítico, existencial y teológico.', icon:'⚡' },
+              { n:'03', title:'Intervención integrada', desc:'Herramientas clínicas + trabajo de sentido + verdad revelada. Cada sesión con dirección clara.', icon:'🔧' },
+              { n:'04', title:'Reordenamiento del alma', desc:'No ajuste de conducta. Restitución del orden interior: identidad, propósito, vínculos, fe.', icon:'🌿' },
+            ].map(s => (
+              <div key={s.n} className="p-5 rounded-2xl border border-white/8 bg-white/3">
+                <div className="text-2xl mb-4">{s.icon}</div>
+                <div className="text-[#c9a84c]/40 text-xs font-bold tracking-widest mb-2">{s.n}</div>
+                <h3 style={{fontFamily:'Georgia,serif'}} className="font-bold text-white mb-3">{s.title}</h3>
+                <p className="text-white/40 text-xs leading-relaxed">{s.desc}</p>
               </div>
             ))}
           </div>
+          <div>
+            <div className="text-center mb-10">
+              <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-3">Situaciones que trabajamos</p>
+              <h3 style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold">Casos representativos</h3>
+              <p className="text-white/30 text-sm mt-2">Situaciones reales, presentadas con rigor clínico. Sin nombres ni datos identificatorios.</p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-5">
+              {[
+                { tag:'Crisis vocacional', title:'Líder espiritual, 42 años', situacion:'Pastor con 18 años de ministerio. Funciona externamente pero siente vacío interior creciente. Irritabilidad, pérdida de sentido, desconexión de la fe.', conflicto:'Identidad construida sobre el rol. Teología del rendimiento internalizada. Vergüenza encubierta.', intervencion:'Psicoanálisis de la estructura del yo. Logoterapia para reorientar el sentido. Trabajo teológico sobre gracia vs. performance.', resultado:'Reintegración de identidad disociada. Ministerio sostenido desde plenitud, no desde obligación.' },
+                { tag:'Vacío existencial', title:'Profesional, 35 años', situacion:'Éxito profesional visible. Ansiedad crónica, insomnio, sensación de que algo esencial falta. Tres terapias anteriores sin resolución.', conflicto:'Logros como sustitutos del sentido. Estructura de vida sin orientación trascendente. Trauma de apego no elaborado.', intervencion:'Exploración psicoanalítica del vacío. Frankl aplicado al proyecto existencial. Reconstrucción del marco de sentido.', resultado:'Transición profesional con propósito claro. Ansiedad remite al trabajar la raíz, no el síntoma.' },
+                { tag:'Restauración familiar', title:'Pareja, 12 años juntos', situacion:'Conflicto crónico sin resolución. Comunicación deteriorada. Historia familiar de ambos replicándose en el vínculo presente.', conflicto:'Heridas de origen activadas en el vínculo. Patrones de apego inseguro. Teología distorsionada sobre el matrimonio.', intervencion:'Trabajo sistémico psicoanalítico. Revisión del orden relacional bíblico. Intervención en patrones transgeneracionales.', resultado:'Restauración del vínculo desde comprensión profunda. No ajuste conductual sino transformación de la dinámica de base.' },
+              ].map(c => (
+                <div key={c.title} className="border border-white/10 rounded-2xl overflow-hidden">
+                  <div className="bg-[#4a7c59]/20 px-5 py-3 border-b border-white/5">
+                    <span className="text-[#7ab893] text-xs font-semibold uppercase tracking-wide">{c.tag}</span>
+                    <p className="text-white font-semibold text-sm mt-0.5">{c.title}</p>
+                  </div>
+                  <div className="p-5 space-y-3">
+                    {[
+                      { label:'Situación', val:c.situacion },
+                      { label:'Conflicto central', val:c.conflicto },
+                      { label:'Intervención', val:c.intervencion },
+                      { label:'Resultado observable', val:c.resultado },
+                    ].map(r => (
+                      <div key={r.label}>
+                        <p className="text-[#c9a84c] text-xs font-semibold uppercase tracking-wide mb-1">{r.label}</p>
+                        <p className="text-white/50 text-xs leading-relaxed">{r.val}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
+
+      {/* ── PRINCIPIOS + A QUIÉN NO ES ── */}
+      <section className="py-28 px-6 bg-[#faf8f4] text-[#1a2e1e]">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-12">
+            <div>
+              <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">Manifiesto profesional</p>
+              <h2 style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold text-[#1a2e1e] mb-8">Nuestros principios<br/>de trabajo</h2>
+              <div className="space-y-4">
+                {[
+                  { p:'No tratamos síntomas sin abordar la raíz', d:'El alivio sin comprensión es anestesia, no restauración.' },
+                  { p:'No reemplazamos la verdad por bienestar emocional', d:'Sentirse bien no es necesariamente estar bien. La verdad puede incomodar antes de liberar.' },
+                  { p:'No espiritualizamos lo que requiere análisis', d:'Orar sobre un conflicto psicológico sin elaborarlo no es fe, es evasión.' },
+                  { p:'No reducimos el alma a lo psicológico', d:'La dimensión espiritual no es opcional ni metafórica. Es constitutiva del ser humano.' },
+                  { p:'No trabajamos sin dirección terapéutica clara', d:'Cada sesión tiene propósito, estructura y orientación definida. No improvisamos.' },
+                ].map(p => (
+                  <div key={p.p} className="flex gap-4 items-start">
+                    <span className="text-[#4a7c59] mt-1 flex-shrink-0 font-bold">→</span>
+                    <div>
+                      <p className="font-semibold text-[#1a2e1e] text-sm">{p.p}</p>
+                      <p className="text-[#8a9b8e] text-xs mt-0.5 leading-relaxed">{p.d}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">Filtro honesto</p>
+              <h2 style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold text-[#1a2e1e] mb-3">Esto NO es para ti si...</h2>
+              <p className="text-[#8a9b8e] text-sm mb-8">La claridad genera confianza. Preferiríamos no tomar tu tiempo si este no es el espacio correcto.</p>
+              <div className="space-y-3">
+                {[
+                  { t:'Buscas soluciones rápidas sin profundidad', d:'Los procesos reales requieren tiempo y disposición. No vendemos atajos.' },
+                  { t:'Quieres validación sin confrontación', d:'Trabajamos con verdad. Eso implica señalar lo que necesita ser señalado.' },
+                  { t:'Prefieres espiritualidad sin base sólida', d:'No ofrecemos sensaciones espirituales. Ofrecemos trabajo serio con fundamento.' },
+                  { t:'Esperas que el terapeuta te arregle', d:'El proceso requiere tu participación activa. No somos reparadores, somos acompañantes.' },
+                ].map(n => (
+                  <div key={n.t} className="flex gap-4 p-4 rounded-xl border border-[#e8dfd0] bg-white">
+                    <span className="text-red-400 flex-shrink-0 font-bold mt-0.5">✗</span>
+                    <div>
+                      <p className="font-semibold text-[#1a2e1e] text-sm">{n.t}</p>
+                      <p className="text-[#8a9b8e] text-xs mt-0.5 leading-relaxed">{n.d}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-6 p-4 bg-[#f0f7f2] rounded-xl border border-[#4a7c59]/20">
+                <p className="text-[#4a7c59] text-sm font-semibold mb-1">✦ Esto SÍ es para ti si...</p>
+                <p className="text-[#5a6b5e] text-xs leading-relaxed">Estás dispuesto a ir a las raíces. Prefieres verdad a comodidad. Buscas restauración real, no alivio temporal. Reconoces que el alma necesita más que técnicas.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
 
       {/* ── FAQ ── */}
       <section id="faq" className="py-28 px-6 bg-[#faf8f4] text-[#1a2e1e]">
