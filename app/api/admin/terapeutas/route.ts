@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
         role: 'THERAPIST',
         bio: body.bio,
         specialties: (body.specialties ?? []) as any,
-        sessionPrice: body.sessionPrice ? parseFloat(body.sessionPrice) : 22,
+        sessionPrice: body.sessionPrice ? parseFloat(body.sessionPrice) : 10,
         isActive: true,
         isVerified: true,
         gdprConsent: true,

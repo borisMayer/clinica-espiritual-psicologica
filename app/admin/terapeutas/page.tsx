@@ -31,7 +31,7 @@ export default function TerapeutasPage() {
 
   const [form, setForm] = useState({
     name: '', email: '', password: '', bio: '',
-    specialties: [] as string[], sessionPrice: '22',
+    specialties: [] as string[], sessionPrice: '10',
   })
 
   useEffect(() => { loadTerapeutas() }, [])
@@ -57,7 +57,7 @@ export default function TerapeutasPage() {
     if (res.ok) {
       setMsg('✅ Terapeuta creado correctamente')
       setShowForm(false)
-      setForm({ name: '', email: '', password: '', bio: '', specialties: [], sessionPrice: '22' })
+      setForm({ name: '', email: '', password: '', bio: '', specialties: [], sessionPrice: '10' })
       loadTerapeutas()
     } else {
       setMsg(`❌ ${data.error}`)
@@ -130,7 +130,7 @@ export default function TerapeutasPage() {
                 <input
                   type="number" value={form.sessionPrice} onChange={e => setForm({...form, sessionPrice: e.target.value})}
                   className="w-full px-4 py-2.5 border border-[#e8dfd0] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4a7c59] text-sm"
-                  placeholder="22"
+                  placeholder="10"
                 />
               </div>
             </div>
@@ -216,7 +216,7 @@ export default function TerapeutasPage() {
                     })}
                   </div>
                   <p className="text-[#4a7c59] text-sm font-semibold">
-                    USD {t.sessionPrice ?? 22} / sesión
+                    USD {t.sessionPrice ?? 10} / sesión
                   </p>
                 </div>
               </div>
