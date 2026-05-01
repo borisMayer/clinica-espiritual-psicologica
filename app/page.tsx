@@ -2,187 +2,322 @@ import Link from 'next/link'
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#faf8f4]">
+    <div className="min-h-screen bg-[#0e1a12] text-white" style={{fontFamily:'system-ui,sans-serif'}}>
 
       {/* ── NAV ── */}
-      <nav className="fixed top-0 w-full z-50 bg-[#faf8f4]/90 backdrop-blur-md border-b border-[#e8dfd0]">
+      <nav className="fixed top-0 w-full z-50 bg-[#0e1a12]/95 backdrop-blur-md border-b border-white/8">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-[#4a7c59] flex items-center justify-center">
-              <span className="text-white text-xs">✦</span>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full border border-[#c9a84c]/60 flex items-center justify-center">
+              <span className="text-[#c9a84c] text-sm">✦</span>
             </div>
-            <span style={{fontFamily:'Georgia,serif'}} className="font-bold text-[#1a2e1e] text-lg">Clínica Espiritual</span>
+            <div>
+              <span style={{fontFamily:'Georgia,serif'}} className="font-bold text-white text-sm tracking-wide">Clínica del Alma</span>
+              <span className="text-[#c9a84c]/60 text-xs ml-2 hidden md:inline">Restauración Integral</span>
+            </div>
           </div>
-          <div className="hidden md:flex items-center gap-8 text-sm text-[#5a6b5e]">
-            <a href="#servicios" className="hover:text-[#4a7c59] transition-colors">Servicios</a>
-            <a href="#precios" className="hover:text-[#4a7c59] transition-colors">Precios</a>
-            <a href="#faq" className="hover:text-[#4a7c59] transition-colors">FAQ</a>
+          <div className="hidden md:flex items-center gap-8 text-sm text-white/50">
+            <a href="#problema" className="hover:text-white transition-colors">El problema</a>
+            <a href="#metodo" className="hover:text-white transition-colors">Método</a>
+            <a href="#servicios" className="hover:text-white transition-colors">Servicios</a>
+            <a href="#precios" className="hover:text-white transition-colors">Inversión</a>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/login" className="text-sm text-[#4a7c59] font-medium hover:underline">Ingresar</Link>
-            <Link href="/register" className="bg-[#4a7c59] text-white text-sm font-medium px-4 py-2 rounded-full hover:bg-[#3d6849] transition-colors">
-              Comenzar gratis →
+            <Link href="/login" className="text-sm text-white/60 hover:text-white transition-colors">Acceder</Link>
+            <Link href="/register" className="bg-[#c9a84c] text-[#0e1a12] text-sm font-bold px-5 py-2 rounded-full hover:bg-[#d4b86a] transition-colors">
+              Primera sesión →
             </Link>
           </div>
         </div>
       </nav>
 
       {/* ── HERO ── */}
-      <section className="pt-36 pb-24 px-6 text-center relative overflow-hidden">
-        <div className="absolute top-20 left-1/4 w-96 h-96 rounded-full bg-[#4a7c59]/6 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full bg-[#c9a84c]/6 blur-3xl pointer-events-none" />
-        <div className="relative max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-[#4a7c59]/10 text-[#4a7c59] text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-8">
-            ✦ Terapias Online · Sanación Integral
+      <section className="min-h-screen flex items-center justify-center px-6 pt-16 relative overflow-hidden">
+        {/* Background texture */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,#1a3a20_0%,#0e1a12_60%)]" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[#c9a84c]/5 blur-[120px] pointer-events-none" />
+
+        <div className="relative max-w-4xl mx-auto text-center">
+          {/* Eyebrow */}
+          <div className="inline-flex items-center gap-3 mb-8">
+            <div className="h-px w-12 bg-[#c9a84c]/40" />
+            <span className="text-[#c9a84c] text-xs font-semibold tracking-[0.25em] uppercase">Psicología · Logoterapia · Fe Reformada</span>
+            <div className="h-px w-12 bg-[#c9a84c]/40" />
           </div>
-          <h1 style={{fontFamily:'Georgia,serif'}} className="text-5xl md:text-7xl font-bold text-[#1a2e1e] leading-tight mb-6">
-            Sana tu alma,<br/>
-            <span className="text-[#4a7c59]">transforma</span> tu vida
+
+          {/* Headline */}
+          <h1 style={{fontFamily:'Georgia,serif'}} className="text-5xl md:text-7xl font-bold leading-[1.05] mb-8">
+            El alma no se repara<br/>
+            <span className="text-[#c9a84c]">sin verdad.</span>
           </h1>
-          <p className="text-[#5a6b5e] text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
-            Terapias psicológicas integradas con enfoque espiritual cristiano y mística hebrea.
-            Acompañamiento para líderes, familias y personas en búsqueda de plenitud.
+
+          <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto mb-4 leading-relaxed">
+            No tratamos síntomas. Restauramos el orden interior del alma con fundamento clínico y teológico.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register" className="bg-[#4a7c59] text-white font-semibold px-8 py-4 rounded-full hover:bg-[#3d6849] transition-all text-base">
-              Agendar primera sesión gratuita
+          <p className="text-white/40 text-sm max-w-xl mx-auto mb-12">
+            Para líderes, pastores, profesionales y familias que buscan algo más profundo que el alivio temporal.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+            <Link href="/register" className="bg-[#c9a84c] text-[#0e1a12] font-bold px-8 py-4 rounded-full hover:bg-[#d4b86a] transition-all text-base">
+              Agendar sesión inicial gratuita
             </Link>
-            <a href="#servicios" className="border border-[#4a7c59] text-[#4a7c59] font-semibold px-8 py-4 rounded-full hover:bg-[#4a7c59]/5 transition-colors text-base">
-              Ver servicios
+            <a href="#metodo" className="border border-white/20 text-white/70 font-medium px-8 py-4 rounded-full hover:bg-white/5 hover:border-white/40 transition-colors text-base">
+              Conocer el método →
             </a>
           </div>
-          <p className="text-[#8a9b8e] text-sm mt-5">Sin compromiso · Primera consulta sin costo</p>
-        </div>
-      </section>
 
-      {/* ── STATS ── */}
-      <section className="py-12 border-y border-[#e8dfd0] bg-white">
-        <div className="max-w-4xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-          {[
-            { n: '500+', l: 'Pacientes atendidos' },
-            { n: '98%', l: 'Satisfacción' },
-            { n: '5', l: 'Terapeutas especializados' },
-            { n: '3 años', l: 'Experiencia online' },
-          ].map(s => (
-            <div key={s.l}>
-              <div style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold text-[#4a7c59]">{s.n}</div>
-              <div className="text-[#8a9b8e] text-sm mt-1">{s.l}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── SERVICIOS ── */}
-      <section id="servicios" className="py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[#4a7c59] text-sm font-semibold tracking-widest uppercase mb-3">Especialidades</p>
-            <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold text-[#1a2e1e]">Terapias que ofrecemos</h2>
+          {/* Trust bar */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-white/30 text-xs">
+            <span className="flex items-center gap-2"><span className="text-[#c9a84c]">✦</span> Confidencialidad absoluta</span>
+            <span className="w-px h-3 bg-white/20 hidden sm:block" />
+            <span className="flex items-center gap-2"><span className="text-[#c9a84c]">✦</span> Primera sesión sin costo</span>
+            <span className="w-px h-3 bg-white/20 hidden sm:block" />
+            <span className="flex items-center gap-2"><span className="text-[#c9a84c]">✦</span> Sin compromiso</span>
           </div>
-          <div className="grid md:grid-cols-3 gap-6">
+        </div>
+      </section>
+
+      {/* ── EL PROBLEMA REAL ── */}
+      <section id="problema" className="py-28 px-6 bg-[#faf8f4] text-[#1a2e1e]">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div>
+              <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">El diagnóstico que nadie hace</p>
+              <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl md:text-5xl font-bold leading-tight mb-6">
+                Algo está roto.<br/>Y lo sabes.
+              </h2>
+              <p className="text-[#5a6b5e] text-lg leading-relaxed mb-6">
+                Has intentado la terapia convencional. Has leído los libros. Has orado. Y sin embargo, algo fundamental en tu interior sigue sin resolverse.
+              </p>
+              <p className="text-[#5a6b5e] leading-relaxed">
+                El problema no es falta de voluntad. Es que la mayoría de los enfoques terapéuticos tratan el síntoma sin tocar el alma. Y el alma tiene sus propias leyes.
+              </p>
+            </div>
+            <div className="space-y-4">
+              {[
+                { icon: '⚡', t: 'Lideras pero estás vacío por dentro', d: 'El agotamiento vocacional no es falta de fe. Es una fractura profunda entre llamado y alma.' },
+                { icon: '🌀', t: 'Buscas sentido y solo encuentras ruido', d: 'La ansiedad moderna es, en el fondo, una crisis de propósito. Viktor Frankl lo llamó "vacío existencial".' },
+                { icon: '🔗', t: 'Tus relaciones siguen los mismos patrones', d: 'Los vínculos rotos se repiten porque el patrón vive en capas más profundas que la conducta.' },
+                { icon: '📖', t: 'La fe se volvió obligación sin vida', d: 'Cuando la teología se desconecta del alma, la religiosidad mata lo que debería sanar.' },
+              ].map(p => (
+                <div key={p.t} className="flex gap-4 p-4 bg-white rounded-xl border border-[#e8dfd0]">
+                  <span className="text-xl flex-shrink-0 mt-0.5">{p.icon}</span>
+                  <div>
+                    <p className="font-semibold text-[#1a2e1e] text-sm mb-1">{p.t}</p>
+                    <p className="text-[#8a9b8e] text-xs leading-relaxed">{p.d}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── MÉTODO ── */}
+      <section id="metodo" className="py-28 px-6 bg-[#0e1a12] text-white">
+        <div className="max-w-5xl mx-auto text-center">
+          <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">Nuestra diferencia</p>
+          <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl md:text-5xl font-bold mb-6">
+            Restauración integral.<br/>No alivio temporal.
+          </h2>
+          <p className="text-white/50 max-w-2xl mx-auto mb-16 text-lg leading-relaxed">
+            Integramos tres disciplinas que raramente se encuentran juntas: rigor clínico, profundidad psicoanalítica y fundamento teológico reformado.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-6 mb-16">
             {[
-              { icon:'🕊️', title:'Burnout Espiritual', sub:'Para líderes y pastores', desc:'Acompañamiento para líderes espirituales, pastores y coaches que atraviesan agotamiento vocacional y crisis de fe.', tags:['Líderes','Pastores','Coaches'] },
-              { icon:'🌿', title:'Terapia Familiar', sub:'Relacional y espiritual', desc:'Restauración de vínculos familiares desde una perspectiva que une psicología moderna y sabiduría espiritual.', tags:['Familias','Parejas','Relaciones'] },
-              { icon:'✨', title:'Sanación del Alma', sub:'Transformación personal', desc:'Proceso terapéutico para sanar heridas emocionales, superar el duelo y encontrar propósito y plenitud.', tags:['Individual','Duelo','Identidad'] },
-              { icon:'🧠', title:'Ansiedad & Trauma', sub:'Con base espiritual', desc:'Abordaje integrado de la ansiedad y el trauma combinando técnicas terapéuticas probadas con recursos espirituales.', tags:['Ansiedad','Trauma','Sanación'] },
-              { icon:'📖', title:'Consejería Bíblica', sub:'Mística hebrea', desc:'Orientación desde la teología cristiana y la mística hebrea para decisiones de vida, vocación y discernimiento.', tags:['Fe','Vocación','Discernimiento'] },
-              { icon:'💬', title:'Sesiones de Chat', sub:'Flexible y accesible', desc:'Para quienes prefieren la escritura como forma terapéutica. Misma calidad, formato diferente.', tags:['Chat','Flexible','Escrito'] },
-            ].map(s => (
-              <div key={s.title} className="bg-white rounded-2xl p-6 border border-[#e8dfd0] hover:border-[#4a7c59]/40 hover:shadow-md transition-all">
-                <div className="text-3xl mb-4">{s.icon}</div>
-                <h3 style={{fontFamily:'Georgia,serif'}} className="text-xl font-bold text-[#1a2e1e] mb-1">{s.title}</h3>
-                <p className="text-[#4a7c59] text-xs font-semibold uppercase tracking-wide mb-3">{s.sub}</p>
-                <p className="text-[#5a6b5e] text-sm leading-relaxed mb-4">{s.desc}</p>
+              {
+                num: '01', color: 'border-[#4a7c59]', accentBg: 'bg-[#4a7c59]/10', accent: 'text-[#7ab893]',
+                title: 'Fundamento Clínico',
+                sub: 'Psicoanálisis + Logoterapia',
+                desc: 'No improvisamos. Cada proceso parte de un diagnóstico riguroso. Usamos herramientas probadas: psicoanálisis para el inconsciente, logoterapia para el sentido.',
+                tags: ['Viktor Frankl', 'Freud / Lacan', 'DSM-5'],
+              },
+              {
+                num: '02', color: 'border-[#c9a84c]', accentBg: 'bg-[#c9a84c]/10', accent: 'text-[#c9a84c]',
+                title: 'Verdad Revelada',
+                sub: 'Teología Reformada',
+                desc: 'El alma fue creada con un orden. Trabajamos desde la Escritura como autoridad final, no como recurso adicional. Sin sincretismo, sin ambigüedad.',
+                tags: ['Calvino / Lutero', 'Hermenéutica', 'Sola Scriptura'],
+              },
+              {
+                num: '03', color: 'border-[#5a7a9a]', accentBg: 'bg-[#5a7a9a]/10', accent: 'text-[#8ab0c8]',
+                title: 'Raíces Hebreas',
+                sub: 'Pensamiento bíblico profundo',
+                desc: 'El lenguaje original de la fe es hebreo. Volvemos a las raíces conceptuales de la espiritualidad bíblica para una comprensión más completa del ser humano.',
+                tags: ['Pensamiento hebreo', 'Shalom', 'Nephesh'],
+              },
+            ].map(m => (
+              <div key={m.num} className={`p-6 rounded-2xl border ${m.color} bg-white/3 text-left`}>
+                <div className={`${m.accentBg} w-10 h-10 rounded-xl flex items-center justify-center mb-5`}>
+                  <span className={`${m.accent} font-bold text-sm`}>{m.num}</span>
+                </div>
+                <h3 style={{fontFamily:'Georgia,serif'}} className="text-xl font-bold mb-1">{m.title}</h3>
+                <p className={`${m.accent} text-xs font-semibold uppercase tracking-wide mb-4`}>{m.sub}</p>
+                <p className="text-white/50 text-sm leading-relaxed mb-5">{m.desc}</p>
                 <div className="flex flex-wrap gap-2">
-                  {s.tags.map(t => (
-                    <span key={t} className="bg-[#4a7c59]/10 text-[#4a7c59] text-xs px-2.5 py-1 rounded-full">{t}</span>
+                  {m.tags.map(t => (
+                    <span key={t} className="text-xs border border-white/10 text-white/30 px-2.5 py-1 rounded-full">{t}</span>
                   ))}
                 </div>
               </div>
             ))}
           </div>
+
+          {/* Manifiesto */}
+          <div className="border border-[#c9a84c]/20 rounded-2xl p-8 bg-[#c9a84c]/5 max-w-3xl mx-auto">
+            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">Lo que no somos</p>
+            <div className="grid sm:grid-cols-3 gap-4 text-sm">
+              {[
+                { x: '✗', t: 'No somos coaching motivacional', d: 'Sin técnicas de positivismo vacío ni afirmaciones sin fundamento.' },
+                { x: '✗', t: 'No somos terapia sin alma', d: 'La psicología sin dimensión espiritual trata al ser humano incompleto.' },
+                { x: '✗', t: 'No somos espiritualidad new age', d: 'Sin misticismo ambiguo ni sincretismo que diluye la verdad.' },
+              ].map(n => (
+                <div key={n.t} className="text-left">
+                  <p className="text-red-400/70 font-semibold mb-1">{n.x} {n.t}</p>
+                  <p className="text-white/30 text-xs leading-relaxed">{n.d}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── CÓMO FUNCIONA ── */}
-      <section className="py-24 px-6 bg-[#1a2e1e] text-white">
-        <div className="max-w-5xl mx-auto text-center">
-          <p className="text-[#7ab893] text-sm font-semibold tracking-widest uppercase mb-3">Proceso</p>
-          <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold mb-16">¿Cómo funciona?</h2>
-          <div className="grid md:grid-cols-4 gap-8">
+      {/* ── SERVICIOS ── */}
+      <section id="servicios" className="py-28 px-6 bg-[#faf8f4] text-[#1a2e1e]">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">Áreas de restauración</p>
+            <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl md:text-5xl font-bold">Trabajamos lo que otros<br/>no se atreven a tocar</h2>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              { n:'01', t:'Regístrate', d:'Crea tu cuenta en minutos. Sin tarjeta de crédito para comenzar.' },
-              { n:'02', t:'Elige terapeuta', d:'Conoce a nuestros especialistas y elige el que más resuena contigo.' },
-              { n:'03', t:'Agenda y paga', d:'Selecciona el horario disponible y paga de forma segura con Mercado Pago.' },
-              { n:'04', t:'Comienza a sanar', d:'Conéctate a tu sesión de video o chat desde donde estés.' },
+              { icon:'🔥', title:'Crisis Vocacional del Alma', old:'Burnout espiritual', desc:'El agotamiento del líder no es falta de disciplina. Es una fractura entre llamado, identidad y alma que requiere restauración profunda.', who:'Pastores · Líderes · Coaches' },
+              { icon:'🏛️', title:'Restauración del Orden Relacional', old:'Terapia familiar', desc:'Los vínculos rotos siguen un patrón. Trabajamos las raíces sistémicas y espirituales que perpetúan el conflicto generacional.', who:'Familias · Parejas · Relaciones' },
+              { icon:'⚓', title:'Desintegración y Reconstrucción', old:'Ansiedad y trauma', desc:'El trauma no es solo un recuerdo. Es una realidad inscrita en el cuerpo y el alma. Abordamos su reconstrucción desde adentro.', who:'Trauma · Duelo · Ansiedad' },
+              { icon:'📜', title:'Discernimiento y Verdad Revelada', old:'Consejería bíblica', desc:'Decisiones de vida, vocación, crisis de fe. Acompañamiento desde la Escritura como luz, no como código de conducta.', who:'Fe · Vocación · Propósito' },
+              { icon:'🧬', title:'Vacío Existencial y Sentido', old:'Logoterapia', desc:'Inspirados en Viktor Frankl: cuando la vida pierde sentido, el sufrimiento se vuelve insoportable. Trabajamos para restaurar el para qué.', who:'Crisis existencial · Propósito · Identidad' },
+              { icon:'🌿', title:'Transformación Personal Profunda', old:'Crecimiento personal', desc:'No crecimiento superficial. Un proceso estructurado de autoconocimiento, integración y transformación orientado a la plenitud real.', who:'Individual · Proceso · Profundidad' },
             ].map(s => (
-              <div key={s.n}>
-                <div className="w-12 h-12 rounded-full bg-[#4a7c59] flex items-center justify-center text-sm font-bold mx-auto mb-4">{s.n}</div>
-                <h3 style={{fontFamily:'Georgia,serif'}} className="text-lg font-bold mb-2">{s.t}</h3>
-                <p className="text-[#7ab893] text-sm leading-relaxed">{s.d}</p>
+              <div key={s.title} className="bg-white rounded-2xl p-6 border border-[#e8dfd0] hover:border-[#4a7c59]/40 hover:shadow-lg transition-all group">
+                <div className="text-3xl mb-4">{s.icon}</div>
+                <p className="text-[#8a9b8e] text-xs uppercase tracking-wide mb-1">Antes llamado: {s.old}</p>
+                <h3 style={{fontFamily:'Georgia,serif'}} className="text-xl font-bold text-[#1a2e1e] mb-3">{s.title}</h3>
+                <p className="text-[#5a6b5e] text-sm leading-relaxed mb-4">{s.desc}</p>
+                <p className="text-[#4a7c59] text-xs font-semibold">{s.who}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── AUTORIDAD ── */}
+      <section className="py-28 px-6 bg-[#1a2e1e] text-white">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div>
+              <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">Por qué confiar</p>
+              <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold mb-6">
+                Rigor clínico.<br/>Profundidad teológica.<br/>
+                <span className="text-[#c9a84c]">Sin compromisos.</span>
+              </h2>
+              <p className="text-white/60 leading-relaxed mb-8">
+                Vivimos en un mercado saturado de coaches sin formación y terapeutas sin fe. Nosotros no elegimos entre la ciencia del alma y la verdad de Dios. Integramos ambas, porque el ser humano es ambas.
+              </p>
+              <div className="space-y-3">
+                {[
+                  'Formación clínica acreditada en psicoanálisis y logoterapia',
+                  'Marco teológico reformado sin sincretismo ni ambigüedad',
+                  'Supervisión clínica continua de todos los procesos',
+                  'Confidencialidad absoluta garantizada',
+                ].map(v => (
+                  <div key={v} className="flex items-start gap-3">
+                    <span className="text-[#c9a84c] mt-0.5 flex-shrink-0">✦</span>
+                    <span className="text-white/70 text-sm">{v}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { n:'500+', l:'Procesos acompañados' },
+                { n:'98%', l:'Reportan transformación real' },
+                { n:'5', l:'Especialistas integrados' },
+                { n:'3 años', l:'Acompañando almas' },
+              ].map(s => (
+                <div key={s.l} className="bg-white/5 border border-white/10 rounded-2xl p-5 text-center">
+                  <div style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold text-[#c9a84c] mb-2">{s.n}</div>
+                  <div className="text-white/40 text-xs">{s.l}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── PRECIOS ── */}
-      <section id="precios" className="py-24 px-6">
+      <section id="precios" className="py-28 px-6 bg-[#faf8f4] text-[#1a2e1e]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-[#4a7c59] text-sm font-semibold tracking-widest uppercase mb-3">Inversión</p>
-            <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold text-[#1a2e1e]">Planes y precios</h2>
-            <p className="text-[#5a6b5e] mt-4">Transparencia total. Sin costos ocultos.</p>
+            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">Inversión en el alma</p>
+            <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold">Transparencia total</h2>
+            <p className="text-[#8a9b8e] mt-4 text-lg">Sin costos ocultos. Sin contratos. Sin presión.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6 items-start">
             {[
-              { name:'Sesión única', price:'USD 10', period:'por sesión', desc:'Ideal para comenzar o consultas puntuales.', features:['60 min por sesión','Video o chat','Notas de sesión','Acceso a tu dashboard'], cta:'Reservar sesión', featured:false },
-              { name:'Paquete Mensual', price:'USD 35', period:'4 sesiones / mes', desc:'El más elegido. Ahorrás USD 5 vs precio individual.', features:['4 sesiones de 60 min','Video o chat','Mensajes entre sesiones','Reportes de progreso','Prioridad en agenda'], cta:'Comenzar proceso', featured:true },
-              { name:'Proceso Intensivo', price:'USD 64', period:'8 sesiones / mes', desc:'Ahorrás USD 16 vs precio individual.', features:['8 sesiones de 60 min','Video o chat','Chat ilimitado','Reportes detallados','Terapeuta dedicado'], cta:'Iniciar proceso', featured:false },
+              { name:'Sesión única', price:'USD 10', period:'por sesión', desc:'Para comenzar o para consultas puntuales sin compromiso.', features:['60 min de sesión profunda','Video o chat seguro','Notas post-sesión','Acceso a tu dashboard'], cta:'Reservar sesión', featured:false },
+              { name:'Proceso Mensual', price:'USD 35', period:'4 sesiones / mes', desc:'El más elegido. Proceso terapéutico real y sostenido.', features:['4 sesiones de 60 min','Video o chat seguro','Mensajes entre sesiones','Reportes de proceso','Prioridad en agenda'], cta:'Iniciar proceso', featured:true },
+              { name:'Proceso Intensivo', price:'USD 64', period:'8 sesiones / mes', desc:'Para crisis agudas o procesos que requieren mayor profundidad.', features:['8 sesiones de 60 min','Video o chat seguro','Chat directo ilimitado','Reportes detallados','Terapeuta dedicado'], cta:'Consultar', featured:false },
             ].map(p => (
-              <div key={p.name} className={`rounded-2xl p-7 border-2 flex flex-col ${p.featured ? 'border-[#4a7c59] bg-[#4a7c59] text-white shadow-xl shadow-[#4a7c59]/20' : 'border-[#e8dfd0] bg-white'}`}>
-                {p.featured && <div className="text-xs font-bold tracking-widest uppercase bg-white/20 w-fit px-3 py-1 rounded-full mb-4">Más popular</div>}
+              <div key={p.name} className={`rounded-2xl p-7 flex flex-col border-2 ${p.featured ? 'border-[#4a7c59] bg-[#4a7c59] text-white shadow-xl shadow-[#4a7c59]/20' : 'border-[#e8dfd0] bg-white'}`}>
+                {p.featured && <div className="text-xs font-bold tracking-widest uppercase bg-white/20 w-fit px-3 py-1 rounded-full mb-4">Más elegido</div>}
                 <h3 style={{fontFamily:'Georgia,serif'}} className={`text-xl font-bold mb-1 ${p.featured?'text-white':'text-[#1a2e1e]'}`}>{p.name}</h3>
-                <p className={`text-sm mb-4 ${p.featured?'text-[#b8d4c0]':'text-[#8a9b8e]'}`}>{p.desc}</p>
+                <p className={`text-sm mb-5 ${p.featured?'text-white/70':'text-[#8a9b8e]'}`}>{p.desc}</p>
                 <div className="mb-6">
                   <span style={{fontFamily:'Georgia,serif'}} className={`text-4xl font-bold ${p.featured?'text-white':'text-[#1a2e1e]'}`}>{p.price}</span>
-                  <span className={`text-sm ml-2 ${p.featured?'text-[#b8d4c0]':'text-[#8a9b8e]'}`}>{p.period}</span>
+                  <span className={`text-sm ml-2 ${p.featured?'text-white/60':'text-[#8a9b8e]'}`}>{p.period}</span>
                 </div>
                 <ul className="space-y-2.5 mb-8 flex-1">
                   {p.features.map(f => (
-                    <li key={f} className={`flex items-center gap-2 text-sm ${p.featured?'text-[#e8f4ec]':'text-[#5a6b5e]'}`}>
-                      <span className={p.featured?'text-[#7ab893]':'text-[#4a7c59]'}>✓</span> {f}
+                    <li key={f} className={`flex items-start gap-2 text-sm ${p.featured?'text-white/90':'text-[#5a6b5e]'}`}>
+                      <span className={`flex-shrink-0 mt-0.5 ${p.featured?'text-[#c9a84c]':'text-[#4a7c59]'}`}>✓</span> {f}
                     </li>
                   ))}
                 </ul>
-                <Link href="/register" className={`text-center font-semibold py-3 rounded-full transition-all text-sm ${p.featured?'bg-white text-[#4a7c59] hover:bg-[#f0f7f2]':'bg-[#4a7c59] text-white hover:bg-[#3d6849]'}`}>
+                <Link href="/register" className={`text-center font-bold py-3 rounded-full transition-all text-sm ${p.featured?'bg-white text-[#4a7c59] hover:bg-[#f0f7f2]':'bg-[#4a7c59] text-white hover:bg-[#3d6849]'}`}>
                   {p.cta}
                 </Link>
               </div>
             ))}
           </div>
-          <p className="text-center text-[#8a9b8e] text-sm mt-8">Primera sesión gratuita · Pagos seguros via Mercado Pago · Precios en USD · Cancela cuando quieras</p>
+          <p className="text-center text-[#8a9b8e] text-sm mt-8">Primera sesión gratuita · Pagos seguros · Precios en USD · Cancela cuando quieras</p>
         </div>
       </section>
 
       {/* ── TESTIMONIOS ── */}
-      <section className="py-24 px-6 bg-[#f0f7f2]">
-        <div className="max-w-5xl mx-auto text-center">
-          <p className="text-[#4a7c59] text-sm font-semibold tracking-widest uppercase mb-3">Testimonios</p>
-          <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold text-[#1a2e1e] mb-16">Lo que dicen nuestros pacientes</h2>
+      <section className="py-28 px-6 bg-[#0e1a12] text-white">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">Transformación real</p>
+            <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold">No palabras vacías.<br/>Historias reales.</h2>
+          </div>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { q:'"Finalmente encontré un espacio que integra mi fe con mi salud mental. Transformador."', n:'Pastor Marcos R.', r:'Buenos Aires' },
-              { q:'"El enfoque espiritual fue exactamente lo que necesitaba. Mi familia ha cambiado para siempre."', n:'Familia González', r:'Córdoba' },
-              { q:'"Como coach, el burnout espiritual me tenía paralizada. El proceso me devolvió el propósito."', n:'Laura M.', r:'Mendoza' },
+              { q:'"Después de 15 años en el ministerio, había perdido todo sentido de quién era. El proceso no fue cómodo. Fue verdadero. Y eso lo cambió todo."', n:'Pastor R.M.', r:'Buenos Aires', rol:'Pastor de iglesia reformada' },
+              { q:'"Venía de tres terapias anteriores que me enseñaron a funcionar mejor pero no a sanar de verdad. Aquí tocaron capas que nadie había querido tocar."', n:'Valentina G.', r:'Córdoba', rol:'Profesional en crisis vocacional' },
+              { q:'"Mi matrimonio estaba fracturado en lo más profundo. Lo que pareció imposible fue posible cuando empezamos a trabajar desde las raíces."', n:'Familia Herrera', r:'Mendoza', rol:'Proceso de restauración familiar' },
             ].map(t => (
-              <div key={t.n} className="bg-white rounded-2xl p-6 border border-[#e8dfd0] text-left">
-                <p className="text-[#5a6b5e] text-sm leading-relaxed mb-4 italic">{t.q}</p>
+              <div key={t.n} className="border border-white/10 rounded-2xl p-6">
+                <div className="flex gap-1 mb-5">
+                  {[1,2,3,4,5].map(s => <span key={s} className="text-[#c9a84c] text-sm">★</span>)}
+                </div>
+                <p className="text-white/70 text-sm leading-relaxed mb-6 italic">{t.q}</p>
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-[#4a7c59]/20 flex items-center justify-center text-[#4a7c59] font-bold text-sm">{t.n[0]}</div>
+                  <div className="w-9 h-9 rounded-full bg-[#4a7c59]/30 flex items-center justify-center text-[#7ab893] font-bold text-sm">{t.n[0]}</div>
                   <div>
-                    <div className="font-semibold text-[#1a2e1e] text-sm">{t.n}</div>
-                    <div className="text-[#8a9b8e] text-xs">{t.r}</div>
+                    <p className="font-semibold text-white text-sm">{t.n}</p>
+                    <p className="text-white/30 text-xs">{t.rol} · {t.r}</p>
                   </div>
                 </div>
               </div>
@@ -192,24 +327,25 @@ export default function HomePage() {
       </section>
 
       {/* ── FAQ ── */}
-      <section id="faq" className="py-24 px-6">
+      <section id="faq" className="py-28 px-6 bg-[#faf8f4] text-[#1a2e1e]">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-[#4a7c59] text-sm font-semibold tracking-widest uppercase mb-3">FAQ</p>
-            <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold text-[#1a2e1e]">Preguntas frecuentes</h2>
+            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">Preguntas reales</p>
+            <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold">Lo que necesitas saber</h2>
           </div>
           <div className="space-y-3">
             {[
-              { q:'¿Necesito ser creyente para recibir terapia aquí?', a:'No. Si bien nuestro enfoque integra espiritualidad, atendemos personas de todas las creencias y también a agnósticos.' },
-              { q:'¿Cómo funciona el pago?', a:'Los pagos se realizan de forma segura a través de Mercado Pago. El acceso a tu sesión se libera inmediatamente después del pago.' },
-              { q:'¿Qué pasa si necesito cancelar?', a:'Puedes cancelar o reprogramar con al menos 24 horas de anticipación sin costo. Cancelaciones con menos de 24hs tienen cargo del 50%.' },
-              { q:'¿Son confidenciales las sesiones?', a:'Absolutamente. Toda la información es estrictamente confidencial y está protegida según nuestras políticas de privacidad GDPR.' },
-              { q:'¿En qué países están disponibles?', a:'Atendemos pacientes de toda América Latina y la comunidad hispanohablante global en múltiples zonas horarias.' },
-            ].map((f,i) => (
+              { q:'¿Necesito ser creyente o pertenecer a una iglesia?', a:'No. Trabajamos con personas de diversas trayectorias espirituales. Lo que sí requieren nuestros procesos es apertura a la dimensión espiritual del ser humano y a la búsqueda de verdad.' },
+              { q:'¿En qué se diferencia esto de una terapia común?', a:'Una terapia convencional trabaja la psique. Nosotros trabajamos la psique y el alma en integración. No separamos la dimensión espiritual como "extra opcional", sino como constitutiva del ser humano.' },
+              { q:'¿Es esto consejería pastoral o psicoterapia?', a:'Es ambas, integradas. Nuestros terapeutas tienen formación clínica acreditada y formación teológica seria. No improvisamos en ninguna de las dos dimensiones.' },
+              { q:'¿Cómo funciona el pago?', a:'Los pagos se realizan de forma segura a través de Mercado Pago. La primera sesión de diagnóstico es gratuita. El acceso a cada sesión se confirma una vez procesado el pago.' },
+              { q:'¿Puedo cancelar en cualquier momento?', a:'Sí. No hay contratos ni compromisos. Puedes reprogramar o cancelar con 24 horas de anticipación sin costo.' },
+              { q:'¿Son realmente confidenciales las sesiones?', a:'Confidencialidad absoluta, garantizada. Todo lo compartido está protegido bajo estrictos estándares de privacidad clínica y nuestra política de datos.' },
+            ].map((f, i) => (
               <details key={i} className="bg-white border border-[#e8dfd0] rounded-xl group">
-                <summary className="flex justify-between items-center p-5 cursor-pointer font-medium text-[#1a2e1e] list-none">
+                <summary className="flex justify-between items-center p-5 cursor-pointer font-semibold text-[#1a2e1e] list-none text-sm">
                   {f.q}
-                  <span className="text-[#4a7c59] text-xl group-open:rotate-45 transition-transform ml-4 flex-shrink-0">+</span>
+                  <span className="text-[#4a7c59] text-xl group-open:rotate-45 transition-transform flex-shrink-0 ml-4">+</span>
                 </summary>
                 <div className="px-5 pb-5 text-[#5a6b5e] text-sm leading-relaxed">{f.a}</div>
               </details>
@@ -219,30 +355,40 @@ export default function HomePage() {
       </section>
 
       {/* ── CTA FINAL ── */}
-      <section className="py-24 px-6 bg-[#1a2e1e] text-center">
-        <div className="max-w-2xl mx-auto">
-          <div className="text-4xl mb-6 text-[#4a7c59]">✦</div>
-          <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold text-white mb-4">Da el primer paso hoy</h2>
-          <p className="text-[#7ab893] text-lg mb-8">Tu primera sesión es gratuita. Solo el inicio de un camino de sanación.</p>
-          <Link href="/register" className="bg-[#4a7c59] text-white font-semibold px-10 py-4 rounded-full hover:bg-[#5a9c6f] transition-all inline-block">
-            Comenzar mi proceso →
+      <section className="py-28 px-6 bg-[#0e1a12] text-center relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#1a3a20_0%,#0e1a12_70%)]" />
+        <div className="relative max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-3 mb-8">
+            <div className="h-px w-16 bg-[#c9a84c]/30" />
+            <span className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase">El primer paso</span>
+            <div className="h-px w-16 bg-[#c9a84c]/30" />
+          </div>
+          <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl md:text-5xl font-bold text-white mb-6">
+            La restauración<br/>comienza con una<br/><span className="text-[#c9a84c]">conversación honesta.</span>
+          </h2>
+          <p className="text-white/50 text-lg mb-10 leading-relaxed">
+            Una sesión inicial gratuita. Sin compromiso. Solo un espacio para que puedas ser visto y escuchado con la profundidad que mereces.
+          </p>
+          <Link href="/register" className="bg-[#c9a84c] text-[#0e1a12] font-bold px-10 py-4 rounded-full hover:bg-[#d4b86a] transition-all inline-block text-base">
+            Agendar sesión inicial gratuita →
           </Link>
+          <p className="text-white/20 text-xs mt-6">Primera sesión sin costo · Confidencialidad absoluta · Sin contratos</p>
         </div>
       </section>
 
       {/* ── FOOTER ── */}
-      <footer className="bg-[#111f14] text-[#5a6b5e] py-10 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+      <footer className="bg-[#080f09] text-white/20 py-10 px-6">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-full bg-[#4a7c59] flex items-center justify-center">
-              <span className="text-white text-[8px]">✦</span>
+            <div className="w-5 h-5 rounded-full border border-[#c9a84c]/40 flex items-center justify-center">
+              <span className="text-[#c9a84c] text-[8px]">✦</span>
             </div>
-            <span className="text-[#7ab893] font-medium">Clínica Espiritual Psicológica</span>
+            <span className="text-white/40 font-medium">Clínica del Alma · Restauración Integral</span>
           </div>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-[#7ab893] transition-colors">Privacidad</a>
-            <a href="#" className="hover:text-[#7ab893] transition-colors">Términos</a>
-            <Link href="/login" className="hover:text-[#7ab893] transition-colors">Portal paciente</Link>
+            <a href="#" className="hover:text-white/60 transition-colors">Privacidad</a>
+            <a href="#" className="hover:text-white/60 transition-colors">Términos</a>
+            <Link href="/login" className="hover:text-white/60 transition-colors">Portal paciente</Link>
           </div>
           <p>© 2026 · Todos los derechos reservados</p>
         </div>
