@@ -215,46 +215,97 @@ export default function HomePage() {
       {/* ── AUTORIDAD ── */}
       <section className="py-28 px-6 bg-[#1a2e1e] text-white">
         <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div>
-              <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">Por qué confiar</p>
-              <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold mb-6">
-                Rigor clínico.<br/>Profundidad teológica.<br/>
-                <span className="text-[#c9a84c]">Sin compromisos.</span>
-              </h2>
-              <p className="text-white/60 leading-relaxed mb-8">
-                Vivimos en un mercado saturado de coaches sin formación y terapeutas sin fe. Nosotros no elegimos entre la ciencia del alma y la verdad de Dios. Integramos ambas, porque el ser humano es ambas.
-              </p>
-              <div className="space-y-3">
-                {[
-                  'Formación clínica acreditada en psicoanálisis y logoterapia',
-                  'Marco teológico reformado sin sincretismo ni ambigüedad',
-                  'Supervisión clínica continua de todos los procesos',
-                  'Confidencialidad absoluta garantizada',
-                ].map(v => (
-                  <div key={v} className="flex items-start gap-3">
-                    <span className="text-[#c9a84c] mt-0.5 flex-shrink-0">✦</span>
-                    <span className="text-white/70 text-sm">{v}</span>
-                  </div>
-                ))}
+
+          {/* Header */}
+          <div className="text-center mb-16">
+            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">Fundamento</p>
+            <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl md:text-5xl font-bold mb-4">
+              La confianza no se construye<br/>con números, sino con verdad.
+            </h2>
+            <p className="text-white/40 max-w-xl mx-auto text-lg leading-relaxed">
+              Ni terapia superficial, ni espiritualidad sin fundamento.<br/>Integración clínica y verdad teológica, sin concesiones.
+            </p>
+          </div>
+
+          {/* Grid de distinciones */}
+          <div className="grid md:grid-cols-3 gap-5 mb-16">
+            {[
+              {
+                neg: 'Esto no es coaching motivacional',
+                pos: 'Es trabajo estructural del alma',
+                desc: 'No ofrecemos técnicas de positivismo ni afirmaciones sin base. El trabajo que hacemos toca capas que el coaching no está formado para abordar.',
+              },
+              {
+                neg: 'Esto no es terapia secular aislada',
+                pos: 'Integra la dimensión espiritual real',
+                desc: 'La psicología sin alma trata al ser humano incompleto. No separamos lo clínico de lo espiritual como si fueran departamentos distintos.',
+              },
+              {
+                neg: 'Esto no es espiritualidad superficial',
+                pos: 'Está anclada en verdad teológica sólida',
+                desc: 'Sin misticismo ambiguo, sin sincretismo, sin sensaciones como criterio. La fe que integramos tiene nombre, texto y estructura.',
+              },
+            ].map(d => (
+              <div key={d.neg} className="border border-white/10 rounded-2xl p-6">
+                <p className="text-red-400/60 text-xs font-semibold mb-1 line-through">{d.neg}</p>
+                <p style={{fontFamily:'Georgia,serif'}} className="text-white font-bold text-lg mb-3">{d.pos}</p>
+                <p className="text-white/40 text-sm leading-relaxed">{d.desc}</p>
               </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
+            ))}
+          </div>
+
+          {/* Estructura del método */}
+          <div className="border border-white/8 rounded-2xl p-8 bg-white/3 mb-16">
+            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-8 text-center">Estructura del método</p>
+            <div className="grid md:grid-cols-4 gap-0">
               {[
-                { n:'500+', l:'Procesos acompañados' },
-                { n:'98%', l:'Reportan transformación real' },
-                { n:'5', l:'Especialistas integrados' },
-                { n:'3 años', l:'Acompañando almas' },
-              ].map(s => (
-                <div key={s.l} className="bg-white/5 border border-white/10 rounded-2xl p-5 text-center">
-                  <div style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold text-[#c9a84c] mb-2">{s.n}</div>
-                  <div className="text-white/40 text-xs">{s.l}</div>
+                { n:'I', title:'Comprensión profunda', sub:'Psicoanálisis', desc:'El inconsciente no es metáfora. Es el lugar donde viven los conflictos no resueltos que dirigen la vida desde abajo.', color:'border-[#4a7c59]' },
+                { n:'II', title:'Sentido y dirección', sub:'Logoterapia · Frankl', desc:'El sufrimiento sin sentido destruye. Con sentido, puede transformarse en el material de la construcción del alma.', color:'border-[#c9a84c]' },
+                { n:'III', title:'Verdad y orden', sub:'Teología Reformada', desc:'El alma fue creada con un orden. La Escritura no es un recurso adicional — es el marco desde el que leemos la realidad.', color:'border-blue-500/50' },
+                { n:'IV', title:'Integración del alma', sub:'Restauración', desc:'El objetivo no es ajuste conductual. Es que identidad, propósito, vínculos y fe operen desde un centro restaurado.', color:'border-purple-500/50' },
+              ].map((m, i) => (
+                <div key={m.n} className={`p-6 ${i < 3 ? 'border-r border-white/8' : ''}`}>
+                  <div className={`text-xs font-bold tracking-widest mb-1 ${i===0?'text-[#7ab893]':i===1?'text-[#c9a84c]':i===2?'text-blue-400':'text-purple-400'}`}>{m.n}</div>
+                  <h3 style={{fontFamily:'Georgia,serif'}} className="font-bold text-white text-base mb-1">{m.title}</h3>
+                  <p className="text-white/30 text-xs font-semibold uppercase tracking-wide mb-3">{m.sub}</p>
+                  <p className="text-white/40 text-xs leading-relaxed">{m.desc}</p>
                 </div>
               ))}
             </div>
           </div>
+
+          {/* Declaración clínica */}
+          <div className="grid md:grid-cols-2 gap-10 items-start">
+            <div>
+              <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">Declaración de trabajo</p>
+              <blockquote style={{fontFamily:'Georgia,serif'}} className="text-2xl font-bold text-white leading-snug mb-6">
+                "No trabajamos para que te sientas mejor sin verdad. Trabajamos para que tu vida se ordene desde lo que es real."
+              </blockquote>
+              <p className="text-white/40 text-sm leading-relaxed">
+                El alivio emocional sin comprensión profunda es anestesia. Puede silenciar el síntoma sin tocar su raíz. Nuestro trabajo apunta más abajo.
+              </p>
+            </div>
+            <div className="space-y-3">
+              {[
+                { t:'Formación clínica real, no aproximaciones informales', d:'Psicoanálisis y logoterapia con base teórica y supervisión activa.' },
+                { t:'Teología reformada sin sincretismo', d:'Marco doctrinal claro. Sola Scriptura como autoridad, sin mezclas que diluyen.' },
+                { t:'Supervisión constante del proceso', d:'Cada caso es revisado. Ningún proceso opera sin control de calidad clínico.' },
+                { t:'Confidencialidad como principio estructural', d:'No como política de privacidad. Como compromiso ético irrenunciable.' },
+              ].map(v => (
+                <div key={v.t} className="flex items-start gap-4 p-4 bg-white/3 border border-white/8 rounded-xl">
+                  <span className="text-[#c9a84c] flex-shrink-0 mt-0.5">✦</span>
+                  <div>
+                    <p className="text-white/80 text-sm font-semibold">{v.t}</p>
+                    <p className="text-white/30 text-xs mt-0.5 leading-relaxed">{v.d}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
+
 
       {/* ── PRECIOS ── */}
       <section id="precios" className="py-28 px-6 bg-[#faf8f4] text-[#1a2e1e]">
