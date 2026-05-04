@@ -44,7 +44,7 @@ export default function TerapeutasPage() {
     setLoading(false)
   }
 
-  async function handleCreate(e: React.FormEvent) {
+  async function handleCreate(e: any) {
     e.preventDefault()
     setSaving(true)
     setMsg('')

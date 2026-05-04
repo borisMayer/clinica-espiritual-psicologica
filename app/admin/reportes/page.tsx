@@ -22,7 +22,7 @@ export default function ReportesAdminPage() {
 
   const d = data!
   const meses = Object.entries(d.financiero.ingresosMensuales).sort()
-  const maxIngreso = Math.max(...meses.map(([,v]) => v), 1)
+  const maxIngreso = Math.max(...meses.map(([,v]: [string, number]) => Number(v)), 1)
 
   const pacientesActivos = d.clinico.pacientesStats.find(p => p.isActive === true)?._count ?? 0
   const pacientesInactivos = d.clinico.pacientesStats.find(p => p.isActive === false)?._count ?? 0
@@ -76,7 +76,7 @@ export default function ReportesAdminPage() {
             <p className="text-[#8a9b8e] text-sm text-center py-8">Sin datos de ingresos aún</p>
           ) : (
             <div className="flex items-end gap-2 h-40">
-              {meses.map(([mes, valor]) => (
+              {meses.map(([mes, valor]: [string, number]) => (
                 <div key={mes} className="flex-1 flex flex-col items-center gap-1">
                   <span className="text-xs text-[#8a9b8e]">USD {valor}</span>
                   <div

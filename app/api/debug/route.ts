@@ -53,9 +53,9 @@ export async function GET() {
 
   // 4. Check env vars
   results.env = {
-    DATABASE_URL: process.env.DATABASE_URL ? `✅ Set (${process.env.DATABASE_URL.substring(0, 30)}...)` : '❌ Missing',
-    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET ? '✅ Set' : '❌ Missing',
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL || '❌ Missing',
+    DATABASE_URL: (process as any).env?.DATABASE_URL ? `✅ Set (${(process as any).env?.DATABASE_URL.substring(0, 30)}...)` : '❌ Missing',
+    NEXTAUTH_SECRET: (process as any).env?.NEXTAUTH_SECRET ? '✅ Set' : '❌ Missing',
+    NEXTAUTH_URL: (process as any).env?.NEXTAUTH_URL || '❌ Missing',
   }
 
   return NextResponse.json(results, { status: 200 })

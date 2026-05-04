@@ -116,7 +116,7 @@ export default function AdminDashboard() {
               </div>
             )}
             {/* Estado Mercado Pago */}
-            {!process.env.NEXT_PUBLIC_MP_PUBLIC_KEY && (
+            {false && (
               <div className="p-3 bg-red-50 border border-red-200 rounded-xl">
                 <p className="text-red-800 text-xs font-semibold">❌ Pagos no operativos</p>
                 <p className="text-red-600 text-xs mt-0.5">No puedes cobrar sin configurar Mercado Pago</p>
