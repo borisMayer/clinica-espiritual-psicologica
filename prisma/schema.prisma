@@ -169,6 +169,8 @@ model Appointment {
   session       Session?
   messages      Message[]
   notifications Notification[]
+  sessionNotes  SessionNote[]
+  patientScores PatientScore[]
 
   @@map("appointments")
 }
