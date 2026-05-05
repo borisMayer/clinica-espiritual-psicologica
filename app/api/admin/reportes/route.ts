@@ -2,81 +2,94 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url)
-  const periodo = searchParams.get('periodo') ?? '30'
-  const dias = parseInt(periodo)
-  const desde = new Date(Date.now() - dias * 24 * 60 * 60 * 1000)
+  try {
+    const { searchParams } = new URL(req.url)
+    const periodo = searchParams.get('periodo') ?? '30'
+    const dias = parseInt(periodo)
+    const desde = new Date(Date.now() - dias * 24 * 60 * 60 * 1000)
+    const desde6meses = new Date(Date.now() - 180 * 24 * 60 * 60 * 1000)
 
-  const [ingresosPorMes, sesionesStats, pacientesStats, terapeutasStats] = await Promise.all([
-    // Ingresos agrupados por mes (últimos 6 meses)
-    prisma.payment.findMany({
-      where: { status: 'APPROVED', paidAt: { gte: new Date(Date.now() - 180 * 24 * 60 * 60 * 1000) } },
+    // Ingresos aprobados últimos 6 meses
+    const pagosAprobados = await prisma.payment.findMany({
+      where: { status: 'APPROVED', paidAt: { gte: desde6meses } },
       select: { amount: true, paidAt: true },
       orderBy: { paidAt: 'asc' },
-    }),
+    })
 
-    // Stats de sesiones
-    prisma.appointment.groupBy({
-      by: ['status'],
+    // Todas las sesiones del período
+    const sesiones = await prisma.appointment.findMany({
       where: { scheduledAt: { gte: desde } },
-      _count: true,
-    }),
+      select: { status: true },
+    })
 
-    // Stats de pacientes
-    prisma.user.groupBy({
-      by: ['isActive'],
+    // Pacientes activos/inactivos
+    const todosLosPacientes = await prisma.user.findMany({
       where: { role: 'PATIENT' },
-      _count: true,
-    }),
+      select: { isActive: true },
+    })
 
-    // Ingresos por terapeuta
-    prisma.appointment.findMany({
+    // Sesiones completadas con terapeuta para ingresos por terapeuta
+    const sesionesCompletadasDetalle = await prisma.appointment.findMany({
       where: { status: 'COMPLETED', scheduledAt: { gte: desde } },
       include: {
         therapist: { select: { id: true, name: true } },
         payments: { where: { status: 'APPROVED' }, select: { amount: true } },
       },
-    }),
-  ])
+    })
 
-  // Agrupar ingresos por mes
-  const ingresosMensuales: Record<string, number> = {}
-  ingresosPorMes.forEach(p => {
-    if (!p.paidAt) return
-    const key = `${p.paidAt.getFullYear()}-${String(p.paidAt.getMonth() + 1).padStart(2,'0')}`
-    ingresosMensuales[key] = (ingresosMensuales[key] ?? 0) + Number(p.amount)
-  })
+    // Total sesiones completadas históricas
+    const totalHistorico = await prisma.appointment.count({ where: { status: 'COMPLETED' } })
 
-  // Ingresos por terapeuta
-  const porTerapeuta: Record<string, { nombre: string; sesiones: number; ingresos: number }> = {}
-  terapeutasStats.forEach(apt => {
-    const id = apt.therapist.id
-    if (!porTerapeuta[id]) porTerapeuta[id] = { nombre: apt.therapist.name, sesiones: 0, ingresos: 0 }
-    porTerapeuta[id].sesiones++
-    apt.payments.forEach(p => { porTerapeuta[id].ingresos += Number(p.amount) })
-  })
+    // Agrupar ingresos por mes
+    const ingresosMensuales: Record<string, number> = {}
+    pagosAprobados.forEach(p => {
+      if (!p.paidAt) return
+      const key = `${p.paidAt.getFullYear()}-${String(p.paidAt.getMonth() + 1).padStart(2, '0')}`
+      ingresosMensuales[key] = (ingresosMensuales[key] ?? 0) + Number(p.amount)
+    })
 
-  const totalIngresos = ingresosPorMes.reduce((s, p) => s + Number(p.amount), 0)
-  const totalSesiones = sesionesStats.reduce((s, g) => s + g._count, 0)
-  const sesionesCompletadas = sesionesStats.find(g => g.status === 'COMPLETED')?._count ?? 0
-  const sesionesTotalesPacientes = await prisma.appointment.count({ where: { status: 'COMPLETED' } })
-  const ticketPromedio = sesionesCompletadas > 0 ? totalIngresos / sesionesCompletadas : 0
+    // Agrupar sesiones por estado
+    const sesionesAgrupadas: Record<string, number> = {}
+    sesiones.forEach(s => {
+      sesionesAgrupadas[s.status] = (sesionesAgrupadas[s.status] ?? 0) + 1
+    })
+    const sesionesStats = Object.entries(sesionesAgrupadas).map(([status, count]) => ({ status, _count: count }))
 
-  return NextResponse.json({
-    financiero: {
-      ingresosMensuales,
-      totalIngresos,
-      ticketPromedio: Math.round(ticketPromedio * 100) / 100,
-      porTerapeuta: Object.values(porTerapeuta),
-    },
-    operativo: {
-      sesionesStats,
-      totalSesiones,
-      tasaCompletadas: totalSesiones > 0 ? Math.round((sesionesCompletadas / totalSesiones) * 100) : 0,
-    },
-    clinico: {
-      pacientesStats,
-      totalCompletadas: sesionesTotalesPacientes,
-    },
-  })
+    // Agrupar pacientes
+    const pacientesActivos = todosLosPacientes.filter(p => p.isActive).length
+    const pacientesInactivos = todosLosPacientes.filter(p => !p.isActive).length
+    const pacientesStats = [
+      { isActive: true, _count: pacientesActivos },
+      { isActive: false, _count: pacientesInactivos },
+    ]
+
+    // Ingresos por terapeuta
+    const porTerapeutaMap: Record<string, { nombre: string; sesiones: number; ingresos: number }> = {}
+    sesionesCompletadasDetalle.forEach(apt => {
+      const id = apt.therapist.id
+      if (!porTerapeutaMap[id]) porTerapeutaMap[id] = { nombre: apt.therapist.name, sesiones: 0, ingresos: 0 }
+      porTerapeutaMap[id].sesiones++
+      apt.payments.forEach(p => { porTerapeutaMap[id].ingresos += Number(p.amount) })
+    })
+
+    const totalIngresos = pagosAprobados.reduce((s, p) => s + Number(p.amount), 0)
+    const completadas = sesionesAgrupadas['COMPLETED'] ?? 0
+    const totalSesiones = sesiones.length
+    const ticketPromedio = completadas > 0 ? totalIngresos / completadas : 0
+    const tasaCompletadas = totalSesiones > 0 ? Math.round((completadas / totalSesiones) * 100) : 0
+
+    return NextResponse.json({
+      financiero: {
+        ingresosMensuales,
+        totalIngresos,
+        ticketPromedio: Math.round(ticketPromedio * 100) / 100,
+        porTerapeuta: Object.values(porTerapeutaMap),
+      },
+      operativo: { sesionesStats, totalSesiones, tasaCompletadas },
+      clinico: { pacientesStats, totalCompletadas: totalHistorico },
+    })
+  } catch (e: any) {
+    console.error('[REPORTES ERROR]', e)
+    return NextResponse.json({ error: e.message }, { status: 500 })
+  }
 }
