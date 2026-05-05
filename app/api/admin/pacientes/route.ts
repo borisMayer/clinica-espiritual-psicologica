@@ -6,24 +6,30 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const search = searchParams.get('search') ?? ''
     const page = parseInt(searchParams.get('page') ?? '1')
+    const filtro = searchParams.get('filtro') ?? 'todos' // todos|activos|inactivos|nuevos|deuda|sinSesion
     const limit = 20
     const skip = (page - 1) * limit
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
 
-    const where = {
-      role: 'PATIENT' as const,
+    const baseWhere: any = {
+      role: 'PATIENT',
       ...(search ? {
         OR: [
-          { name: { contains: search, mode: 'insensitive' as const } },
-          { email: { contains: search, mode: 'insensitive' as const } },
+          { name: { contains: search, mode: 'insensitive' } },
+          { email: { contains: search, mode: 'insensitive' } },
           { phone: { contains: search } },
         ]
       } : {})
     }
 
-    const [pacientes, total, nuevosEsteMes, conDeuda] = await Promise.all([
+    // Filtros adicionales
+    if (filtro === 'activos') baseWhere.isActive = true
+    if (filtro === 'inactivos') baseWhere.isActive = false
+    if (filtro === 'nuevos') baseWhere.createdAt = { gte: thirtyDaysAgo }
+
+    const [pacientes, total, kpiData] = await Promise.all([
       prisma.user.findMany({
-        where,
+        where: baseWhere,
         select: {
           id: true, name: true, email: true, phone: true,
           isActive: true, createdAt: true, lastLoginAt: true, avatarUrl: true,
@@ -40,20 +46,23 @@ export async function GET(req: NextRequest) {
         skip,
         take: limit,
       }),
-      prisma.user.count({ where }),
-      prisma.user.count({ where: { role: 'PATIENT', createdAt: { gte: thirtyDaysAgo } } }),
-      prisma.user.count({
-        where: {
-          role: 'PATIENT',
-          patientAppointments: {
-            some: {
-              status: 'CONFIRMED',
-              payments: { none: { status: 'APPROVED' } }
-            }
+      prisma.user.count({ where: baseWhere }),
+      // KPIs globales (sin filtro de búsqueda)
+      Promise.all([
+        prisma.user.count({ where: { role: 'PATIENT' } }),
+        prisma.user.count({ where: { role: 'PATIENT', isActive: true } }),
+        prisma.user.count({ where: { role: 'PATIENT', createdAt: { gte: thirtyDaysAgo } } }),
+        prisma.payment.aggregate({ where: { status: 'APPROVED', amount: { gt: 0 } }, _sum: { amount: true } }),
+        prisma.appointment.count({
+          where: {
+            scheduledAt: { gte: new Date(new Date().setHours(0,0,0,0)) },
+            status: { in: ['CONFIRMED', 'IN_PROGRESS'] }
           }
-        }
-      }),
+        }),
+      ])
     ])
+
+    const [totalGlobal, activosGlobal, nuevosGlobal, ingresosData, sesionesHoy] = kpiData
 
     const result = pacientes.map(p => {
       const completadas = p.patientAppointments.filter(a => a.status === 'COMPLETED')
@@ -61,34 +70,32 @@ export async function GET(req: NextRequest) {
         ['CONFIRMED', 'PENDING'].includes(a.status) && new Date(a.scheduledAt) > new Date()
       )
       const ultimaCita = completadas[0]
-      const totalPagado = p.payments.filter(pm => pm.status === 'APPROVED').reduce((s, pm) => s + Number(pm.amount), 0)
+      const pagosAprobados = p.payments.filter(pm => pm.status === 'APPROVED' && Number(pm.amount) > 0)
+      const totalPagado = pagosAprobados.reduce((s, pm) => s + Number(pm.amount), 0)
       const tieneDeuda = p.patientAppointments.some(a =>
         a.status === 'PENDING' && !p.payments.some(pm => pm.status === 'APPROVED')
       )
       const esNuevo = new Date(p.createdAt) >= thirtyDaysAgo
+      const sinSesionDias = ultimaCita
+        ? Math.floor((Date.now() - new Date(ultimaCita.scheduledAt).getTime()) / 86400000)
+        : null
 
       return {
         id: p.id, name: p.name, email: p.email, phone: p.phone,
         avatarUrl: p.avatarUrl, isActive: p.isActive,
         createdAt: p.createdAt, lastLoginAt: p.lastLoginAt,
         totalSesiones: completadas.length,
+        totalCitas: p.patientAppointments.length,
         totalPagado,
         tieneDeuda,
         esNuevo,
-        proximaCita: proximaCita ? { scheduledAt: proximaCita.scheduledAt, therapist: proximaCita.therapist.name, status: proximaCita.status } : null,
-        ultimaCita: ultimaCita ? { scheduledAt: ultimaCita.scheduledAt, therapist: ultimaCita.therapist.name } : null,
-        sinSesionDias: ultimaCita ? Math.floor((Date.now() - new Date(ultimaCita.scheduledAt).getTime()) / 86400000) : null,
-      }
-    })
-
-    // KPIs
-    const ingresosTotal = await prisma.payment.aggregate({
-      where: { status: 'APPROVED' }, _sum: { amount: true }
-    })
-    const sesionesHoy = await prisma.appointment.count({
-      where: {
-        scheduledAt: { gte: new Date(new Date().setHours(0,0,0,0)) },
-        status: { in: ['CONFIRMED', 'IN_PROGRESS'] }
+        sinSesionDias,
+        proximaCita: proximaCita
+          ? { scheduledAt: proximaCita.scheduledAt, therapist: proximaCita.therapist.name, status: proximaCita.status }
+          : null,
+        ultimaCita: ultimaCita
+          ? { scheduledAt: ultimaCita.scheduledAt, therapist: ultimaCita.therapist.name }
+          : null,
       }
     })
 
@@ -98,15 +105,16 @@ export async function GET(req: NextRequest) {
       pages: Math.ceil(total / limit),
       page,
       kpis: {
-        total,
-        activos: pacientes.filter(p => p.isActive).length,
-        nuevos: nuevosEsteMes,
-        conDeuda,
-        ingresos: Number(ingresosTotal._sum.amount ?? 0),
+        total: totalGlobal,
+        activos: activosGlobal,
+        nuevos: nuevosGlobal,
+        conDeuda: result.filter(p => p.tieneDeuda).length,
+        ingresos: Number(ingresosData._sum.amount ?? 0),
         sesionesHoy,
       }
     })
   } catch (e: any) {
+    console.error('[PACIENTES API]', e)
     return NextResponse.json({ error: e.message }, { status: 500 })
   }
 }
