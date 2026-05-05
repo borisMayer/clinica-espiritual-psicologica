@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 
 type Terapeuta = { id: string; name: string; bio: string | null; specialties: string[]; sessionPrice: number | null }
 type Cita = {
@@ -7,383 +7,270 @@ type Cita = {
   therapist: { name: string; specialties: string[]; sessionPrice: number | null }
 }
 
-const PLANES = [
+const MODALIDADES = [
   {
-    id: 'free', label: 'Primera sesión', precio: 0, precioLabel: 'Gratis',
-    desc: 'Solo si es tu primera sesión. Sin compromiso.',
-    features: ['60 min de sesión profunda', 'Diagnóstico inicial', 'Sin pago requerido'],
-    color: 'border-blue-400', accentBg: 'bg-blue-500', accentText: 'text-blue-600',
-    badge: 'bg-blue-50 text-blue-600 border-blue-200', cta: 'Reservar sesión gratuita',
+    id: 'single',
+    nombre: 'Sesión individual',
+    descripcion: 'Espacio terapéutico de exploración y acompañamiento inicial o puntual.',
+    duracion: '60 minutos',
+    enfoque: 'Diagnóstico · Exploración · Consulta',
+    precio: 10,
   },
   {
-    id: 'single', label: 'Sesión única', precio: 10, precioLabel: 'USD 10',
-    desc: 'Para consultas puntuales sin compromiso.',
-    features: ['60 min de sesión', 'Video o chat', 'Notas post-sesión'],
-    color: 'border-[#e8dfd0]', accentBg: 'bg-[#4a7c59]', accentText: 'text-[#4a7c59]',
-    badge: 'bg-[#f0f7f2] text-[#4a7c59] border-[#4a7c59]/20', cta: 'Elegir y agendar',
+    id: 'monthly',
+    nombre: 'Proceso mensual',
+    descripcion: 'Acompañamiento continuo con cuatro sesiones estructuradas en el mes.',
+    duracion: '4 sesiones · 60 min cada una',
+    enfoque: 'Proceso · Profundidad · Seguimiento',
+    precio: 35,
+    destacado: true,
   },
   {
-    id: 'monthly', label: 'Proceso mensual', precio: 35, precioLabel: 'USD 35',
-    desc: '4 sesiones. El más elegido para proceso real.',
-    features: ['4 sesiones de 60 min', 'Mensajes entre sesiones', 'Reportes de progreso', 'Prioridad en agenda'],
-    color: 'border-[#4a7c59]', accentBg: 'bg-[#4a7c59]', accentText: 'text-[#4a7c59]',
-    badge: 'bg-[#f0f7f2] text-[#4a7c59] border-[#4a7c59]/20', cta: 'Comenzar proceso', featured: true,
-  },
-  {
-    id: 'intensive', label: 'Proceso intensivo', precio: 64, precioLabel: 'USD 64',
-    desc: '8 sesiones para transformación profunda.',
-    features: ['8 sesiones de 60 min', 'Chat directo ilimitado', 'Terapeuta dedicado', 'Reportes detallados'],
-    color: 'border-[#e8dfd0]', accentBg: 'bg-[#1a2e1e]', accentText: 'text-[#1a2e1e]',
-    badge: 'bg-[#f5f3ef] text-[#1a2e1e] border-[#e8dfd0]', cta: 'Iniciar proceso',
+    id: 'intensive',
+    nombre: 'Proceso intensivo',
+    descripcion: 'Para situaciones que requieren mayor frecuencia e intervención sostenida.',
+    duracion: '8 sesiones · 60 min cada una',
+    enfoque: 'Intervención profunda · Crisis · Transformación',
+    precio: 64,
   },
 ]
 
 const ESP: Record<string, string> = {
-  BURNOUT_ESPIRITUAL: 'Burnout Espiritual', TERAPIA_FAMILIAR: 'Terapia Familiar',
-  SANACION_ALMA: 'Sanación del Alma', TRANSFORMACION_PERSONAL: 'Transformación Personal',
-  LIDERAZGO_ESPIRITUAL: 'Liderazgo Espiritual', DUELO: 'Duelo', ANSIEDAD_ESPIRITUAL: 'Ansiedad Espiritual',
+  BURNOUT_ESPIRITUAL: 'Crisis vocacional', TERAPIA_FAMILIAR: 'Orden relacional',
+  SANACION_ALMA: 'Sanación del alma', TRANSFORMACION_PERSONAL: 'Transformación personal',
+  LIDERAZGO_ESPIRITUAL: 'Liderazgo espiritual', DUELO: 'Duelo', ANSIEDAD_ESPIRITUAL: 'Ansiedad espiritual',
 }
+
 const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']
-const DIAS_SEMANA = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']
+const DIAS = ['Do','Lu','Ma','Mi','Ju','Vi','Sá']
 
 export default function AgendaPacientePage() {
-  const [view, setView] = useState<'mis-citas' | 'agendar'>('mis-citas')
-  const [step, setStep] = useState<1|2|3>(1)
+  const [vista, setVista] = useState<'principal' | 'modalidades' | 'agendar'>('principal')
+  const [paso, setPaso] = useState<1|2|3>(1)
   const [citas, setCitas] = useState<Cita[]>([])
   const [terapeutas, setTerapeutas] = useState<Terapeuta[]>([])
-  const [planSelected, setPlanSelected] = useState<string>('')
-  const [terapeutaSelected, setTerapeutaSelected] = useState('')
-  const [calYear, setCalYear] = useState(new Date().getFullYear())
-  const [calMonth, setCalMonth] = useState(new Date().getMonth())
-  const [dateSelected, setDateSelected] = useState('')
+  const [modalidad, setModalidad] = useState<string>('')
+  const [terapeuta, setTerapeuta] = useState('')
+  const [calAnio, setCalAnio] = useState(new Date().getFullYear())
+  const [calMes, setCalMes] = useState(new Date().getMonth())
+  const [fecha, setFecha] = useState('')
   const [slots, setSlots] = useState<string[]>([])
-  const [slotSelected, setSlotSelected] = useState('')
-  const [loadingSlots, setLoadingSlots] = useState(false)
-  const [booking, setBooking] = useState(false)
-  const [paying, setPaying] = useState(false)
+  const [slotSel, setSlotSel] = useState('')
+  const [cargandoSlots, setCargandoSlots] = useState(false)
+  const [guardando, setGuardando] = useState(false)
+  const [pagando, setPagando] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [msg, setMsg] = useState('')
-  const [countdown, setCountdown] = useState<number | null>(null)
-  const countdownRef = useRef<any>(null)
+  const [notif, setNotif] = useState<{tipo:'ok'|'err', msg:string}|null>(null)
 
-  const esNuevoPaciente = citas.length === 0
-  const planActual = PLANES.find(p => p.id === planSelected)
+  const esPrimerPaciente = citas.length === 0
+  const modalidadSel = MODALIDADES.find(m => m.id === modalidad)
 
   useEffect(() => {
-    fetch('/api/paciente/agenda').then(r => r.json()).then(d => { setCitas(d.citas ?? []); setLoading(false) })
-    fetch('/api/paciente/agenda?type=terapeutas').then(r => r.json()).then(d => setTerapeutas(d.terapeutas ?? []))
+    fetch('/api/paciente/agenda').then(r=>r.json()).then(d=>{setCitas(d.citas??[]);setLoading(false)})
+    fetch('/api/paciente/agenda?type=terapeutas').then(r=>r.json()).then(d=>setTerapeutas(d.terapeutas??[]))
   }, [])
 
   useEffect(() => {
-    if (!terapeutaSelected || !dateSelected) { setSlots([]); return }
-    setLoadingSlots(true)
-    fetch(`/api/paciente/agenda?type=slots&therapistId=${terapeutaSelected}&date=${dateSelected}`)
-      .then(r => r.json()).then(d => { setSlots(d.slots ?? []); setLoadingSlots(false) })
-  }, [terapeutaSelected, dateSelected])
+    if (!terapeuta || !fecha) { setSlots([]); return }
+    setCargandoSlots(true)
+    fetch(`/api/paciente/agenda?type=slots&therapistId=${terapeuta}&date=${fecha}`)
+      .then(r=>r.json()).then(d=>{setSlots(d.slots??[]);setCargandoSlots(false)})
+  }, [terapeuta, fecha])
 
-  // Countdown timer cuando hay slot seleccionado
-  useEffect(() => {
-    if (slotSelected && step === 3) {
-      setCountdown(30 * 60) // 30 min
-      countdownRef.current = setInterval(() => {
-        setCountdown(c => {
-          if (c === null || c <= 1) { clearInterval(countdownRef.current); return 0 }
-          return c - 1
-        })
-      }, 1000)
-    }
-    return () => clearInterval(countdownRef.current)
-  }, [slotSelected, step])
-
-  function formatCountdown(secs: number) {
-    const m = Math.floor(secs / 60), s = secs % 60
-    return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
-  }
-
-  async function handleBook() {
-    if (!terapeutaSelected || !slotSelected) return
-    setBooking(true)
+  async function confirmar() {
+    if (!terapeuta || !slotSel) return
+    setGuardando(true)
     const res = await fetch('/api/paciente/agenda', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ therapistId: terapeutaSelected, scheduledAt: slotSelected }),
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ therapistId: terapeuta, scheduledAt: slotSel }),
     })
     const data = await res.json()
     if (res.ok) {
-      setCitas(p => [data.appointment, ...p])
-      // Si es gratis, directo a mis citas
-      if (planSelected === 'free') {
-        setMsg('✅ Sesión gratuita reservada. ¡Te esperamos!')
-        setView('mis-citas')
-        resetFlow()
+      setCitas(p=>[data.appointment,...p])
+      if (esPrimerPaciente) {
+        setNotif({tipo:'ok', msg:'Su sesión inicial ha sido programada.'})
+        resetFlujo(); setVista('principal')
       } else {
-        // Ir a pagar
-        handlePagar(data.appointment.id)
+        pagar(data.appointment.id)
       }
     } else {
-      setMsg('❌ ' + data.error)
-      setBooking(false)
+      setNotif({tipo:'err', msg: data.error ?? 'No fue posible procesar la solicitud.'})
+      setGuardando(false)
     }
   }
 
-  async function handlePagar(citaId: string) {
-    setPaying(true)
+  async function pagar(citaId: string) {
+    setPagando(true)
     const res = await fetch('/api/paciente/pagar', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      method: 'POST', headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ appointmentId: citaId }),
     })
     const data = await res.json()
-    if (res.ok && data.linkPago) {
-      window.location.href = data.linkPago
-    } else {
-      setMsg('❌ ' + (data.error ?? 'Error generando pago'))
-      setPaying(false)
-      setBooking(false)
-    }
+    if (res.ok && data.linkPago) { window.location.href = data.linkPago }
+    else { setNotif({tipo:'err', msg: data.error ?? 'Error al procesar el pago.'}); setPagando(false); setGuardando(false) }
   }
 
-  function resetFlow() {
-    setStep(1); setPlanSelected(''); setTerapeutaSelected('')
-    setDateSelected(''); setSlotSelected(''); setSlots([])
-    clearInterval(countdownRef.current); setCountdown(null)
+  function resetFlujo() {
+    setPaso(1); setModalidad(''); setTerapeuta(''); setFecha(''); setSlotSel(''); setSlots([])
   }
 
-  // Calendar
-  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate()
-  const firstDay = new Date(calYear, calMonth, 1).getDay()
-  const today = new Date()
-  const isPastMonth = calYear < today.getFullYear() || (calYear === today.getFullYear() && calMonth < today.getMonth())
+  // Calendario
+  const diasEnMes = new Date(calAnio, calMes+1, 0).getDate()
+  const primerDia = new Date(calAnio, calMes, 1).getDay()
+  const hoy = new Date()
+  const mesPasado = calAnio < hoy.getFullYear() || (calAnio===hoy.getFullYear() && calMes<hoy.getMonth())
 
-  function isPast(day: number) {
-    const d = new Date(calYear, calMonth, day); const t = new Date(); t.setHours(0,0,0,0); return d < t
-  }
-  function isSelected(day: number) {
-    return dateSelected === `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`
-  }
-  function isToday(day: number) {
-    return today.getFullYear()===calYear && today.getMonth()===calMonth && today.getDate()===day
-  }
-  function selectDay(day: number) {
-    setDateSelected(`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`)
-    setSlotSelected('')
-  }
-  function prevMonth() { if(calMonth===0){setCalMonth(11);setCalYear(y=>y-1)}else setCalMonth(m=>m-1); setDateSelected(''); setSlots([]) }
-  function nextMonth() { if(calMonth===11){setCalMonth(0);setCalYear(y=>y+1)}else setCalMonth(m=>m+1); setDateSelected(''); setSlots([]) }
+  function esPasado(d:number) { const dt=new Date(calAnio,calMes,d); const t=new Date(); t.setHours(0,0,0,0); return dt<t }
+  function esSeleccionado(d:number) { return fecha===`${calAnio}-${String(calMes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}` }
+  function esHoy(d:number) { return hoy.getFullYear()===calAnio&&hoy.getMonth()===calMes&&hoy.getDate()===d }
+  function selDia(d:number) { setFecha(`${calAnio}-${String(calMes+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`); setSlotSel('') }
+  function mesPrev() { if(calMes===0){setCalMes(11);setCalAnio(a=>a-1)}else setCalMes(m=>m-1); setFecha(''); setSlots([]) }
+  function mesSig() { if(calMes===11){setCalMes(0);setCalAnio(a=>a+1)}else setCalMes(m=>m+1); setFecha(''); setSlots([]) }
 
-  const completadas = citas.filter(c => c.status === 'COMPLETED')
-  const sesionesPlan = planSelected === 'monthly' ? 4 : planSelected === 'intensive' ? 8 : 1
+  const completadas = citas.filter(c=>c.status==='COMPLETED')
+  const proxima = citas.find(c=>['CONFIRMED','PENDING'].includes(c.status)&&new Date(c.scheduledAt)>new Date())
 
   return (
-    <div>
-      {/* ── HEADER ── */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold text-[#1a2e1e]">Mi Agenda</h1>
-          <p className="text-[#8a9b8e] text-sm mt-1">Gestiona tus sesiones terapéuticas</p>
-        </div>
-        <div className="flex gap-2">
-          {(['mis-citas','agendar'] as const).map(v => (
-            <button key={v} onClick={() => { setView(v); setMsg(''); if(v==='agendar') resetFlow() }}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${view===v ? 'bg-[#4a7c59] text-white' : 'border border-[#e8dfd0] text-[#5a6b5e] hover:bg-[#f5f3ef]'}`}>
-              {v==='mis-citas' ? 'Mis citas' : '+ Agendar sesión'}
-            </button>
-          ))}
-        </div>
-      </div>
+    <div className="max-w-3xl">
 
-      {msg && (
-        <div className={`mb-5 px-4 py-3 rounded-xl text-sm ${msg.startsWith('✅') ? 'bg-green-50 text-green-700 border border-green-200' : 'bg-red-50 text-red-600 border border-red-200'}`}>
-          {msg}
+      {/* Notificación */}
+      {notif && (
+        <div className={`mb-6 px-5 py-3.5 rounded-xl text-sm flex items-center justify-between ${notif.tipo==='ok' ? 'bg-[#f0f7f2] text-[#2d5a3d] border border-[#b8d8c0]' : 'bg-[#fdf2f2] text-[#7a2a2a] border border-[#e8b8b8]'}`}>
+          <span>{notif.tipo==='ok' ? '✓ ' : '— '}{notif.msg}</span>
+          <button onClick={()=>setNotif(null)} className="text-current opacity-40 hover:opacity-70 ml-4">✕</button>
         </div>
       )}
 
-      {/* ══════════════════ MIS CITAS ══════════════════ */}
-      {view === 'mis-citas' && (
+      {/* ══ VISTA PRINCIPAL ══ */}
+      {vista === 'principal' && (
         <div>
-          {/* Banner primera sesión gratuita */}
-          {esNuevoPaciente && !loading && (
-            <div className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-2xl p-6 mb-6 text-white">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="inline-flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full text-xs font-bold mb-3">
-                    🎁 Oferta de bienvenida
-                  </div>
-                  <h2 style={{fontFamily:'Georgia,serif'}} className="text-2xl font-bold mb-1">Tu primera sesión es gratuita</h2>
-                  <p className="text-blue-100 text-sm">Sin tarjeta. Sin compromiso. Solo un espacio para conocernos.</p>
-                </div>
-                <button
-                  onClick={() => { setView('agendar'); setPlanSelected('free'); setStep(2) }}
-                  className="bg-white text-blue-600 font-bold px-6 py-3 rounded-full hover:bg-blue-50 transition-colors text-sm flex-shrink-0 ml-6">
-                  Reservar gratis →
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Plan activo */}
-          {completadas.length > 0 && (
-            <div className="bg-white rounded-2xl border border-[#e8dfd0] p-5 mb-5">
-              <p className="text-[#8a9b8e] text-xs font-semibold uppercase tracking-wide mb-3">Mi proceso</p>
-              <div className="flex items-center gap-6">
-                <div>
-                  <p style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold text-[#4a7c59]">{completadas.length}</p>
-                  <p className="text-[#8a9b8e] text-xs">sesiones completadas</p>
-                </div>
-                <div className="flex-1">
-                  <div className="flex justify-between text-xs text-[#8a9b8e] mb-1.5">
-                    <span>Trayecto recorrido</span>
-                    <span>{Math.min(100, Math.round((completadas.length / 12) * 100))}%</span>
-                  </div>
-                  <div className="h-2 bg-[#f0ebe3] rounded-full overflow-hidden">
-                    <div className="h-full bg-[#4a7c59] rounded-full transition-all" style={{width:`${Math.min(100,(completadas.length/12)*100)}%`}} />
-                  </div>
-                  <p className="text-[#b0a898] text-xs mt-1">Proceso de referencia: 12 sesiones</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {loading ? (
-            <div className="flex items-center justify-center py-16"><div className="w-6 h-6 border-2 border-[#4a7c59] border-t-transparent rounded-full animate-spin" /></div>
-          ) : citas.length === 0 ? (
-            <div className="bg-white rounded-2xl border border-[#e8dfd0] p-12 text-center">
-              <div className="text-5xl mb-4">📅</div>
-              <h3 style={{fontFamily:'Georgia,serif'}} className="text-xl font-bold text-[#1a2e1e] mb-2">Aún no tienes sesiones</h3>
-              <p className="text-[#8a9b8e] text-sm mb-6">Tu primera sesión es completamente gratuita.</p>
-              <button onClick={() => { setView('agendar'); setPlanSelected('free'); setStep(2) }}
-                className="bg-blue-500 text-white px-6 py-3 rounded-full text-sm font-bold hover:bg-blue-600 transition-colors">
-                🎁 Reservar primera sesión gratuita
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {citas.map(c => {
-                const fecha = new Date(c.scheduledAt)
-                const isPending = c.status === 'PENDING'
-                const isConfirmed = c.status === 'CONFIRMED'
-                const isCompleted = c.status === 'COMPLETED'
-                return (
-                  <div key={c.id} className={`bg-white rounded-2xl border-2 transition-all ${isPending ? 'border-yellow-200' : isConfirmed ? 'border-green-200' : 'border-[#e8dfd0]'}`}>
-                    <div className="flex items-center gap-5 p-5">
-                      {/* Fecha */}
-                      <div className={`w-16 h-16 rounded-xl flex flex-col items-center justify-center flex-shrink-0 ${isConfirmed ? 'bg-green-50 border-2 border-green-200' : isPending ? 'bg-yellow-50 border-2 border-yellow-200' : 'bg-[#f0f7f2] border border-[#d4e8d8]'}`}>
-                        <span className={`font-bold text-xl leading-none ${isConfirmed ? 'text-green-700' : isPending ? 'text-yellow-700' : 'text-[#4a7c59]'}`}>{fecha.getDate()}</span>
-                        <span className={`text-xs uppercase font-medium ${isConfirmed ? 'text-green-600' : isPending ? 'text-yellow-600' : 'text-[#4a7c59]'}`}>{MESES[fecha.getMonth()].slice(0,3)}</span>
-                      </div>
-                      {/* Info */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <p className="font-semibold text-[#1a2e1e]">{c.therapist.name}</p>
-                          <span className={`text-xs px-2.5 py-0.5 rounded-full font-semibold border ${
-                            isConfirmed ? 'bg-green-50 text-green-700 border-green-200' :
-                            isPending ? 'bg-yellow-50 text-yellow-700 border-yellow-200' :
-                            isCompleted ? 'bg-gray-100 text-gray-600 border-gray-200' :
-                            'bg-blue-50 text-blue-600 border-blue-200'
-                          }`}>
-                            {isConfirmed ? '✓ Confirmada' : isPending ? '⏳ Pendiente pago' : isCompleted ? 'Completada' : c.status}
-                          </span>
-                        </div>
-                        <p className="text-[#8a9b8e] text-sm">
-                          {fecha.toLocaleString('es-AR', { weekday:'long' })} · {fecha.toLocaleString('es-AR', { hour:'2-digit', minute:'2-digit' })} hs · 60 min
-                        </p>
-                        <div className="flex gap-1.5 mt-1.5">
-                          {c.therapist.specialties?.slice(0,2).map(sp => (
-                            <span key={sp} className="text-xs bg-[#f0f7f2] text-[#4a7c59] px-2 py-0.5 rounded-full">{ESP[sp] ?? sp}</span>
-                          ))}
-                        </div>
-                      </div>
-                      {/* CTA dinámico */}
-                      <div className="flex-shrink-0">
-                        {isPending && (
-                          <button onClick={() => handlePagar(c.id)} disabled={paying}
-                            className="bg-[#009ee3] text-white font-bold px-5 py-2.5 rounded-full text-sm hover:bg-[#007cc1] transition-colors disabled:opacity-60 flex items-center gap-2">
-                            {paying ? <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : '💳'}
-                            Pagar USD {c.therapist.sessionPrice ?? 10}
-                          </button>
-                        )}
-                        {isConfirmed && (
-                          <button className="bg-[#4a7c59] text-white font-bold px-5 py-2.5 rounded-full text-sm hover:bg-[#3d6849] transition-colors">
-                            🎥 Unirse
-                          </button>
-                        )}
-                        {isCompleted && (
-                          <span className="text-[#4a7c59] text-sm font-medium">✓ Completada</span>
-                        )}
-                      </div>
-                    </div>
-                    {/* Banner pago pendiente */}
-                    {isPending && (
-                      <div className="mx-5 mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-xl flex items-start gap-2">
-                        <span className="text-yellow-500 flex-shrink-0">⏱️</span>
-                        <p className="text-yellow-700 text-xs">Completa el pago para confirmar tu sesión. El horario se reserva 30 minutos.</p>
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ══════════════════ AGENDAR — FLUJO 3 PASOS ══════════════════ */}
-      {view === 'agendar' && (
-        <div>
-          {/* Progress bar */}
-          <div className="flex items-center gap-3 mb-8">
-            {[1,2,3].map(s => (
-              <div key={s} className="flex items-center gap-3 flex-1">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all ${step >= s ? 'bg-[#4a7c59] text-white' : 'bg-[#f0ebe3] text-[#b0a898]'}`}>
-                  {step > s ? '✓' : s}
-                </div>
-                <div className="flex-1">
-                  <p className={`text-xs font-semibold ${step >= s ? 'text-[#1a2e1e]' : 'text-[#b0a898]'}`}>
-                    {s===1 ? 'Elige tu plan' : s===2 ? 'Fecha y terapeuta' : 'Confirmar y pagar'}
-                  </p>
-                </div>
-                {s < 3 && <div className={`h-px flex-1 max-w-8 ${step > s ? 'bg-[#4a7c59]' : 'bg-[#e8dfd0]'}`} />}
-              </div>
-            ))}
+          {/* Hero clínico */}
+          <div className="mb-8">
+            <h1 style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold text-[#1a2e1e] mb-2">
+              Tu proceso terapéutico
+            </h1>
+            <p className="text-[#6a7b6e] text-sm leading-relaxed">
+              Agenda y gestiona tus sesiones de manera simple y confidencial.
+            </p>
+            {esPrimerPaciente && !loading && (
+              <p className="text-[#6a7b6e] text-xs mt-2 italic">
+                La primera sesión está incluida en su proceso sin costo adicional.
+              </p>
+            )}
           </div>
 
-          {/* ── PASO 1: ELEGIR PLAN ── */}
-          {step === 1 && (
-            <div>
-              <div className="mb-6">
-                <h2 style={{fontFamily:'Georgia,serif'}} className="text-2xl font-bold text-[#1a2e1e] mb-1">¿Qué tipo de sesión necesitas?</h2>
-                <p className="text-[#8a9b8e] text-sm">Selecciona el plan que mejor se adapta a tu proceso</p>
+          {/* Estado del proceso */}
+          <div className="bg-white rounded-2xl border border-[#e4dfd8] p-6 mb-5">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-[#9a9088] text-xs uppercase tracking-widest font-medium mb-2">Estado del proceso</p>
+                {loading ? (
+                  <div className="h-5 w-32 bg-[#f0ebe3] rounded animate-pulse" />
+                ) : citas.length === 0 ? (
+                  <>
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#9a9088]" />
+                      <p style={{fontFamily:'Georgia,serif'}} className="text-[#1a2e1e] font-semibold">Sin sesiones programadas</p>
+                    </div>
+                    <p className="text-[#9a9088] text-xs mt-1">Puede agendar su primera sesión cuando lo considere oportuno.</p>
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#4a7c59]" />
+                      <p style={{fontFamily:'Georgia,serif'}} className="text-[#1a2e1e] font-semibold">Proceso activo</p>
+                    </div>
+                    <p className="text-[#9a9088] text-xs mt-1">{completadas.length} sesión{completadas.length!==1?'es':''} realizada{completadas.length!==1?'s':''}</p>
+                  </>
+                )}
               </div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {PLANES.map(plan => {
-                  const showFree = plan.id === 'free' && esNuevoPaciente
-                  const hideFree = plan.id === 'free' && !esNuevoPaciente
-                  if (hideFree) return null
+              <button
+                onClick={() => { setVista('agendar'); resetFlujo() }}
+                className="bg-[#1a2e1e] text-white text-sm font-medium px-5 py-2.5 rounded-full hover:bg-[#2d4a32] transition-colors flex-shrink-0">
+                Agendar sesión
+              </button>
+            </div>
+
+            {/* Barra de progreso si hay sesiones */}
+            {completadas.length > 0 && (
+              <div className="mt-5 pt-5 border-t border-[#f0ebe3]">
+                <div className="flex justify-between text-xs text-[#9a9088] mb-2">
+                  <span>Trayecto recorrido</span>
+                  <span>{completadas.length} de 12 sesiones</span>
+                </div>
+                <div className="h-1 bg-[#f0ebe3] rounded-full overflow-hidden">
+                  <div className="h-full bg-[#4a7c59] rounded-full transition-all" style={{width:`${Math.min(100,(completadas.length/12)*100)}%`}} />
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Próxima sesión */}
+          {proxima && (
+            <div className="bg-white rounded-2xl border border-[#e4dfd8] p-6 mb-5">
+              <p className="text-[#9a9088] text-xs uppercase tracking-widest font-medium mb-4">Próxima sesión</p>
+              <div className="flex items-start gap-5">
+                <div className="text-center flex-shrink-0">
+                  <p style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold text-[#1a2e1e] leading-none">
+                    {new Date(proxima.scheduledAt).getDate()}
+                  </p>
+                  <p className="text-[#9a9088] text-xs uppercase mt-1">
+                    {MESES[new Date(proxima.scheduledAt).getMonth()].slice(0,3)}
+                  </p>
+                </div>
+                <div className="flex-1 border-l border-[#f0ebe3] pl-5">
+                  <p style={{fontFamily:'Georgia,serif'}} className="text-[#1a2e1e] font-semibold">{proxima.therapist.name}</p>
+                  <p className="text-[#9a9088] text-sm mt-0.5">
+                    {new Date(proxima.scheduledAt).toLocaleString('es-AR',{weekday:'long'})} · {new Date(proxima.scheduledAt).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})} h · 60 min
+                  </p>
+                  <div className="flex items-center gap-3 mt-3">
+                    <span className={`text-xs px-2.5 py-1 rounded-full font-medium border ${proxima.status==='CONFIRMED' ? 'bg-[#f0f7f2] text-[#2d5a3d] border-[#b8d8c0]' : 'bg-[#fdf8f0] text-[#7a5a2a] border-[#e8d4a8]'}`}>
+                      {proxima.status==='CONFIRMED' ? 'Confirmada' : 'Pendiente de confirmación'}
+                    </span>
+                    {proxima.status==='PENDING' && (
+                      <button
+                        onClick={() => pagar(proxima.id)}
+                        disabled={pagando}
+                        className="text-xs text-[#1a2e1e] underline hover:no-underline transition-all disabled:opacity-50">
+                        {pagando ? 'Procesando...' : 'Completar pago'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Historial de sesiones */}
+          {citas.length > 0 && (
+            <div className="bg-white rounded-2xl border border-[#e4dfd8] overflow-hidden mb-5">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-[#f0ebe3]">
+                <p className="text-[#9a9088] text-xs uppercase tracking-widest font-medium">Historial</p>
+                <button onClick={()=>setVista('agendar')} className="text-xs text-[#4a7c59] hover:underline">
+                  + Agendar otra sesión
+                </button>
+              </div>
+              <div className="divide-y divide-[#f5f2ef]">
+                {citas.filter(c=>c.status!=='PENDING'||new Date(c.scheduledAt)<new Date()).slice(0,5).map(c => {
+                  const f = new Date(c.scheduledAt)
+                  const statusMap: Record<string,{label:string,cls:string}> = {
+                    COMPLETED: {label:'Realizada', cls:'text-[#4a7c59]'},
+                    CONFIRMED: {label:'Confirmada', cls:'text-[#2d5a3d]'},
+                    CANCELLED: {label:'Cancelada', cls:'text-[#9a9088]'},
+                    PENDING: {label:'Pendiente', cls:'text-[#7a5a2a]'},
+                  }
+                  const s = statusMap[c.status] ?? {label:c.status, cls:'text-[#9a9088]'}
                   return (
-                    <div key={plan.id}
-                      onClick={() => { setPlanSelected(plan.id); setStep(2) }}
-                      className={`relative cursor-pointer rounded-2xl border-2 p-5 transition-all hover:shadow-md ${plan.featured ? 'border-[#4a7c59] bg-[#f0f7f2]' : plan.id==='free' ? 'border-blue-400 bg-blue-50' : 'border-[#e8dfd0] bg-white hover:border-[#4a7c59]/40'}`}>
-                      {plan.featured && (
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#4a7c59] text-white text-xs font-bold px-3 py-1 rounded-full">Más elegido</div>
-                      )}
-                      {plan.id === 'free' && (
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full">🎁 Solo primera vez</div>
-                      )}
-                      <div className="mb-4">
-                        <p className="font-bold text-[#1a2e1e] text-base">{plan.label}</p>
-                        <p className="text-[#8a9b8e] text-xs mt-0.5">{plan.desc}</p>
+                    <div key={c.id} className="flex items-center gap-4 px-6 py-4 hover:bg-[#faf8f4] transition-colors">
+                      <div className="w-8 text-center flex-shrink-0">
+                        <p style={{fontFamily:'Georgia,serif'}} className="text-lg font-bold text-[#1a2e1e] leading-none">{f.getDate()}</p>
+                        <p className="text-[#9a9088] text-xs">{MESES[f.getMonth()].slice(0,3)}</p>
                       </div>
-                      <p style={{fontFamily:'Georgia,serif'}} className={`text-3xl font-bold mb-4 ${plan.id==='free' ? 'text-blue-600' : plan.id==='monthly'||plan.id==='intensive' ? 'text-[#4a7c59]' : 'text-[#1a2e1e]'}`}>
-                        {plan.precioLabel}
-                      </p>
-                      <ul className="space-y-1.5 mb-5">
-                        {plan.features.map(f => (
-                          <li key={f} className="flex items-start gap-1.5 text-xs text-[#5a6b5e]">
-                            <span className={plan.id==='free' ? 'text-blue-500' : 'text-[#4a7c59]'}>✓</span> {f}
-                          </li>
-                        ))}
-                      </ul>
-                      <div className={`w-full text-center py-2.5 rounded-full text-sm font-bold ${plan.id==='free' ? 'bg-blue-500 text-white' : plan.featured ? 'bg-[#4a7c59] text-white' : 'border-2 border-[#4a7c59] text-[#4a7c59]'}`}>
-                        {plan.cta} →
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[#1a2e1e] text-sm font-medium">{c.therapist.name}</p>
+                        <p className="text-[#9a9088] text-xs">{f.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})} h · 60 min</p>
                       </div>
+                      <span className={`text-xs font-medium flex-shrink-0 ${s.cls}`}>{s.label}</span>
                     </div>
                   )
                 })}
@@ -391,216 +278,255 @@ export default function AgendaPacientePage() {
             </div>
           )}
 
-          {/* ── PASO 2: TERAPEUTA + CALENDARIO ── */}
-          {step === 2 && (
+          {/* Explorar modalidades */}
+          <button
+            onClick={()=>setVista('modalidades')}
+            className="w-full text-left bg-white rounded-2xl border border-[#e4dfd8] px-6 py-4 hover:border-[#4a7c59]/30 transition-colors group">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[#1a2e1e] text-sm font-medium">Modalidades de acompañamiento</p>
+                <p className="text-[#9a9088] text-xs mt-0.5">Sesión individual · Proceso mensual · Proceso intensivo</p>
+              </div>
+              <span className="text-[#9a9088] group-hover:text-[#4a7c59] transition-colors">→</span>
+            </div>
+          </button>
+        </div>
+      )}
+
+      {/* ══ MODALIDADES ══ */}
+      {vista === 'modalidades' && (
+        <div>
+          <div className="flex items-center gap-3 mb-8">
+            <button onClick={()=>setVista('principal')} className="text-[#9a9088] hover:text-[#1a2e1e] transition-colors text-sm">←</button>
             <div>
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h2 style={{fontFamily:'Georgia,serif'}} className="text-2xl font-bold text-[#1a2e1e] mb-1">Elige fecha y terapeuta</h2>
-                  <div className="flex items-center gap-2">
-                    {planActual && (
-                      <span className={`text-xs px-3 py-1 rounded-full font-semibold border ${planActual.badge}`}>
-                        {planActual.label} · {planActual.precioLabel}
-                      </span>
-                    )}
+              <h1 style={{fontFamily:'Georgia,serif'}} className="text-2xl font-bold text-[#1a2e1e]">Modalidades de acompañamiento</h1>
+              <p className="text-[#9a9088] text-xs mt-0.5">Seleccione la modalidad que mejor se adapta a su proceso</p>
+            </div>
+          </div>
+          <div className="space-y-3">
+            {MODALIDADES.map(m => (
+              <div key={m.id} className={`bg-white rounded-2xl border-2 p-6 transition-all ${m.destacado ? 'border-[#4a7c59]/40' : 'border-[#e4dfd8]'}`}>
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 style={{fontFamily:'Georgia,serif'}} className="text-lg font-semibold text-[#1a2e1e]">{m.nombre}</h3>
+                      {m.destacado && <span className="text-xs text-[#4a7c59] font-medium bg-[#f0f7f2] px-2 py-0.5 rounded-full border border-[#b8d8c0]">Más solicitado</span>}
+                    </div>
+                    <p className="text-[#6a7b6e] text-sm leading-relaxed mb-3">{m.descripcion}</p>
+                    <p className="text-[#9a9088] text-xs mb-1">{m.duracion}</p>
+                    <p className="text-[#9a9088] text-xs italic">{m.enfoque}</p>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <p className="text-[#9a9088] text-xs mb-0.5">desde</p>
+                    <p style={{fontFamily:'Georgia,serif'}} className="text-xl font-bold text-[#1a2e1e]">USD {m.precio}</p>
+                    <button
+                      onClick={() => { setModalidad(m.id); setVista('agendar'); setPaso(2) }}
+                      className="mt-3 bg-[#1a2e1e] text-white text-xs font-medium px-4 py-2 rounded-full hover:bg-[#2d4a32] transition-colors">
+                      Agendar
+                    </button>
                   </div>
                 </div>
-                <button onClick={() => setStep(1)} className="text-[#8a9b8e] text-sm hover:text-[#1a2e1e] transition-colors">← Cambiar plan</button>
               </div>
+            ))}
+          </div>
+        </div>
+      )}
 
-              <div className="grid lg:grid-cols-3 gap-5">
-                {/* Terapeuta */}
-                <div className="bg-white rounded-2xl border border-[#e8dfd0] p-5">
-                  <p className="text-xs font-semibold text-[#8a9b8e] uppercase tracking-wide mb-4">Terapeuta</p>
-                  {terapeutas.length === 0 ? (
-                    <p className="text-[#8a9b8e] text-sm text-center py-6">No hay terapeutas disponibles</p>
-                  ) : (
-                    <div className="space-y-2">
-                      {terapeutas.map(t => (
-                        <button key={t.id} onClick={() => setTerapeutaSelected(t.id)}
-                          className={`w-full text-left p-3.5 rounded-xl border-2 transition-all ${terapeutaSelected===t.id ? 'border-[#4a7c59] bg-[#f0f7f2]' : 'border-[#e8dfd0] hover:border-[#4a7c59]/40'}`}>
-                          <div className="flex gap-3 items-center">
-                            <div className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0 ${terapeutaSelected===t.id ? 'bg-[#4a7c59] text-white' : 'bg-[#4a7c59]/20 text-[#4a7c59]'}`}>{t.name[0]}</div>
-                            <div className="min-w-0">
-                              <p className="font-semibold text-[#1a2e1e] text-sm truncate">{t.name}</p>
-                              <div className="flex flex-wrap gap-1 mt-0.5">
-                                {t.specialties?.slice(0,2).map(s => <span key={s} className="text-xs text-[#4a7c59] bg-[#f0f7f2] px-1.5 py-0.5 rounded">{ESP[s]?.split(' ')[0] ?? s}</span>)}
-                              </div>
-                            </div>
+      {/* ══ AGENDAR — FLUJO LIMPIO ══ */}
+      {vista === 'agendar' && (
+        <div>
+          {/* Header con pasos */}
+          <div className="flex items-center gap-4 mb-8">
+            <button onClick={()=>{setVista('principal');resetFlujo()}} className="text-[#9a9088] hover:text-[#1a2e1e] transition-colors text-sm">←</button>
+            <div className="flex-1">
+              <h1 style={{fontFamily:'Georgia,serif'}} className="text-2xl font-bold text-[#1a2e1e]">
+                {paso===1 ? 'Seleccionar modalidad' : paso===2 ? 'Seleccionar fecha y hora' : 'Confirmar sesión'}
+              </h1>
+              <div className="flex items-center gap-2 mt-2">
+                {[1,2,3].map(s => (
+                  <div key={s} className="flex items-center gap-2">
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-medium transition-all ${paso>=s ? 'bg-[#1a2e1e] text-white' : 'bg-[#f0ebe3] text-[#9a9088]'}`}>
+                      {paso>s ? '✓' : s}
+                    </div>
+                    {s<3 && <div className={`h-px w-6 ${paso>s ? 'bg-[#1a2e1e]' : 'bg-[#e4dfd8]'}`} />}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* PASO 1: MODALIDAD */}
+          {paso===1 && (
+            <div className="space-y-3">
+              {esPrimerPaciente && (
+                <div className="bg-[#faf8f4] border border-[#e4dfd8] rounded-xl px-5 py-4 mb-5">
+                  <p className="text-[#6a7b6e] text-sm">Su primera sesión está incluida en el proceso sin costo adicional.</p>
+                </div>
+              )}
+              {MODALIDADES.map(m => (
+                <button key={m.id} onClick={()=>{setModalidad(m.id);setPaso(2)}}
+                  className="w-full text-left bg-white rounded-2xl border border-[#e4dfd8] hover:border-[#4a7c59]/40 p-5 transition-all group">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p style={{fontFamily:'Georgia,serif'}} className="text-[#1a2e1e] font-semibold">{m.nombre}</p>
+                      <p className="text-[#9a9088] text-xs mt-0.5">{m.duracion} · {m.enfoque}</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <p className="text-[#9a9088] text-sm">USD {m.precio}</p>
+                      <span className="text-[#9a9088] group-hover:text-[#4a7c59] transition-colors">→</span>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* PASO 2: TERAPEUTA + FECHA + HORA */}
+          {paso===2 && (
+            <div className="space-y-5">
+              {/* Terapeuta */}
+              <div className="bg-white rounded-2xl border border-[#e4dfd8] p-5">
+                <p className="text-[#9a9088] text-xs uppercase tracking-widest font-medium mb-4">Especialista</p>
+                <div className="space-y-2">
+                  {terapeutas.map(t => (
+                    <button key={t.id} onClick={()=>{setTerapeuta(t.id);setFecha('');setSlots([])}}
+                      className={`w-full text-left p-4 rounded-xl border-2 transition-all ${terapeuta===t.id ? 'border-[#1a2e1e] bg-[#faf8f4]' : 'border-[#e4dfd8] hover:border-[#9a9088]'}`}>
+                      <div className="flex items-center gap-3">
+                        <div className={`w-9 h-9 rounded-full flex items-center justify-center font-semibold text-sm flex-shrink-0 ${terapeuta===t.id ? 'bg-[#1a2e1e] text-white' : 'bg-[#f0ebe3] text-[#5a6b5e]'}`}>
+                          {t.name[0]}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-[#1a2e1e] font-medium text-sm">{t.name}</p>
+                          {t.bio && <p className="text-[#9a9088] text-xs truncate">{t.bio}</p>}
+                          <div className="flex gap-1 mt-0.5">
+                            {t.specialties?.slice(0,2).map(s=><span key={s} className="text-[#9a9088] text-xs">{ESP[s]??s}{t.specialties.indexOf(s)<t.specialties.slice(0,2).length-1?'·':''} </span>)}
                           </div>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* Calendario */}
-                <div className="bg-white rounded-2xl border border-[#e8dfd0] p-5">
-                  <p className="text-xs font-semibold text-[#8a9b8e] uppercase tracking-wide mb-4">Fecha</p>
-                  {!terapeutaSelected ? (
-                    <div className="text-center py-10 text-[#b0a898] text-sm">← Selecciona un terapeuta</div>
-                  ) : (
-                    <>
-                      <div className="flex items-center justify-between mb-3">
-                        <button onClick={prevMonth} disabled={isPastMonth} className="w-7 h-7 rounded-full hover:bg-[#f0f7f2] flex items-center justify-center text-[#4a7c59] disabled:opacity-30 text-lg">‹</button>
-                        <span className="font-semibold text-[#1a2e1e] text-sm">{MESES[calMonth]} {calYear}</span>
-                        <button onClick={nextMonth} className="w-7 h-7 rounded-full hover:bg-[#f0f7f2] flex items-center justify-center text-[#4a7c59] text-lg">›</button>
+                        </div>
                       </div>
-                      <div className="grid grid-cols-7 mb-1">
-                        {DIAS_SEMANA.map(d => <div key={d} className="text-center text-xs font-semibold text-[#a0988e] py-1">{d}</div>)}
-                      </div>
-                      <div className="grid grid-cols-7 gap-0.5">
-                        {Array.from({length:firstDay}).map((_,i) => <div key={`e${i}`}/>)}
-                        {Array.from({length:daysInMonth}).map((_,i) => {
-                          const day = i+1; const past = isPast(day); const sel = isSelected(day); const tod = isToday(day)
-                          return (
-                            <button key={day} onClick={() => !past && selectDay(day)} disabled={past}
-                              className={`h-8 w-full rounded-lg text-xs font-medium transition-all
-                                ${sel ? 'bg-[#4a7c59] text-white shadow-sm' : ''}
-                                ${tod && !sel ? 'border-2 border-[#4a7c59] text-[#4a7c59]' : ''}
-                                ${!past && !sel ? 'hover:bg-[#f0f7f2] text-[#1a2e1e]' : ''}
-                                ${past ? 'text-[#d4cfc8] cursor-not-allowed' : ''}
-                              `}>
-                              {day}
-                            </button>
-                          )
-                        })}
-                      </div>
-                      {dateSelected && (
-                        <p className="text-center text-xs text-[#4a7c59] font-medium mt-2">
-                          📅 {new Date(dateSelected+'T12:00:00').toLocaleDateString('es-AR', {weekday:'long',day:'numeric',month:'long'})}
-                        </p>
-                      )}
-                    </>
-                  )}
-                </div>
-
-                {/* Horarios */}
-                <div className="bg-white rounded-2xl border border-[#e8dfd0] p-5">
-                  <p className="text-xs font-semibold text-[#8a9b8e] uppercase tracking-wide mb-4">Horario disponible</p>
-                  {!dateSelected ? (
-                    <div className="text-center py-10 text-[#b0a898] text-sm">← Selecciona una fecha</div>
-                  ) : loadingSlots ? (
-                    <div className="text-center py-10"><div className="w-5 h-5 border-2 border-[#4a7c59] border-t-transparent rounded-full animate-spin mx-auto"/></div>
-                  ) : slots.length === 0 ? (
-                    <div className="text-center py-10">
-                      <p className="text-3xl mb-2">😔</p>
-                      <p className="text-[#8a9b8e] text-sm">Sin horarios disponibles</p>
-                      <p className="text-[#b0a898] text-xs mt-1">Prueba otro día</p>
-                    </div>
-                  ) : (
-                    <>
-                      <p className="text-xs text-[#8a9b8e] mb-3">{slots.length} disponible{slots.length!==1?'s':''}</p>
-                      <div className="grid grid-cols-2 gap-1.5">
-                        {slots.map(slot => {
-                          const hora = new Date(slot).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})
-                          const isSel = slotSelected === slot
-                          return (
-                            <button key={slot} onClick={() => setSlotSelected(slot)}
-                              className={`py-2.5 rounded-xl text-xs font-bold border-2 transition-all ${isSel ? 'border-[#4a7c59] bg-[#4a7c59] text-white shadow-md' : 'border-[#4a7c59]/30 text-[#4a7c59] hover:border-[#4a7c59] hover:bg-[#f0f7f2]'}`}>
-                              {hora}
-                            </button>
-                          )
-                        })}
-                      </div>
-                    </>
-                  )}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* CTA paso 2 */}
-              {slotSelected && (
-                <div className="mt-5 flex justify-end">
-                  <button onClick={() => setStep(3)}
-                    className="bg-[#4a7c59] text-white font-bold px-8 py-3 rounded-full hover:bg-[#3d6849] transition-all shadow-lg shadow-[#4a7c59]/20 flex items-center gap-2">
-                    Continuar → Confirmar
+              {/* Calendario */}
+              {terapeuta && (
+                <div className="bg-white rounded-2xl border border-[#e4dfd8] p-5">
+                  <p className="text-[#9a9088] text-xs uppercase tracking-widest font-medium mb-4">Fecha</p>
+                  <div className="flex items-center justify-between mb-4">
+                    <button onClick={mesPrev} disabled={mesPasado} className="text-[#9a9088] hover:text-[#1a2e1e] disabled:opacity-30 transition-colors px-2 py-1">‹</button>
+                    <p className="text-[#1a2e1e] font-medium text-sm">{MESES[calMes]} {calAnio}</p>
+                    <button onClick={mesSig} className="text-[#9a9088] hover:text-[#1a2e1e] transition-colors px-2 py-1">›</button>
+                  </div>
+                  <div className="grid grid-cols-7 mb-2">
+                    {DIAS.map(d=><div key={d} className="text-center text-xs text-[#b0a898] py-1 font-medium">{d}</div>)}
+                  </div>
+                  <div className="grid grid-cols-7 gap-0.5">
+                    {Array.from({length:primerDia}).map((_,i)=><div key={`e${i}`}/>)}
+                    {Array.from({length:diasEnMes}).map((_,i)=>{
+                      const d=i+1; const pas=esPasado(d); const sel=esSeleccionado(d); const tod=esHoy(d)
+                      return (
+                        <button key={d} onClick={()=>!pas&&selDia(d)} disabled={pas}
+                          className={`h-8 w-full rounded-lg text-xs transition-all font-medium
+                            ${sel ? 'bg-[#1a2e1e] text-white' : ''}
+                            ${tod&&!sel ? 'border border-[#1a2e1e] text-[#1a2e1e]' : ''}
+                            ${!pas&&!sel ? 'hover:bg-[#f5f2ef] text-[#1a2e1e]' : ''}
+                            ${pas ? 'text-[#d4cfc8] cursor-not-allowed' : ''}
+                          `}>{d}</button>
+                      )
+                    })}
+                  </div>
+                  {fecha && (
+                    <p className="text-center text-xs text-[#6a7b6e] mt-3">
+                      {new Date(fecha+'T12:00:00').toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Horarios */}
+              {fecha && (
+                <div className="bg-white rounded-2xl border border-[#e4dfd8] p-5">
+                  <p className="text-[#9a9088] text-xs uppercase tracking-widest font-medium mb-4">Horario disponible</p>
+                  {cargandoSlots ? (
+                    <div className="flex justify-center py-6"><div className="w-5 h-5 border border-[#1a2e1e] border-t-transparent rounded-full animate-spin"/></div>
+                  ) : slots.length===0 ? (
+                    <p className="text-[#9a9088] text-sm text-center py-4">No hay disponibilidad para esta fecha. Por favor seleccione otro día.</p>
+                  ) : (
+                    <div className="grid grid-cols-3 gap-2">
+                      {slots.map(s=>{
+                        const hora=new Date(s).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})
+                        const sel=slotSel===s
+                        return (
+                          <button key={s} onClick={()=>setSlotSel(s)}
+                            className={`py-2.5 rounded-xl text-xs font-medium border transition-all ${sel ? 'border-[#1a2e1e] bg-[#1a2e1e] text-white' : 'border-[#e4dfd8] text-[#1a2e1e] hover:border-[#9a9088]'}`}>
+                            {hora}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {slotSel && (
+                <div className="flex justify-end">
+                  <button onClick={()=>setPaso(3)} className="bg-[#1a2e1e] text-white text-sm font-medium px-6 py-2.5 rounded-full hover:bg-[#2d4a32] transition-colors">
+                    Continuar →
                   </button>
                 </div>
               )}
             </div>
           )}
 
-          {/* ── PASO 3: CONFIRMAR Y PAGAR ── */}
-          {step === 3 && (
-            <div className="max-w-lg mx-auto">
-              <div className="mb-6 text-center">
-                <h2 style={{fontFamily:'Georgia,serif'}} className="text-2xl font-bold text-[#1a2e1e] mb-1">Confirma tu sesión</h2>
-                <p className="text-[#8a9b8e] text-sm">Revisa los detalles antes de confirmar</p>
+          {/* PASO 3: CONFIRMACIÓN */}
+          {paso===3 && (
+            <div>
+              <div className="bg-white rounded-2xl border border-[#e4dfd8] overflow-hidden mb-5">
+                <div className="px-6 py-4 border-b border-[#f0ebe3] bg-[#faf8f4]">
+                  <p className="text-[#9a9088] text-xs uppercase tracking-widest font-medium">Resumen de la sesión</p>
+                </div>
+                <div className="px-6 py-5 space-y-4">
+                  {[
+                    {label:'Modalidad', val:modalidadSel?.nombre??'—'},
+                    {label:'Especialista', val:terapeutas.find(t=>t.id===terapeuta)?.name??'—'},
+                    {label:'Fecha', val:new Date(slotSel).toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})},
+                    {label:'Hora', val:`${new Date(slotSel).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})} h`},
+                    {label:'Duración', val:'60 minutos'},
+                  ].map(r=>(
+                    <div key={r.label} className="flex justify-between items-baseline">
+                      <span className="text-[#9a9088] text-sm">{r.label}</span>
+                      <span className="text-[#1a2e1e] text-sm font-medium text-right max-w-xs">{r.val}</span>
+                    </div>
+                  ))}
+                  <div className="pt-3 border-t border-[#f0ebe3] flex justify-between items-baseline">
+                    <span className="text-[#9a9088] text-sm">Total</span>
+                    <span style={{fontFamily:'Georgia,serif'}} className="text-xl font-bold text-[#1a2e1e]">
+                      {esPrimerPaciente ? 'Sin costo' : `USD ${modalidadSel?.precio??10}`}
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              {/* Countdown */}
-              {countdown !== null && countdown > 0 && (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-3 mb-5 flex items-center gap-3">
-                  <span className="text-yellow-500 text-xl">⏱️</span>
-                  <div>
-                    <p className="text-yellow-800 text-sm font-semibold">Tu horario está reservado</p>
-                    <p className="text-yellow-600 text-xs">Tiempo restante: <span className="font-bold">{formatCountdown(countdown)}</span></p>
-                  </div>
+              {esPrimerPaciente && (
+                <div className="bg-[#faf8f4] border border-[#e4dfd8] rounded-xl px-5 py-4 mb-5">
+                  <p className="text-[#6a7b6e] text-sm">Esta es su primera sesión. No se requiere pago para confirmarla.</p>
                 </div>
               )}
 
-              {/* Resumen */}
-              <div className="bg-white rounded-2xl border border-[#e8dfd0] overflow-hidden mb-5">
-                <div className="bg-[#f5f3ef] px-6 py-4 border-b border-[#e8dfd0]">
-                  <p className="text-xs font-semibold text-[#8a9b8e] uppercase tracking-wide">Resumen de tu sesión</p>
-                </div>
-                <div className="px-6 py-5 space-y-3">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-[#8a9b8e]">Plan</span>
-                    <span className="font-semibold text-[#1a2e1e]">{planActual?.label}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-[#8a9b8e]">Terapeuta</span>
-                    <span className="font-semibold text-[#1a2e1e]">{terapeutas.find(t=>t.id===terapeutaSelected)?.name}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-[#8a9b8e]">Fecha</span>
-                    <span className="font-semibold text-[#1a2e1e]">
-                      {new Date(slotSelected).toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'})}
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-[#8a9b8e]">Hora</span>
-                    <span className="font-semibold text-[#1a2e1e]">
-                      {new Date(slotSelected).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})} hs
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-[#8a9b8e]">Duración</span>
-                    <span className="font-semibold text-[#1a2e1e]">60 minutos</span>
-                  </div>
-                  <div className="border-t border-[#f0ebe3] pt-3 flex justify-between">
-                    <span className="font-bold text-[#1a2e1e]">Total</span>
-                    <span style={{fontFamily:'Georgia,serif'}} className={`text-xl font-bold ${planSelected==='free' ? 'text-blue-600' : 'text-[#4a7c59]'}`}>
-                      {planActual?.precioLabel}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Botones */}
               <div className="space-y-3">
-                {planSelected === 'free' ? (
-                  <button onClick={handleBook} disabled={booking}
-                    className="w-full bg-blue-500 text-white font-bold py-4 rounded-full hover:bg-blue-600 transition-all disabled:opacity-60 flex items-center justify-center gap-2 text-base shadow-lg">
-                    {booking ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"/>Reservando...</> : '🎁 Confirmar sesión gratuita'}
-                  </button>
-                ) : (
-                  <button onClick={handleBook} disabled={booking || paying}
-                    className="w-full bg-[#009ee3] text-white font-bold py-4 rounded-full hover:bg-[#007cc1] transition-all disabled:opacity-60 flex items-center justify-center gap-2 text-base shadow-lg">
-                    {booking || paying
-                      ? <><span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"/>Procesando...</>
-                      : <>💳 Confirmar y pagar {planActual?.precioLabel}</>
-                    }
-                  </button>
-                )}
-                <button onClick={() => setStep(2)} className="w-full border border-[#e8dfd0] text-[#5a6b5e] py-3 rounded-full text-sm hover:bg-[#f5f3ef] transition-colors">
-                  ← Volver y cambiar fecha
+                <button onClick={confirmar} disabled={guardando||pagando}
+                  className="w-full bg-[#1a2e1e] text-white text-sm font-semibold py-3.5 rounded-full hover:bg-[#2d4a32] transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
+                  {guardando||pagando
+                    ? <><span className="w-4 h-4 border border-white border-t-transparent rounded-full animate-spin"/>Procesando...</>
+                    : esPrimerPaciente ? 'Confirmar sesión' : 'Confirmar y proceder al pago'
+                  }
+                </button>
+                <button onClick={()=>setPaso(2)} className="w-full text-[#9a9088] text-sm py-2 hover:text-[#1a2e1e] transition-colors">
+                  Modificar fecha u hora
                 </button>
               </div>
-
               <p className="text-center text-[#b0a898] text-xs mt-4">
-                {planSelected === 'free' ? 'Sin tarjeta requerida · Totalmente gratuito' : 'Pago seguro via Mercado Pago · Cancela con 24hs de anticipación'}
+                {esPrimerPaciente ? 'Sesión incluida · Sin cargo' : 'Pago seguro · Puede reprogramar con 24 horas de anticipación'}
               </p>
             </div>
           )}
@@ -609,4 +535,3 @@ export default function AgendaPacientePage() {
     </div>
   )
 }
-// rebuild Tue May  5 02:25:23 UTC 2026
