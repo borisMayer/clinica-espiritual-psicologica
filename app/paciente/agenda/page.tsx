@@ -62,7 +62,8 @@ export default function AgendaPacientePage() {
   const [loading, setLoading] = useState(true)
   const [notif, setNotif] = useState<{tipo:'ok'|'err', msg:string}|null>(null)
 
-  const esPrimerPaciente = citas.length === 0
+  // First session: no appointments at all, OR none confirmed/completed yet
+  const esPrimerPaciente = citas.length === 0 || !citas.some(c => ['CONFIRMED','COMPLETED'].includes(c.status))
   const modalidadSel = MODALIDADES.find(m => m.id === modalidad)
 
   useEffect(() => {
@@ -87,8 +88,9 @@ export default function AgendaPacientePage() {
     const data = await res.json()
     if (res.ok) {
       setCitas(p=>[data.appointment,...p])
-      if (esPrimerPaciente) {
-        setNotif({tipo:'ok', msg:'Su sesión inicial ha sido programada.'})
+      // API confirms: esPrimeraSesion → auto-confirmed, no payment needed
+      if (data.esPrimeraSesion) {
+        setNotif({tipo:'ok', msg:'Su sesión inicial ha sido confirmada. Le esperamos.'})
         resetFlujo(); setVista('principal')
       } else {
         pagar(data.appointment.id)

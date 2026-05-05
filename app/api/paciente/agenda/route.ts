@@ -81,17 +81,42 @@ export async function POST(req: NextRequest) {
 
   const { therapistId, scheduledAt, sessionType } = await req.json()
 
+  // Check if this is the patient first session ever
+  const citasExistentes = await prisma.appointment.count({
+    where: { patientId: session.user.id }
+  })
+  const esPrimeraSesion = citasExistentes === 0
+
+  // First session: auto-confirm, no payment needed
+  const status = esPrimeraSesion ? 'CONFIRMED' : 'PENDING'
+
   const appointment = await prisma.appointment.create({
     data: {
       patientId: session.user.id,
       therapistId,
       scheduledAt: new Date(scheduledAt),
       duration: 60,
-      status: 'PENDING',
+      status,
       sessionType: sessionType ?? 'VIDEO',
     },
-    include: { therapist: { select: { name: true, specialties: true } } },
+    include: { therapist: { select: { name: true, specialties: true, sessionPrice: true } } },
   })
 
-  return NextResponse.json({ appointment }, { status: 201 })
+  // If first session: create a $0 payment record for tracking
+  if (esPrimeraSesion) {
+    await prisma.payment.create({
+      data: {
+        patientId: session.user.id,
+        appointmentId: appointment.id,
+        amount: 0,
+        currency: 'USD',
+        paymentType: 'SINGLE_SESSION',
+        status: 'APPROVED',
+        paidAt: new Date(),
+        mpStatus: 'primera_sesion_gratuita',
+      }
+    })
+  }
+
+  return NextResponse.json({ appointment, esPrimeraSesion }, { status: 201 })
 }
