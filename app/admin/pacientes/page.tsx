@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 import { useState, useEffect, useCallback } from 'react'
 
 type Paciente = {
@@ -334,6 +335,10 @@ export default function PacientesPage() {
                               💬 <span>WhatsApp</span>
                             </button>
                           )}
+                          <Link href={`/admin/pacientes/${p.id}`}
+                            className="w-full text-left px-3 py-2 rounded-xl bg-white border border-[#e8dfd0] hover:border-[#4a7c59]/40 text-sm text-[#1a2e1e] flex items-center gap-2 transition-colors">
+                            📋 <span>Ver ficha completa</span>
+                          </Link>
                           <button onClick={() => toggleActivo(p.id, p.isActive)}
                             className={`w-full text-left px-3 py-2 rounded-xl border text-sm flex items-center gap-2 transition-colors ${p.isActive ? 'bg-red-50 border-red-200 text-red-600 hover:bg-red-100' : 'bg-green-50 border-green-200 text-green-700 hover:bg-green-100'}`}>
                             {p.isActive ? '🔒 Desactivar cuenta' : '🔓 Activar cuenta'}

@@ -106,6 +106,8 @@ model User {
   sentMessages          Message[]     @relation("SentMessages")
   receivedMessages      Message[]     @relation("ReceivedMessages")
   payments              Payment[]
+  patientScores         PatientScore[]   @relation("PatientScores")
+  clinicalRecord        ClinicalRecord?  @relation("ClinicalRecord")
   notifications         Notification[]
   availability          TherapistAvailability[]
   patientSessions       Session[]     @relation("PatientSessions")
@@ -307,4 +309,76 @@ model AuditLog {
   createdAt   DateTime @default(now()) @map("created_at")
 
   @@map("audit_logs")
+}
+
+// ── SCORE INTEGRAL DEL PACIENTE ──
+model PatientScore {
+  id            String   @id @default(uuid())
+  patientId     String
+  appointmentId String?
+  // Dimensiones (0-100 cada una)
+  psicologica   Int      @default(0)  // 40% peso
+  emocional     Int      @default(0)  // 30% peso
+  espiritual    Int      @default(0)  // 20% peso
+  adherencia    Int      @default(0)  // 10% peso
+  scoreTotal    Int      @default(0)  // calculado
+  notas         String?
+  evaluadoPor   String?  // therapist id
+  createdAt     DateTime @default(now())
+
+  patient     User        @relation("PatientScores", fields: [patientId], references: [id])
+  appointment Appointment? @relation(fields: [appointmentId], references: [id])
+
+  @@map("patient_scores")
+}
+
+// ── HISTORIA CLÍNICA ──
+model ClinicalRecord {
+  id                String   @id @default(uuid())
+  patientId         String   @unique
+  problemaPrincipal String?
+  diagnosticoIntegral String?
+  antecedentes      String?
+  objetivosTerapeuticos String?
+  // Dimensión teológica
+  temasEspirituales String[] @default([])
+  nivelVerdad       Int      @default(0)
+  nivelPerdon       Int      @default(0)
+  nivelIdentidad    Int      @default(0)
+  nivelProposito    Int      @default(0)
+  // Riesgo
+  nivelRiesgo       String   @default("bajo") // bajo | medio | alto | critico
+  alertas           String[] @default([])
+  // Meta
+  therapistId       String?
+  fechaIngreso      DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  patient User @relation("ClinicalRecord", fields: [patientId], references: [id])
+
+  @@map("clinical_records")
+}
+
+// ── NOTAS DE SESIÓN (enriquecidas) ──
+model SessionNote {
+  id            String   @id @default(uuid())
+  appointmentId String
+  therapistId   String
+  patientId     String
+  // Contenido
+  resumen       String?
+  temasDetectados String[] @default([])
+  estadoEmocional String?  // bien | regular | bajo | crisis
+  tareaAsignada String?
+  tareaEntregada Boolean  @default(false)
+  // Scores de esta sesión
+  avancePsicologico Int @default(0)  // -5 a +5
+  avanceEspiritual  Int @default(0)
+  // Privado
+  notasPrivadas String?
+  createdAt     DateTime @default(now())
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+
+  @@map("session_notes")
 }
