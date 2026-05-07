@@ -4,14 +4,99 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
-const NAV_ITEMS = [
-  { href: '/admin/dashboard', icon: 'ti-layout-dashboard', label: 'Dashboard', section: 'principal' },
-  { href: '/admin/agenda', icon: 'ti-calendar-event', label: 'Agenda', section: 'principal' },
-  { href: '/admin/pacientes', icon: 'ti-users', label: 'Pacientes', section: 'principal' },
-  { href: '/admin/terapeutas', icon: 'ti-stethoscope', label: 'Terapeutas', section: 'principal' },
-  { href: '/admin/pagos', icon: 'ti-credit-card', label: 'Pagos', section: 'gestion' },
-  { href: '/admin/reportes', icon: 'ti-chart-bar', label: 'Reportes', section: 'gestion' },
+const NAV_MAIN = [
+  { href: '/admin/dashboard', label: 'Dashboard',
+    icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
+  { href: '/admin/agenda', label: 'Agenda',
+    icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z' },
+  { href: '/admin/pacientes', label: 'Pacientes',
+    icon: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z' },
+  { href: '/admin/terapeutas', label: 'Terapeutas',
+    icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' },
 ]
+const NAV_GESTION = [
+  { href: '/admin/pagos', label: 'Pagos',
+    icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' },
+  { href: '/admin/reportes', label: 'Reportes',
+    icon: 'M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' },
+]
+
+function Icon({ d }: { d: string }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{flexShrink:0}}>
+      <path d={d}/>
+    </svg>
+  )
+}
+
+const S = {
+  sidebar: (w: number): React.CSSProperties => ({
+    width: w, background: '#071B14',
+    display: 'flex', flexDirection: 'column',
+    position: 'fixed', height: '100vh', zIndex: 50,
+    transition: 'width 0.22s cubic-bezier(0.4,0,0.2,1)',
+    overflow: 'hidden', flexShrink: 0,
+  }),
+  logo: (collapsed: boolean): React.CSSProperties => ({
+    padding: collapsed ? '18px 16px' : '18px 20px',
+    borderBottom: '0.5px solid rgba(200,169,107,0.1)',
+    display: 'flex', alignItems: 'center', gap: 10,
+    minHeight: 64, flexShrink: 0, overflow: 'hidden',
+  }),
+  logoIcon: (): React.CSSProperties => ({
+    width: 28, height: 28, flexShrink: 0,
+    border: '1px solid rgba(200,169,107,0.55)',
+    borderRadius: 7,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    color: '#C8A96B', fontSize: 13,
+  }),
+  profile: (collapsed: boolean): React.CSSProperties => ({
+    padding: collapsed ? '14px 14px' : '14px 18px',
+    borderBottom: '0.5px solid rgba(200,169,107,0.07)',
+    display: 'flex', alignItems: 'center', gap: 10,
+    flexShrink: 0, overflow: 'hidden',
+  }),
+  avatar: (): React.CSSProperties => ({
+    width: 34, height: 34, borderRadius: '50%',
+    background: 'linear-gradient(135deg, #4a7c59, #C8A96B)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    fontFamily: "'DM Serif Display', Georgia, serif",
+    color: '#F7F4EE', fontSize: 14, flexShrink: 0, position: 'relative',
+  }),
+  navLink: (active: boolean, collapsed: boolean): React.CSSProperties => ({
+    display: 'flex', alignItems: 'center',
+    gap: collapsed ? 0 : 10,
+    padding: collapsed ? '11px 0' : '9px 10px',
+    justifyContent: collapsed ? 'center' : 'flex-start',
+    borderRadius: 8, marginBottom: 1,
+    textDecoration: 'none', position: 'relative',
+    background: active ? 'rgba(200,169,107,0.12)' : 'transparent',
+    transition: 'background 0.15s',
+  }),
+  navIconColor: (active: boolean): React.CSSProperties => ({
+    color: active ? '#C8A96B' : 'rgba(247,244,238,0.35)', display: 'flex',
+  }),
+  navLabel: (active: boolean): React.CSSProperties => ({
+    fontSize: 12, whiteSpace: 'nowrap',
+    color: active ? '#F7F4EE' : 'rgba(247,244,238,0.45)',
+    fontWeight: active ? 500 : 400,
+  }),
+  activePill: (): React.CSSProperties => ({
+    position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)',
+    width: 2, height: 16, background: '#C8A96B', borderRadius: '0 2px 2px 0',
+  }),
+  sectionLabel: (): React.CSSProperties => ({
+    color: 'rgba(247,244,238,0.2)', fontSize: 8.5,
+    letterSpacing: '0.13em', textTransform: 'uppercase' as const,
+    padding: '12px 10px 5px',
+  }),
+  bottomLink: (): React.CSSProperties => ({
+    display: 'flex', alignItems: 'center', gap: 8,
+    padding: '7px 8px', borderRadius: 7,
+    textDecoration: 'none', fontSize: 11,
+    color: 'rgba(247,244,238,0.3)',
+  }),
+}
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -20,345 +105,140 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const name = session?.user?.name ?? 'Admin'
   const initial = name[0]?.toUpperCase() ?? 'A'
+  const W = collapsed ? 64 : 224
+  const currentPage = [...NAV_MAIN, ...NAV_GESTION].find(i => pathname?.startsWith(i.href))?.label ?? 'Panel'
 
   return (
-    <>
-      {/* Tabler Icons CDN */}
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <div style={{display:'flex', minHeight:'100vh', background:'#F7F4EE', fontFamily:"'DM Sans',system-ui,sans-serif"}}>
 
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap');
+      {/* ── SIDEBAR ── */}
+      <aside style={S.sidebar(W)}>
 
-        .admin-root { display: flex; min-height: 100vh; background: #F7F4EE; font-family: 'DM Sans', sans-serif; }
+        {/* Collapse btn */}
+        <button onClick={() => setCollapsed(c => !c)} aria-label="Colapsar menú" style={{
+          position:'absolute', top:18, right:-10,
+          width:20, height:20, background:'#071B14',
+          border:'0.5px solid rgba(200,169,107,0.3)', borderRadius:'50%',
+          display:'flex', alignItems:'center', justifyContent:'center',
+          cursor:'pointer', color:'rgba(247,244,238,0.5)', fontSize:10, zIndex:60,
+          fontFamily:'monospace',
+        }}>
+          {collapsed ? '›' : '‹'}
+        </button>
 
-        /* Sidebar */
-        .admin-sidebar {
-          width: ${collapsed ? '64px' : '224px'};
-          background: #071B14;
-          display: flex;
-          flex-direction: column;
-          position: fixed;
-          height: 100vh;
-          z-index: 50;
-          transition: width 0.2s cubic-bezier(0.4,0,0.2,1);
-          overflow: hidden;
-        }
-
-        .sidebar-logo {
-          padding: ${collapsed ? '20px 14px' : '20px 20px'};
-          border-bottom: 0.5px solid rgba(200,169,107,0.12);
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          flex-shrink: 0;
-          white-space: nowrap;
-          min-height: 68px;
-        }
-
-        .logo-icon {
-          width: 28px; height: 28px;
-          border: 1px solid rgba(200,169,107,0.6);
-          border-radius: 7px;
-          display: flex; align-items: center; justify-content: center;
-          flex-shrink: 0;
-          font-size: 12px; color: #C8A96B;
-        }
-        .logo-text { opacity: ${collapsed ? '0' : '1'}; transition: opacity 0.15s; }
-        .logo-name { font-family: 'DM Serif Display', serif; color: #F7F4EE; font-size: 13px; line-height: 1.2; }
-        .logo-sub { color: rgba(247,244,238,0.25); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
-
-        .sidebar-profile {
-          padding: ${collapsed ? '14px' : '16px 20px'};
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          border-bottom: 0.5px solid rgba(200,169,107,0.08);
-          flex-shrink: 0;
-          overflow: hidden;
-          white-space: nowrap;
-        }
-
-        .sidebar-avatar {
-          width: 34px; height: 34px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #4a7c59, #C8A96B);
-          display: flex; align-items: center; justify-content: center;
-          font-family: 'DM Serif Display', serif;
-          color: #F7F4EE; font-size: 13px;
-          flex-shrink: 0;
-          position: relative;
-        }
-        .online-dot {
-          position: absolute; bottom: 1px; right: 1px;
-          width: 8px; height: 8px;
-          background: #4ade80; border-radius: 50%;
-          border: 1.5px solid #071B14;
-        }
-        .profile-text { opacity: ${collapsed ? '0' : '1'}; transition: opacity 0.15s; min-width: 0; }
-        .profile-name { color: #F7F4EE; font-size: 12px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; }
-        .profile-role { color: rgba(247,244,238,0.3); font-size: 9px; margin-top: 1px; }
-
-        .sidebar-nav { padding: 10px 10px; flex: 1; overflow-y: auto; overflow-x: hidden; }
-        .sidebar-nav::-webkit-scrollbar { width: 0; }
-
-        .nav-section {
-          color: rgba(247,244,238,0.2);
-          font-size: 8px; letter-spacing: 0.14em; text-transform: uppercase;
-          padding: 10px 10px 4px;
-          white-space: nowrap;
-          opacity: ${collapsed ? '0' : '1'};
-          transition: opacity 0.1s;
-          height: ${collapsed ? '0' : 'auto'};
-          overflow: hidden;
-        }
-
-        .nav-link {
-          display: flex;
-          align-items: center;
-          gap: ${collapsed ? '0' : '10px'};
-          padding: ${collapsed ? '10px 0' : '8px 10px'};
-          justify-content: ${collapsed ? 'center' : 'flex-start'};
-          border-radius: 8px;
-          margin-bottom: 1px;
-          text-decoration: none;
-          position: relative;
-          transition: all 0.15s;
-          white-space: nowrap;
-        }
-        .nav-link:hover { background: rgba(200,169,107,0.08); }
-        .nav-link.active { background: rgba(200,169,107,0.12); }
-        .nav-link.active::before {
-          content: '';
-          position: absolute;
-          left: 0; top: 50%; transform: translateY(-50%);
-          width: 2px; height: 16px;
-          background: #C8A96B;
-          border-radius: 0 2px 2px 0;
-        }
-        .nav-icon {
-          font-size: 16px;
-          color: rgba(247,244,238,0.3);
-          flex-shrink: 0;
-          transition: color 0.15s;
-        }
-        .nav-link:hover .nav-icon { color: rgba(247,244,238,0.6); }
-        .nav-link.active .nav-icon { color: #C8A96B; }
-        .nav-label {
-          font-size: 12px; font-weight: 400;
-          color: rgba(247,244,238,0.4);
-          opacity: ${collapsed ? '0' : '1'};
-          transition: opacity 0.1s;
-        }
-        .nav-link:hover .nav-label { color: rgba(247,244,238,0.75); }
-        .nav-link.active .nav-label { color: #F7F4EE; font-weight: 500; }
-
-        .sidebar-bottom {
-          padding: ${collapsed ? '14px' : '14px 16px'};
-          border-top: 0.5px solid rgba(200,169,107,0.08);
-          flex-shrink: 0;
-        }
-
-        .bottom-link {
-          display: flex; align-items: center; gap: 8px;
-          padding: ${collapsed ? '8px 0' : '7px 8px'};
-          justify-content: ${collapsed ? 'center' : 'flex-start'};
-          border-radius: 7px;
-          text-decoration: none;
-          color: rgba(247,244,238,0.3);
-          font-size: 11px;
-          transition: all 0.15s;
-          white-space: nowrap;
-        }
-        .bottom-link:hover { color: rgba(247,244,238,0.6); background: rgba(255,255,255,0.04); }
-        .bottom-link.danger:hover { color: #f87171; }
-        .bottom-text { opacity: ${collapsed ? '0' : '1'}; transition: opacity 0.1s; }
-
-        .collapse-btn {
-          position: absolute;
-          top: 22px; right: -10px;
-          width: 20px; height: 20px;
-          background: #071B14;
-          border: 0.5px solid rgba(200,169,107,0.2);
-          border-radius: 50%;
-          display: flex; align-items: center; justify-content: center;
-          cursor: pointer;
-          color: rgba(247,244,238,0.4);
-          font-size: 10px;
-          z-index: 60;
-          transition: all 0.15s;
-        }
-        .collapse-btn:hover { color: #C8A96B; border-color: rgba(200,169,107,0.5); }
-
-        /* Main */
-        .admin-main {
-          margin-left: ${collapsed ? '64px' : '224px'};
-          flex: 1;
-          transition: margin-left 0.2s cubic-bezier(0.4,0,0.2,1);
-          display: flex;
-          flex-direction: column;
-          min-height: 100vh;
-        }
-
-        .admin-topbar {
-          height: 52px;
-          background: #F7F4EE;
-          border-bottom: 0.5px solid rgba(7,27,20,0.07);
-          display: flex;
-          align-items: center;
-          padding: 0 32px;
-          gap: 12px;
-          flex-shrink: 0;
-          position: sticky;
-          top: 0;
-          z-index: 40;
-        }
-
-        .breadcrumb { display: flex; align-items: center; gap: 6px; }
-        .bc-item { font-size: 12px; color: rgba(7,27,20,0.35); }
-        .bc-sep { color: rgba(7,27,20,0.2); font-size: 10px; }
-        .bc-current { font-size: 12px; color: #071B14; font-weight: 500; }
-
-        .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
-
-        .topbar-btn {
-          display: flex; align-items: center; gap: 5px;
-          padding: 6px 12px;
-          border-radius: 8px;
-          font-size: 11px; font-weight: 500;
-          cursor: pointer; border: none;
-          font-family: 'DM Sans', sans-serif;
-          transition: all 0.15s;
-        }
-        .topbar-btn.secondary { background: rgba(7,27,20,0.06); color: rgba(7,27,20,0.55); }
-        .topbar-btn.primary { background: #071B14; color: #F7F4EE; }
-        .topbar-btn:hover { opacity: 0.8; }
-
-        .admin-content {
-          flex: 1;
-          padding: 32px;
-          max-width: 1200px;
-          width: 100%;
-        }
-
-        /* Tooltip for collapsed */
-        .nav-link[data-tooltip]:hover::after {
-          content: attr(data-tooltip);
-          position: absolute;
-          left: calc(100% + 10px);
-          top: 50%; transform: translateY(-50%);
-          background: #071B14;
-          border: 0.5px solid rgba(200,169,107,0.2);
-          color: #F7F4EE;
-          font-size: 11px;
-          padding: 5px 10px;
-          border-radius: 6px;
-          white-space: nowrap;
-          z-index: 100;
-          opacity: ${collapsed ? '1' : '0'};
-          pointer-events: none;
-        }
-      `}</style>
-
-      <div className="admin-root">
-        {/* Sidebar */}
-        <aside className="admin-sidebar">
-          {/* Collapse toggle */}
-          <button className="collapse-btn" onClick={() => setCollapsed(!collapsed)} aria-label="Colapsar menú">
-            <i className={`ti ${collapsed ? 'ti-chevron-right' : 'ti-chevron-left'}`} style={{fontSize:'10px'}} />
-          </button>
-
-          {/* Logo */}
-          <div className="sidebar-logo">
-            <div className="logo-icon">✦</div>
-            <div className="logo-text">
-              <div className="logo-name">Clínica del Alma</div>
-              <div className="logo-sub">Panel profesional</div>
+        {/* Logo */}
+        <div style={S.logo(collapsed)}>
+          <div style={S.logoIcon()}>✦</div>
+          {!collapsed && (
+            <div style={{whiteSpace:'nowrap'}}>
+              <div style={{fontFamily:"'DM Serif Display',Georgia,serif", color:'#F7F4EE', fontSize:13, lineHeight:1.2}}>
+                Clínica del Alma
+              </div>
+              <div style={{color:'rgba(247,244,238,0.25)', fontSize:8.5, letterSpacing:'0.1em', textTransform:'uppercase', marginTop:2}}>
+                Panel profesional
+              </div>
             </div>
+          )}
+        </div>
+
+        {/* Profile */}
+        <div style={S.profile(collapsed)}>
+          <div style={S.avatar()}>
+            {initial}
+            <div style={{position:'absolute', bottom:1, right:1, width:8, height:8, background:'#4ade80', borderRadius:'50%', border:'1.5px solid #071B14'}} />
           </div>
-
-          {/* Profile */}
-          <div className="sidebar-profile">
-            <div className="sidebar-avatar">
-              {initial}
-              <div className="online-dot" />
+          {!collapsed && (
+            <div style={{minWidth:0, whiteSpace:'nowrap'}}>
+              <div style={{color:'#F7F4EE', fontSize:12, fontWeight:500, overflow:'hidden', textOverflow:'ellipsis'}}>{name}</div>
+              <div style={{color:'rgba(247,244,238,0.3)', fontSize:9.5, marginTop:1}}>Logoterapeuta · Admin</div>
             </div>
-            <div className="profile-text">
-              <div className="profile-name">{name}</div>
-              <div className="profile-role">Logoterapeuta · Admin</div>
-            </div>
-          </div>
+          )}
+        </div>
 
-          {/* Nav */}
-          <nav className="sidebar-nav">
-            <div className="nav-section">Principal</div>
-            {NAV_ITEMS.filter(i => i.section === 'principal').map(item => {
-              const active = pathname?.startsWith(item.href)
-              return (
-                <Link key={item.href} href={item.href}
-                  className={`nav-link${active ? ' active' : ''}`}
-                  data-tooltip={collapsed ? item.label : undefined}>
-                  <i className={`ti ${item.icon} nav-icon`} aria-hidden="true" />
-                  <span className="nav-label">{item.label}</span>
-                </Link>
-              )
-            })}
-
-            <div className="nav-section" style={{marginTop:'8px'}}>Gestión</div>
-            {NAV_ITEMS.filter(i => i.section === 'gestion').map(item => {
-              const active = pathname?.startsWith(item.href)
-              return (
-                <Link key={item.href} href={item.href}
-                  className={`nav-link${active ? ' active' : ''}`}
-                  data-tooltip={collapsed ? item.label : undefined}>
-                  <i className={`ti ${item.icon} nav-icon`} aria-hidden="true" />
-                  <span className="nav-label">{item.label}</span>
-                </Link>
-              )
-            })}
-          </nav>
-
-          {/* Bottom */}
-          <div className="sidebar-bottom">
-            <Link href="/" className="bottom-link">
-              <i className="ti ti-arrow-left" style={{fontSize:'13px', flexShrink:0}} aria-hidden="true" />
-              <span className="bottom-text">Sitio público</span>
-            </Link>
-            <Link href="/api/auth/signout" className="bottom-link danger">
-              <i className="ti ti-logout" style={{fontSize:'13px', flexShrink:0}} aria-hidden="true" />
-              <span className="bottom-text">Cerrar sesión</span>
-            </Link>
-          </div>
-        </aside>
-
-        {/* Main */}
-        <div className="admin-main">
-          {/* Topbar */}
-          <header className="admin-topbar">
-            <div className="breadcrumb">
-              <span className="bc-item">Clínica del Alma</span>
-              <span className="bc-sep">›</span>
-              <span className="bc-current">
-                {NAV_ITEMS.find(i => pathname?.startsWith(i.href))?.label ?? 'Panel'}
-              </span>
-            </div>
-            <div className="topbar-right">
-              <button className="topbar-btn secondary">
-                <i className="ti ti-search" style={{fontSize:'12px'}} aria-hidden="true" />
-                Buscar
-              </button>
-              <Link href="/admin/agenda" className="topbar-btn primary" style={{textDecoration:'none'}}>
-                <i className="ti ti-plus" style={{fontSize:'12px'}} aria-hidden="true" />
-                Nueva sesión
+        {/* Nav */}
+        <nav style={{padding:'10px', flex:1, overflowY:'auto', overflowX:'hidden'}}>
+          {!collapsed && <div style={S.sectionLabel()}>Principal</div>}
+          {NAV_MAIN.map(item => {
+            const active = !!pathname?.startsWith(item.href)
+            return (
+              <Link key={item.href} href={item.href} style={S.navLink(active, collapsed)}>
+                {active && <div style={S.activePill()} />}
+                <span style={S.navIconColor(active)}><Icon d={item.icon} /></span>
+                {!collapsed && <span style={S.navLabel(active)}>{item.label}</span>}
               </Link>
-            </div>
-          </header>
+            )
+          })}
 
-          {/* Page content */}
-          <div className="admin-content">
-            {children}
+          {!collapsed
+            ? <div style={{...S.sectionLabel(), paddingTop:16}}>Gestión</div>
+            : <div style={{height:10}} />
+          }
+          {NAV_GESTION.map(item => {
+            const active = !!pathname?.startsWith(item.href)
+            return (
+              <Link key={item.href} href={item.href} style={S.navLink(active, collapsed)}>
+                {active && <div style={S.activePill()} />}
+                <span style={S.navIconColor(active)}><Icon d={item.icon} /></span>
+                {!collapsed && <span style={S.navLabel(active)}>{item.label}</span>}
+              </Link>
+            )
+          })}
+        </nav>
+
+        {/* Bottom */}
+        <div style={{padding: collapsed ? '12px 8px' : '12px 14px', borderTop:'0.5px solid rgba(200,169,107,0.08)', flexShrink:0}}>
+          <Link href="/" style={{...S.bottomLink(), justifyContent: collapsed ? 'center' : 'flex-start', gap: collapsed ? 0 : 8}}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" style={{flexShrink:0}}>
+              <path d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+            </svg>
+            {!collapsed && <span>Sitio público</span>}
+          </Link>
+          <Link href="/api/auth/signout" style={{...S.bottomLink(), color:'rgba(247,244,238,0.25)', justifyContent: collapsed ? 'center' : 'flex-start', gap: collapsed ? 0 : 8}}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" style={{flexShrink:0}}>
+              <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            {!collapsed && <span>Cerrar sesión</span>}
+          </Link>
+        </div>
+      </aside>
+
+      {/* ── MAIN ── */}
+      <div style={{
+        marginLeft: W, flex:1,
+        display:'flex', flexDirection:'column', minHeight:'100vh',
+        transition:'margin-left 0.22s cubic-bezier(0.4,0,0.2,1)',
+      }}>
+        {/* Topbar */}
+        <header style={{
+          height:52, background:'#F7F4EE',
+          borderBottom:'0.5px solid rgba(7,27,20,0.07)',
+          display:'flex', alignItems:'center',
+          padding:'0 32px', gap:12,
+          flexShrink:0, position:'sticky', top:0, zIndex:40,
+        }}>
+          <div style={{display:'flex', alignItems:'center', gap:6}}>
+            <span style={{fontSize:12, color:'rgba(7,27,20,0.35)'}}>Clínica del Alma</span>
+            <span style={{color:'rgba(7,27,20,0.2)', fontSize:11}}>›</span>
+            <span style={{fontSize:12, color:'#071B14', fontWeight:500}}>{currentPage}</span>
           </div>
+          <div style={{marginLeft:'auto', display:'flex', alignItems:'center', gap:8}}>
+            <Link href="/admin/agenda" style={{
+              display:'flex', alignItems:'center', gap:5,
+              padding:'7px 14px',
+              background:'#071B14', color:'#F7F4EE',
+              borderRadius:8, fontSize:12, fontWeight:500,
+              textDecoration:'none',
+            }}>
+              <span style={{fontSize:16, lineHeight:1}}>+</span> Nueva sesión
+            </Link>
+          </div>
+        </header>
+
+        {/* Content */}
+        <div style={{flex:1, padding:'32px', maxWidth:1200}}>
+          {children}
         </div>
       </div>
-    </>
+    </div>
   )
 }
