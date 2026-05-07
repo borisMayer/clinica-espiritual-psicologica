@@ -237,6 +237,12 @@ export default function AgendaPacientePage() {
                         {pagando ? 'Procesando...' : 'Completar pago'}
                       </button>
                     )}
+                    {proxima.status==='CONFIRMED' && (
+                      <a href={`/paciente/sesion/${proxima.id}`}
+                        className="flex items-center gap-1.5 bg-[#1a2e1e] text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-[#2d4a32] transition-colors">
+                        🎥 Unirse a sesión
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
