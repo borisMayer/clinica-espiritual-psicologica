@@ -511,7 +511,7 @@ return head('Compartir','Tú eliges qué compartir')+
 `<p>Marca las partes que quieres mostrarle a tu psicólogo o psicóloga. Abajo ves exactamente lo que va a leer.</p>
 <fieldset><legend>Incluir</legend>${sec.map(([k,l])=>`<label class="check"><input type="checkbox" data-share="${k}" ${S.share[k]?'checked':''}> ${l}</label>`).join('')}</fieldset>
 <h2 style="margin-top:22px">Vista previa</h2><div class="preview" id="preview">${summaryHTML()}</div>`+
-actions(b('Volver','back','secondary'),b('Descargar registro','json','secondary')+b('Imprimir resumen','print'))}
+actions(b('Volver','back','secondary'),b('Imprimir resumen','print'))}
 };
 
 function sceneAnswer(i){const a=S.scenes[i];if(a.skipped)return 'Prefirió saltarla';if(a.choice===null)return 'Sin respuesta';if(a.choice===-1)return 'Otra: '+(a.other.trim()||'sin detalle');return SCENES[i].c[a.choice]}
