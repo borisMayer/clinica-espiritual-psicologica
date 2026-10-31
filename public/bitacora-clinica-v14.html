@@ -223,7 +223,7 @@ blockquote{margin:6px 0 0;padding:4px 0 4px 16px;border-left:3px solid var(--sun
   </header>
   <nav class="trail" id="trail" aria-label="Avance"></nav>
   <section class="panel" id="app"></section>
-  <p class="footer">Actividad de exploración personal para hacer con un psicólogo o psicóloga. No es una prueba diagnóstica y no entrega puntajes. Tus respuestas se guardan cifradas en la plataforma clínica y el profesional responsable podrá consultar las partes que decidas compartir.</p>
+  <p class="footer">Actividad de exploración personal para hacer con un psicólogo o psicóloga. No es una prueba diagnóstica y no entrega puntajes. Tus respuestas se guardan cifradas en la plataforma clínica y el profesional responsable podrá consultar todas las respuestas registradas.</p>
 </main>
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="print"></div>
@@ -402,8 +402,8 @@ ${inp('alias','¿Cómo quieres que te llame la bitácora? (opcional)','Tu apodo'
 
 acuerdo(){return head('Lo que tienes que saber','Quién ve lo que escribes')+
 `<div class="rules">
-<p>Tus respuestas se guardan cifradas en la plataforma clínica para que puedas retomar esta actividad. El profesional responsable podrá consultar el informe con las partes que elijas compartir.</p>
-<p>Al terminar eliges qué partes incluir en el informe que podrá revisar tu psicólogo o psicóloga. La plataforma conserva las respuestas para poder reanudar la actividad.</p>
+<p>Tus respuestas se guardan cifradas en la plataforma clínica para que puedas retomar esta actividad. El profesional responsable podrá consultar el informe con todas las respuestas registradas.</p>
+<p>Tu psicólogo o psicóloga recibirá el informe completo de las respuestas registradas, incluso si omites alguna pregunta. La plataforma conserva las respuestas para reanudar la actividad.</p>
 <p>Lo que conversan en sesión es confidencial. Hay una excepción: si cuentas algo que muestra que tu vida o la de otra persona corre peligro, o que alguien te está haciendo daño, tendrá que avisarle a un adulto que pueda protegerte. Si eso pasa, primero te lo dirá a ti.</p>
 <p>Si en algún momento algo te incomoda o te sientes mal, puedes parar y decírselo a tu psicólogo o psicóloga.</p>
 </div>
@@ -504,20 +504,17 @@ ${vl.length?`<div class="card"><h2>Tu brújula</h2>${tags(vl)}</div>`:''}
 ${S.message.trim()?`<div class="card"><h2>Tu cápsula del tiempo</h2><blockquote>${esc(S.message)}</blockquote></div>`:''}
 <div class="card"><h2>Tus baterías de confianza</h2>${confBars()}<p class="helper">Es un mapa para conversar, no un puntaje.</p></div>
 ${ta('surprise','¿Hubo algo de tus respuestas que te sorprendió?','')}
-<div id="care"></div>`+actions(b('Empezar de nuevo','reset','secondary'),b('Elegir qué compartir','next'))},
+<div id="care"></div>`+actions(b('Empezar de nuevo','reset','secondary'),b('Ver informe completo','next'))},
 
-compartir(){const sec=[['emociones','Clima por dentro (inicio y final)'],['fortalezas','Constelación de fortalezas'],['confianza','Baterías de confianza'],['historias','Historias'],['red','Mapa de personas'],['importa','Brújula'],['mensaje','Cápsula del tiempo'],['cierre','Lo que me sorprendió']];
-return head('Compartir','Tú eliges qué compartir')+
-`<p>Marca las partes que quieres mostrarle a tu psicólogo o psicóloga. Abajo ves exactamente lo que va a leer.</p>
-<fieldset><legend>Incluir</legend>${sec.map(([k,l])=>`<label class="check"><input type="checkbox" data-share="${k}" ${S.share[k]?'checked':''}> ${l}</label>`).join('')}</fieldset>
-<h2 style="margin-top:22px">Vista previa</h2><div class="preview" id="preview">${summaryHTML()}</div>`+
+compartir(){S.share={emociones:true,fortalezas:true,confianza:true,historias:true,red:true,importa:true,mensaje:true,cierre:true};return head('Informe','Tu bitácora completa')+
+`<p>Tu psicólogo o psicóloga podrá revisar todas las respuestas registradas, incluso las preguntas que preferiste dejar en blanco. Este resumen es para que también puedas revisarlas e imprimirlas.</p><h2 style="margin-top:22px">Resumen completo</h2><div class="preview" id="preview">${summaryHTML()}</div>`+
 actions(b('Volver','back','secondary'),b('Imprimir resumen','print'))}
 };
 
 function sceneAnswer(i){const a=S.scenes[i];if(a.skipped)return 'Prefirió saltarla';if(a.choice===null)return 'Sin respuesta';if(a.choice===-1)return 'Otra: '+(a.other.trim()||'sin detalle');return SCENES[i].c[a.choice]}
 function moodText(m){if(!m.pt)return 'sin marcar';return `${QUAD[quadOf(m.pt)].name} (energía ${sc5(m.pt.y)}, agrado ${sc5(m.pt.x)}, en escala de −5 a 5)${m.emos.length?'. Palabras: '+esc(m.emos.join(', ')):''}`}
 
-function summaryHTML(){
+function summaryHTML(){S.share={emociones:true,fortalezas:true,confianza:true,historias:true,red:true,importa:true,mensaje:true,cierre:true};
   const sk=k=>S.skipped[k]?'<p><em>Prefirió saltar esta misión.</em></p>':'';
   const q=t=>t&&t.trim()?`«${esc(t.trim())}»`:'';
   let h=`<h3>${S.alias?esc(S.alias):'Sin apodo'} · ${new Date().toLocaleDateString('es-CL')}</h3>`;
