@@ -19,7 +19,7 @@ const mood=(v:any)=>v?.pt?`Energía: ${Math.round(v.pt.y*5)} / Agrado: ${Math.ro
 function ClinicalReport({data}:{data:Report}){
  const a=data.answers||{}
  return <div id="mi-universo-informe" style={{color:'#24352b',background:'white',padding:24,borderRadius:15}}>
-  <h2>Informe descriptivo · Mi Bitácora v14</h2>
+  <h2>Informe descriptivo · Mi Bitácora v16</h2>
   <p><strong>Código:</strong> {data.code} · <strong>Estado:</strong> {data.status==='COMPLETED'?'Finalizado':data.status==='REVOKED'?'Revocado':'En curso'} · <strong>Avance:</strong> {Math.min(data.step+1,12)} de 12 etapas</p>
   <p>Actividad exploratoria no validada para adolescentes de 12 a 15 años. No es una prueba diagnóstica ni produce puntuaciones clínicas. El informe incluye todas las respuestas registradas, incluidas las preguntas omitidas o sin responder.</p>
   {data.status!=='COMPLETED'&&<p style={{color:'#9b3026'}}>Informe provisional: el participante todavía no ha finalizado la actividad.</p>}
@@ -27,6 +27,7 @@ function ClinicalReport({data}:{data:Report}){
    <h3>{title}</h3>
    {key==='emociones'?<><p><strong>Inicio:</strong> {mood(a.moodPre)}</p><p><strong>Final:</strong> {mood(a.moodPost)}</p><p><strong>Percepción corporal:</strong> {p(a.moodPre?.body)}</p><p><strong>Relato:</strong> {p(a.moodPre?.why)}</p></>:key==='fortalezas'?<><p>{p(a.strengths?.map((v:string)=>v==='Otra'?a.strengthOther||v:v))}</p><p><strong>Ejemplo:</strong> {p(a.strengthExample)}</p></>:key==='confianza'?<div>{confidence.map((c,i)=><p key={c}>{c}: {typeof a.conf?.[i]==='number'?a.conf[i]+'/10':a.conf?.[i]==='skip'?'Prefirió no responder':'Sin respuesta'}</p>)}</div>:key==='historias'?<div>{histories.map((h,i)=>{const s=a.scenes?.[i];const answer=s?.skipped?'Prefirió saltar':s?.choice===-1?s.other:s?.choice==null?'Sin respuesta':choices[i]?.[s.choice];return <p key={h}><strong>{h}:</strong> {p(answer)}. Pensamiento: {p(s?.thought)}. Sentimiento: {p(s?.feeling)}</p>})}</div>:key==='red'?<><p>{(a.network||[]).map((v:any)=>`${v.role} (${['Muy cerca','Cerca','Un poco más lejos'][v.ring-1]||'Sin clasificar'})`).join('; ')||'Sin personas registradas'}</p><p><strong>Lo que quisiera que comprendieran:</strong> {p(a.wish)}</p></>:key==='importa'?<><p><strong>Valores:</strong> {p(a.values?.map((v:string)=>v==='Otra'?a.valueOther||v:v))}</p><p><strong>Motivación:</strong> {p(a.valueWhy)}</p></>:key==='mensaje'?<p style={{whiteSpace:'pre-wrap'}}>{p(a.message)}</p>:<p>{p(a.surprise)}</p>}
   </section>)}
+  <h3>Registro íntegro de respuestas y opciones (v16)</h3><pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere',fontSize:12}}>{JSON.stringify(a,null,2)}</pre>
   <p style={{fontSize:13}}>Este informe registra respuestas autodeclaradas para su revisión por el profesional. No incluye interpretación diagnóstica automatizada.</p>
  </div>
 }
@@ -38,7 +39,7 @@ export default function MiUniversoAdmin(){
  const view=async(id:string)=>{setError('');try{const r=await fetch('/api/mi-universo/admin/'+encodeURIComponent(id),{cache:'no-store'});if(!r.ok)throw Error('No fue posible consultar el informe');setDetail(await r.json())}catch(e){setError((e as Error).message)}}
  const change=async(id:string,method:'PATCH'|'DELETE')=>{const deleting=method==='DELETE';if(!confirm(deleting?'¿Eliminar definitivamente este informe y todas sus respuestas? Esta acción no se puede deshacer.':'¿Revocar este enlace para impedir el acceso del participante?'))return;setError('');try{const r=await fetch('/api/mi-universo/admin/'+encodeURIComponent(id),{method});if(!r.ok)throw Error('No se pudo realizar la operación');setDetail(null);await load()}catch(e){setError((e as Error).message)}}
  return <main style={{color:'#173a2c',maxWidth:1050}}>
- <h1 style={{fontSize:32,fontFamily:'Georgia'}}>Mi Universo · Mi Bitácora v14</h1>
+ <h1 style={{fontSize:32,fontFamily:'Georgia'}}>Mi Universo · Mi Bitácora v16</h1>
  <p>Actividad interactiva original de siete misiones, con almacenamiento cifrado, enlaces privados e informes descriptivos.</p>
  {error&&<p role="alert" style={{color:'#9b3026'}}>{error}</p>}
  <section style={{background:'white',padding:24,borderRadius:16,marginTop:20}}>
