@@ -17,7 +17,7 @@ const secondary:React.CSSProperties={...button,background:'#e8f0eb',color:'#173a
 const p=(value:unknown)=>Array.isArray(value)?value.join(', '):typeof value==='string'?value:'Sin respuesta'
 const mood=(v:any)=>v?.pt?`Energía: ${Math.round(v.pt.y*5)} / Agrado: ${Math.round(v.pt.x*5)} (escala −5 a 5). Emociones: ${p(v.emos)}`:'Sin marcar'
 function ClinicalReport({data}:{data:Report}){
- const a=data.answers||{},share=a.share||{},allowed=(key:string)=>share[key]===true
+ const a=data.answers||{},share=a.share||{},allowed=(key:string)=>data.step>=11&&share[key]===true
  return <div id="mi-universo-informe" style={{color:'#24352b',background:'white',padding:24,borderRadius:15}}>
   <h2>Informe descriptivo · Mi Bitácora v14</h2>
   <p><strong>Código:</strong> {data.code} · <strong>Estado:</strong> {data.status==='COMPLETED'?'Finalizado':data.status==='REVOKED'?'Revocado':'En curso'} · <strong>Avance:</strong> {Math.min(data.step+1,12)} de 12 etapas</p>
