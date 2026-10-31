@@ -7,3 +7,6 @@ Este cambio se entrega en una rama de revisión. No fusionar ni usar con datos c
 5. Incorporar enlace de navegación a /admin/mi-universo tras validar el módulo.
 6. Pendiente para producción: rate limiting distribuido, CSRF/origin checks, protección de URLs sensibles en logs, controles antiabuso, gestión de claves, política de retención, consentimiento formal y revisión normativa chilena.
 No son instrumentos psicométricos validados ni generan diagnóstico automático.
+
+## Vercel Preview
+Variable MI_UNIVERSO_ENCRYPTION_KEY configurada en Preview para esta rama. La base de datos de Preview debe aislarse de producción antes de aplicar cambios. No usar db push con --accept-data-loss.
