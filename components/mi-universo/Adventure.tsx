@@ -17,7 +17,7 @@ export default function Adventure(){
    while(pending.current){
     const state=pending.current;pending.current=null
     setStatus('Guardando respuestas…')
-    const res=await fetch(endpoint,{method:'PUT',headers:{'Content-Type':'application/json'},cache:'no-store',body:JSON.stringify({step:state.step,answers:state,complete:state.step>=11})})
+    const res=await fetch(endpoint,{method:'PUT',headers:{'Content-Type':'application/json'},cache:'no-store',body:JSON.stringify({step:state.step,answers:state,complete:state.step>=10})})
     if(!res.ok)throw Error('No se pudieron guardar las respuestas. No cierres esta página; comprueba tu conexión.')
     setStatus('Respuestas guardadas de forma segura')
     setError('')
@@ -52,6 +52,6 @@ export default function Adventure(){
  if(!ready)return <main style={{padding:32,fontFamily:'system-ui'}} role="status">{error||'Cargando tu bitácora…'}</main>
  return <main style={{margin:0,padding:0}}>
   <div role="status" aria-live="polite" style={{fontFamily:'system-ui',fontSize:13,textAlign:'center',padding:6,background:'#edf0f7',color:error?'#b3261e':'#545a7a'}}>{error||status}</div>
-  <iframe ref={frame} title="Mi bitácora · Actividad de autoconocimiento" src="/bitacora-clinica-v14.html" onLoad={initialize} style={{display:'block',width:'100%',height:'calc(100dvh - 32px)',minHeight:760,border:0}} referrerPolicy="no-referrer" />
+  <iframe ref={frame} title="Mi bitácora · Actividad de autoconocimiento" src="/bitacora-clinica-v16.html" onLoad={initialize} style={{display:'block',width:'100%',height:'calc(100dvh - 32px)',minHeight:760,border:0}} referrerPolicy="no-referrer" />
  </main>
 }
