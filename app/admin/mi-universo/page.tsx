@@ -2,33 +2,38 @@
 import {useEffect,useState} from 'react'
 type Item={id:string;code:string;status:string;createdAt:string;expiresAt:string;completedAt:string|null}
 type Report={code:string;status:string;step:number;answers:Record<string,any>}
-const sections=[['emociones','Clima por dentro'],['fortalezas','Constelación de fortalezas'],['confianza','Baterías de confianza'],['historias','Historias'],['red','Mapa de personas'],['importa','Brújula'],['mensaje','Cápsula del tiempo'],['cierre','Lo que me sorprendió']]
-const confidence=['Participar en clases','Conocer a alguien nuevo','Intentar algo que me cuesta','Decir lo que pienso aunque otros piensen distinto','Pedir ayuda cuando la necesito','Reconocer algo bueno de mí','Mostrarme como soy en redes sociales']
-const histories=['Un error frente al curso','Las historias del fin de semana','En visto','Algo que no sale','Una discusión en casa']
+const emotions=['Alegría','Entusiasmo','Orgullo','Emoción','Ganas de hacer cosas','Enojo','Frustración','Nervios','Preocupación','Estrés','Tristeza','Cansancio','Aburrimiento','Desánimo','Soledad','Calma','Tranquilidad','Alivio','Comodidad','Gratitud','Confusión','Vergüenza','No sé bien']
+const bodyAreas=['Cabeza','Garganta','Pecho','Estómago','Hombros o espalda','Manos o piernas','No lo noto en el cuerpo']
+const strengths=['Creatividad','Humor','Curiosidad','Valentía','Paciencia','Responsabilidad','Amabilidad','Perseverancia','Saber escuchar','Lealtad','Imaginación','Talento práctico (deporte, música, arte…)','Otra']
+const values=['Familia','Amistad','Aprender','Ayudar a otros','Crear cosas','Justicia','Fe o espiritualidad','Naturaleza y animales','Deporte o movimiento','Libertad','Tranquilidad','Otra']
+const confidence=['Participar en clases','Conocer a alguien nuevo','Intentar algo que me cuesta','Decir lo que pienso aunque otros piensen distinto','Pedir ayuda cuando la necesito','Reconocer algo bueno de mí','Presentar o disertar frente al curso']
+const histories=['Un error frente al curso','Silencio en el recreo','Las invitaciones','El mensaje sin respuesta','Una discusión en casa']
 const choices=[
- ['Me quedo en silencio el resto de la clase','Me río también, para que no se note','Pienso que a cualquiera le puede pasar','Me da rabia con quienes se rieron'],
- ['Pienso que no les caigo bien','Le pregunto a alguien del grupo qué pasó','Dejo el celular y hago otra cosa','Me quedo revisando las fotos un buen rato'],
- ['Borro el mensaje','Pienso que dije algo mal','Lo dejo pasar: a veces la gente no contesta','Le escribo a alguien por privado'],
- ['Lo dejo por ahora','Busco otra forma o pido ayuda','Me comparo con alguien a quien le sale fácil','Insisto hasta que me salga'],
- ['Me encierro en mi pieza','Digo algo de lo que después me arrepiento','Hago lo que me piden, pero con rabia','Más tarde busco hablar con calma']
-]
+['Me quedo en silencio el resto de la clase','Me río también, para que no se note','Pienso que a cualquiera le puede pasar','Me da rabia con quienes se rieron'],
+['Pienso que estaban hablando de mí','Les pregunto de qué estaban hablando','Me voy a otra parte del patio','Me quedo y hago como si nada']]
+const optionList=(options:string[],selected:unknown)=> <ul style={{listStyle:'none',paddingLeft:0,margin:'8px 0'}}>{options.map((v,i)=><li key={i} style={{padding:'5px 0',borderBottom:'1px solid #edf0ed'}}><span style={{color:Array.isArray(selected)&&selected.includes(i)?'#12693e':'#77827b',fontWeight:Array.isArray(selected)&&selected.includes(i)?700:400}}>{Array.isArray(selected)&&selected.includes(i)?'☑ Marcada':'☐ No marcada'}</span> · {v}</li>)}</ul>
 const button:React.CSSProperties={padding:'10px 15px',background:'#173a2c',color:'white',border:0,borderRadius:9,cursor:'pointer'}
 const secondary:React.CSSProperties={...button,background:'#e8f0eb',color:'#173a2c'}
 const p=(value:unknown)=>Array.isArray(value)?value.join(', '):typeof value==='string'?value:'Sin respuesta'
 const mood=(v:any)=>v?.pt?`Energía: ${Math.round(v.pt.y*5)} / Agrado: ${Math.round(v.pt.x*5)} (escala −5 a 5). Emociones: ${p(v.emos)}`:'Sin marcar'
 function ClinicalReport({data}:{data:Report}){
- const a=data.answers||{}
- return <div id="mi-universo-informe" style={{color:'#24352b',background:'white',padding:24,borderRadius:15}}>
-  <h2>Informe descriptivo · Mi Bitácora v16</h2>
-  <p><strong>Código:</strong> {data.code} · <strong>Estado:</strong> {data.status==='COMPLETED'?'Finalizado':data.status==='REVOKED'?'Revocado':'En curso'} · <strong>Avance:</strong> {Math.min(data.step+1,12)} de 12 etapas</p>
-  <p>Actividad exploratoria no validada para adolescentes de 12 a 15 años. No es una prueba diagnóstica ni produce puntuaciones clínicas. El informe incluye todas las respuestas registradas, incluidas las preguntas omitidas o sin responder.</p>
-  {data.status!=='COMPLETED'&&<p style={{color:'#9b3026'}}>Informe provisional: el participante todavía no ha finalizado la actividad.</p>}
-  {sections.map(([key,title])=><section key={key} style={{borderTop:'1px solid #dce5df',padding:'16px 0'}}>
-   <h3>{title}</h3>
-   {key==='emociones'?<><p><strong>Inicio:</strong> {mood(a.moodPre)}</p><p><strong>Final:</strong> {mood(a.moodPost)}</p><p><strong>Percepción corporal:</strong> {p(a.moodPre?.body)}</p><p><strong>Relato:</strong> {p(a.moodPre?.why)}</p></>:key==='fortalezas'?<><p>{p(a.strengths?.map((v:string)=>v==='Otra'?a.strengthOther||v:v))}</p><p><strong>Ejemplo:</strong> {p(a.strengthExample)}</p></>:key==='confianza'?<div>{confidence.map((c,i)=><p key={c}>{c}: {typeof a.conf?.[i]==='number'?a.conf[i]+'/10':a.conf?.[i]==='skip'?'Prefirió no responder':'Sin respuesta'}</p>)}</div>:key==='historias'?<div>{histories.map((h,i)=>{const s=a.scenes?.[i];const answer=s?.skipped?'Prefirió saltar':s?.choice===-1?s.other:s?.choice==null?'Sin respuesta':choices[i]?.[s.choice];return <p key={h}><strong>{h}:</strong> {p(answer)}. Pensamiento: {p(s?.thought)}. Sentimiento: {p(s?.feeling)}</p>})}</div>:key==='red'?<><p>{(a.network||[]).map((v:any)=>`${v.role} (${['Muy cerca','Cerca','Un poco más lejos'][v.ring-1]||'Sin clasificar'})`).join('; ')||'Sin personas registradas'}</p><p><strong>Lo que quisiera que comprendieran:</strong> {p(a.wish)}</p></>:key==='importa'?<><p><strong>Valores:</strong> {p(a.values?.map((v:string)=>v==='Otra'?a.valueOther||v:v))}</p><p><strong>Motivación:</strong> {p(a.valueWhy)}</p></>:key==='mensaje'?<p style={{whiteSpace:'pre-wrap'}}>{p(a.message)}</p>:<p>{p(a.surprise)}</p>}
-  </section>)}
-  <h3>Registro íntegro de respuestas y opciones (v16)</h3><pre style={{whiteSpace:'pre-wrap',overflowWrap:'anywhere',fontSize:12}}>{JSON.stringify(a,null,2)}</pre>
-  <p style={{fontSize:13}}>Este informe registra respuestas autodeclaradas para su revisión por el profesional. No incluye interpretación diagnóstica automatizada.</p>
+ const a=data.answers||{}, isDone=data.status==='COMPLETED'
+ const label=(x:unknown)=>typeof x==='string'&&x.trim()?x:'Sin respuesta registrada'
+ const chosen=(list:unknown)=>Array.isArray(list)?list:[]
+ return <div id="mi-universo-informe" style={{color:'#24352b',background:'white',padding:28,borderRadius:15,lineHeight:1.55}}>
+ <header style={{borderBottom:'2px solid #173a2c',paddingBottom:18}}><p style={{letterSpacing:2,fontSize:12}}>CLÍNICA DEL ALMA · REGISTRO CLÍNICO</p><h2 style={{fontFamily:'Georgia',fontSize:27,margin:'6px 0'}}>Mi Universo · Informe de Bitácora v16</h2><p><strong>Código:</strong> {data.code} · <strong>Estado:</strong> {isDone?'Finalizado':'En curso'} · <strong>Idioma del paciente:</strong> {a.lang==='en'?'Inglés':'Español'} · <strong>Etapa:</strong> {a.step??data.step}</p></header>
+ <p style={{fontSize:13}}>Registro descriptivo de respuestas autodeclaradas. Las opciones marcadas y no marcadas se muestran por separado. La ausencia de selección no implica rechazo ni constituye diagnóstico. Actividad exploratoria, no instrumento diagnóstico validado.</p>
+ {!isDone&&<p style={{color:'#9b3026'}}>Informe provisional: actividad aún no finalizada.</p>}
+ <section><h3>1. Radar emocional · Antes</h3><p><strong>Posición en el radar:</strong> {a.moodPre?.pt?'Energía '+Math.round(a.moodPre.pt.y*100)+' %, agrado '+Math.round(a.moodPre.pt.x*100)+' %':'No registrada'}</p><strong>Emociones</strong>{optionList(emotions,chosen(a.moodPre?.emos))}<strong>Percepción corporal</strong>{optionList(bodyAreas,chosen(a.moodPre?.body))}<p><strong>Relato:</strong> {label(a.moodPre?.why)}</p></section>
+ <section><h3>2. Constelación de fortalezas</h3>{optionList(strengths,chosen(a.strengths))}<p><strong>Otra fortaleza:</strong> {label(a.strengthOther)}</p><p><strong>Ejemplo:</strong> {label(a.strengthExample)}</p></section>
+ <section><h3>3. Baterías de confianza</h3>{confidence.map((q,i)=><p key={i}><strong>{q}:</strong> {typeof a.conf?.[i]==='number'?a.conf[i]+' / 10':a.conf?.[i]==='skip'?'Omitida por el paciente':'Sin respuesta registrada'}</p>)}</section>
+ <section><h3>4. Historias y decisiones</h3>{(a.scenes||[]).map((s:any,i:number)=><div key={i} style={{marginBottom:18}}><h4>{histories[i]||'Historia '+(i+1)}</h4><p><strong>Estado:</strong> {s?.skipped?'Omitida':s?.choice==null?'Sin elección':'Respondida'}</p>{(choices[i]||[]).length>0?optionList(choices[i],typeof s?.choice==='number'&&s.choice>=0?[s.choice]:[]):<p><strong>Índice de opción elegida:</strong> {typeof s?.choice==='number'?s.choice:'Sin selección'} (consultar texto original de la historia)</p>}<p><strong>Otra respuesta:</strong> {label(s?.other)}</p><p><strong>Pensamiento:</strong> {label(s?.thought)}</p><p><strong>Sentimiento:</strong> {label(s?.feeling)}</p></div>)}</section>
+ <section><h3>5. Mapa de personas</h3>{(a.network||[]).length?(a.network||[]).map((n:any,i:number)=><p key={i}>{label(n.role)} · Cercanía: {['Muy cerca','Cerca','Un poco más lejos'][n.ring-1]||'No especificada'}</p>):<p>Sin personas registradas.</p>}<p><strong>Lo que quisiera que comprendieran:</strong> {label(a.wish)}</p></section>
+ <section><h3>6. Brújula de valores</h3>{optionList(values,chosen(a.values))}<p><strong>Otro valor:</strong> {label(a.valueOther)}</p><p><strong>Motivación:</strong> {label(a.valueWhy)}</p></section>
+ <section><h3>7. Cápsula del tiempo</h3><p style={{whiteSpace:'pre-wrap'}}>{label(a.message)}</p></section>
+ <section><h3>Cierre · Radar emocional después</h3><p><strong>Posición:</strong> {a.moodPost?.pt?'Energía '+Math.round(a.moodPost.pt.y*100)+' %, agrado '+Math.round(a.moodPost.pt.x*100)+' %':'No registrada'}</p>{optionList(emotions,chosen(a.moodPost?.emos))}<p><strong>Reflexión:</strong> {label(a.surprise)}</p></section>
+ <section><h3>Misiones omitidas</h3><p>{chosen(a.skipped).length?chosen(a.skipped).join(', '):'No se registraron misiones omitidas.'}</p></section>
+ <p style={{fontSize:12,borderTop:'1px solid #dce5df',paddingTop:15}}>El informe conserva la información original de las respuestas y la presenta para revisión profesional. No reemplaza una entrevista clínica.</p>
  </div>
 }
 export default function MiUniversoAdmin(){
