@@ -1,7 +1,7 @@
 'use client'
 import {useCallback,useEffect,useRef,useState} from 'react'
 type BitacoraState={step:number;share?:Record<string,boolean>;[key:string]:unknown}
-export default function Adventure({token}:{token:string}){
+export default function Adventure(){
  const frame=useRef<HTMLIFrameElement>(null)
  const initial=useRef<BitacoraState|null>(null)
  const pending=useRef<BitacoraState|null>(null)
@@ -9,7 +9,7 @@ export default function Adventure({token}:{token:string}){
  const [ready,setReady]=useState(false)
  const [error,setError]=useState('')
  const [status,setStatus]=useState('Cargando tu bitácora…')
- const endpoint='/api/mi-universo/sesion/'+encodeURIComponent(token)
+ const endpoint='/api/mi-universo/actual'
  const flush=useCallback(async()=>{
   if(saving.current)return
   saving.current=true
