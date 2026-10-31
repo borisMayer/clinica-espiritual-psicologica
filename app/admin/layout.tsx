@@ -16,6 +16,7 @@ const NAV_MAIN = [
 ]
 const NAV_GESTION = [
   { href: '/admin/mi-universo', label: 'Mi Universo', icon: 'M12 3a9 9 0 100 18 9 9 0 000-18zm0 4v5l3 2' },
+  { href: '/admin/instrumentos', label: 'Instrumentos', icon: 'M9 12h6m-6 4h6M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z' },
   { href: '/admin/pagos', label: 'Pagos',
     icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' },
   { href: '/admin/reportes', label: 'Reportes',
