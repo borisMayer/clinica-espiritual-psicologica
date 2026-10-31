@@ -24,7 +24,7 @@ function ClinicalReport({data}:{data:Report}){
  const label=(x:unknown)=>typeof x==='string'&&x.trim()?x:'Sin respuesta registrada'
  const chosen=(list:unknown)=>Array.isArray(list)?list:[]
  return <div id="mi-universo-informe" style={{color:'#24352b',background:'white',padding:28,borderRadius:15,lineHeight:1.55}}>
- <header style={{borderBottom:'2px solid #173a2c',paddingBottom:18}}><p style={{letterSpacing:2,fontSize:12}}>CLÍNICA DEL ALMA · REGISTRO CLÍNICO</p><h2 style={{fontFamily:'Georgia',fontSize:27,margin:'6px 0'}}>Mi Universo · Informe de Bitácora v16</h2><p><strong>Código:</strong> {data.code} · <strong>Estado:</strong> {isDone?'Finalizado':'En curso'} · <strong>Idioma del paciente:</strong> {a.lang==='en'?'Inglés':'Español'} · <strong>Etapa:</strong> {a.step??data.step}</p></header>
+ <header style={{borderBottom:'2px solid #173a2c',paddingBottom:18}}><p style={{letterSpacing:2,fontSize:12}}>CLÍNICA DEL ALMA · REGISTRO CLÍNICO</p><h2 style={{fontFamily:'Georgia',fontSize:27,margin:'6px 0'}}>Mi Bitácora · Informe clínico</h2><p><strong>Código:</strong> {data.code} · <strong>Estado:</strong> {isDone?'Finalizado':'En curso'} · <strong>Idioma del paciente:</strong> {a.lang==='en'?'Inglés':'Español'} · <strong>Etapa:</strong> {a.step??data.step}</p></header>
  <p style={{fontSize:13}}>Registro descriptivo de respuestas autodeclaradas. Las opciones marcadas y no marcadas se muestran por separado. La ausencia de selección no implica rechazo ni constituye diagnóstico. Actividad exploratoria, no instrumento diagnóstico validado.</p>
  {!isDone&&<p style={{color:'#9b3026'}}>Informe provisional: actividad aún no finalizada.</p>}
  <section><h3>1. Radar emocional · Antes</h3><p><strong>Posición en el radar:</strong> {a.moodPre?.pt?'Energía '+Math.round(a.moodPre.pt.y*100)+' %, agrado '+Math.round(a.moodPre.pt.x*100)+' %':'No registrada'}</p><strong>Emociones</strong>{optionList(emotions,chosen(a.moodPre?.emos))}<strong>Percepción corporal</strong>{optionList(bodyAreas,chosen(a.moodPre?.body))}<p><strong>Relato:</strong> {label(a.moodPre?.why)}</p></section>
@@ -47,7 +47,7 @@ export default function MiUniversoAdmin(){
  const view=async(id:string)=>{setError('');try{const r=await fetch('/api/mi-universo/admin/'+encodeURIComponent(id),{cache:'no-store'});if(!r.ok)throw Error('No fue posible consultar el informe');setDetail(await r.json())}catch(e){setError((e as Error).message)}}
  const change=async(id:string,method:'PATCH'|'DELETE')=>{const deleting=method==='DELETE';if(!confirm(deleting?'¿Eliminar definitivamente este informe y todas sus respuestas? Esta acción no se puede deshacer.':'¿Revocar este enlace para impedir el acceso del participante?'))return;setError('');try{const r=await fetch('/api/mi-universo/admin/'+encodeURIComponent(id),{method});if(!r.ok)throw Error('No se pudo realizar la operación');setDetail(null);await load()}catch(e){setError((e as Error).message)}}
  return <main style={{color:'#173a2c',maxWidth:1050}}>
- <h1 style={{fontSize:32,fontFamily:'Georgia'}}>Mi Universo · Mi Bitácora v16</h1>
+ <h1 style={{fontSize:32,fontFamily:'Georgia'}}>Mi Bitácora</h1>
  <p>Actividad interactiva original de siete misiones, con almacenamiento cifrado, enlaces privados e informes descriptivos.</p>
  {error&&<p role="alert" style={{color:'#9b3026'}}>{error}</p>}
  <section style={{background:'white',padding:24,borderRadius:16,marginTop:20}}>
