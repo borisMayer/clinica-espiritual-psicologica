@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mi bitácora · Actividad de autoconocimiento (12 a 15 años)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF0F7;--surface:#FFFFFF;--surface-2:#F4F5FB;--ink:#1D2140;--muted:#545A7A;--line:#D5D9E8;
+  --accent:#5A48D6;--accent-ink:#FFFFFF;--accent-soft:#E9E6FB;--mint:#1E9E80;--mint-soft:#DDF4EC;
+  --sun:#FFC53D;--sun-soft:#FFF3D1;--care:#B3261E;--care-soft:#FCE8E6;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121429;--surface:#1B1E3A;--surface-2:#242849;--ink:#EEF0FF;--muted:#A9AECD;--line:#363C66;
+    --accent:#A193FF;--accent-ink:#15123A;--accent-soft:#2D2A5A;--mint:#52D7B5;--mint-soft:#173A3A;
+    --sun:#FFD166;--sun-soft:#3A3320;--care:#FF9C93;--care-soft:#3E1F25;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121429;--surface:#1B1E3A;--surface-2:#242849;--ink:#EEF0FF;--muted:#A9AECD;--line:#363C66;
+  --accent:#A193FF;--accent-ink:#15123A;--accent-soft:#2D2A5A;--mint:#52D7B5;--mint-soft:#173A3A;
+  --sun:#FFD166;--sun-soft:#3A3320;--care:#FF9C93;--care-soft:#3E1F25;
+  color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.6}
+.wrap{max-width:760px;margin:0 auto;padding:20px 18px 40px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:800;font-size:22px;letter-spacing:-.01em}
+.top-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.stage{font-size:14px;color:var(--muted)}
+.trail{display:flex;align-items:center;margin:22px 0 24px}
+.trail .dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--muted);background:var(--surface);flex:none}
+.trail .seg{flex:1;height:3px;background:var(--line)}
+.trail .dot.done{background:var(--mint);border-color:var(--mint);color:var(--surface)}
+.trail .seg.done{background:var(--mint)}
+.trail .dot.now{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:clamp(20px,5vw,40px)}
+.sticker{display:inline-block;background:var(--sun);color:#2A2200;font-weight:700;padding:5px 13px;border-radius:9px;transform:rotate(-2deg);font-size:15px}
+h1{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:800;font-size:clamp(28px,6vw,42px);line-height:1.1;margin:16px 0 14px;letter-spacing:-.015em}
+h1:focus{outline:none}
+h2{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:600;font-size:22px;line-height:1.25;margin:0 0 8px}
+h3{font-size:18px;margin:20px 0 6px}
+p{margin:0 0 12px}
+.lead{font-size:19px}
+.count{color:var(--muted);font-size:15px;font-weight:700}
+.helper{font-size:15px;color:var(--muted)}
+label,legend{display:block;font-weight:700;margin:18px 0 7px}
+fieldset{border:0;padding:0;margin:0}
+input[type=text],textarea,select{width:100%;background:var(--surface-2);border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;color:var(--ink);font:inherit}
+textarea{resize:vertical;min-height:96px}
+input[type=text]:focus,textarea:focus,select:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:16px 0}
+.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.opt{font:inherit;text-align:left;background:var(--surface-2);border:2px solid var(--line);border-radius:14px;padding:13px 14px;color:var(--ink);cursor:pointer;min-height:54px;transition:border-color .15s,background .15s}
+.opt .e{display:block;font-size:26px;line-height:1;margin-bottom:6px}
+.opt:hover{border-color:var(--accent)}
+.opt[aria-pressed="true"],.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.chip{font:inherit;font-size:16px;background:var(--surface-2);border:1.5px solid var(--line);border-radius:999px;padding:9px 15px;color:var(--ink);cursor:pointer}
+.chip:hover{border-color:var(--accent)}
+.card{background:var(--surface-2);border-radius:16px;padding:18px 20px;margin:16px 0}
+.card p:last-child{margin-bottom:0}
+.rules p{padding-left:16px;border-left:3px solid var(--mint)}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:400;margin:10px 0;cursor:pointer}
+.check input{width:20px;height:20px;margin-top:3px;accent-color:var(--accent);flex:none}
+.check.big{font-weight:700;margin-top:22px}
+.rangebox{margin:16px 0}
+.big{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:800;font-size:64px;line-height:1;text-align:center;color:var(--accent);margin:8px 0}
+input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;height:32px}
+input[type=range].unset{opacity:.45}
+.scale{display:flex;justify-content:space-between;color:var(--muted);font-size:14px}
+details.deeper{margin:18px 0;border:1.5px dashed var(--line);border-radius:14px;padding:4px 16px 12px}
+details.deeper summary{cursor:pointer;font-weight:700;padding:10px 0}
+.note{background:var(--sun-soft);border-radius:14px;padding:14px 16px;margin:16px 0}
+.note:focus{outline:3px solid var(--sun)}
+.care{background:var(--care-soft);border-radius:14px;padding:14px 16px;margin:16px 0}
+.care p{color:var(--ink)}
+.actions{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:28px}
+.actions .right{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+button.primary,button.secondary,button.ghost{font:inherit;font-weight:700;border-radius:12px;padding:12px 20px;cursor:pointer}
+button.primary{background:var(--accent);color:var(--accent-ink);border:2px solid var(--accent)}
+button.secondary{background:transparent;color:var(--ink);border:2px solid var(--line)}
+button.ghost{background:transparent;color:var(--muted);border:2px solid transparent;text-decoration:underline;text-underline-offset:3px}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.link{font:inherit;font-size:14px;background:none;border:0;color:var(--accent);cursor:pointer;text-decoration:underline;padding:4px}
+.netwrap{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:20px;align-items:start;margin:10px 0}
+.net{width:100%;height:auto;overflow:visible}
+.net .ring{fill:none;stroke:var(--line);stroke-width:1.5}
+.net .ring.r1{fill:var(--mint-soft)}
+.net .me{fill:var(--accent)}
+.net .metxt{fill:var(--accent-ink);font-weight:700;font-size:14px}
+.net .rl{fill:var(--muted);font-size:11px}
+.net .pd{fill:var(--mint);stroke:var(--surface);stroke-width:2}
+.net .pt{fill:var(--ink);font-size:12px}
+.netform label{margin-top:0}
+.netform select{margin-bottom:12px}
+.netform input{margin-bottom:12px}
+.plist{list-style:none;padding:0;margin:14px 0 0}
+.plist li{display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid var(--line);padding:6px 0}
+.plist small{color:var(--muted)}
+.breathbox{position:relative;width:210px;height:210px;margin:18px auto 10px}
+.breath{position:absolute;inset:38px;border-radius:50%;background:var(--mint-soft);border:3px solid var(--mint);transition:transform 4s ease-in-out}
+.breathtxt{position:absolute;inset:0;display:grid;place-items:center;font-weight:700;font-size:18px;text-align:center}
+.center{text-align:center}
+.bar{display:grid;grid-template-columns:minmax(0,1fr) 130px 28px;gap:10px;align-items:center;margin:8px 0;font-size:15px}
+.bt{height:10px;background:var(--line);border-radius:6px;overflow:hidden}
+.bt span{display:block;height:100%;background:var(--mint);border-radius:6px}
+.bv{text-align:right;font-weight:700}
+blockquote{margin:6px 0 0;padding:4px 0 4px 16px;border-left:3px solid var(--sun);font-size:18px}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tags span{background:var(--accent-soft);border-radius:999px;padding:5px 12px;font-size:15px}
+.preview{background:var(--surface-2);border-radius:16px;padding:6px 20px 16px;margin-top:10px}
+.preview h3:first-child{margin-top:14px}
+.preview ul{margin:4px 0 10px;padding-left:20px}
+.footer{font-size:13px;color:var(--muted);margin:18px 2px;line-height:1.6}
+#print{display:none}
+@media (max-width:600px){
+  .grid.two{grid-template-columns:1fr}
+  .netwrap{grid-template-columns:1fr}
+  .bar{grid-template-columns:minmax(0,1fr) 80px 24px}
+  .wrap{padding:14px 12px 30px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  body{background:#fff;color:#000}
+  .wrap{display:none!important}
+  #print{display:block;font-size:13px;color:#000;padding:10px}
+  #print h1{font-size:24px;margin:0 0 6px}
+  #print .bt{background:#ddd}#print .bt span{background:#555}
+  #print *{color:#000!important}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="top">
+    <div class="brand">Mi bitácora</div>
+    <div class="top-right">
+      <span class="stage" id="stage"></span>
+    </div>
+  </header>
+  <nav class="trail" id="trail" aria-label="Avance"></nav>
+  <section class="panel" id="app"></section>
+  <p class="footer">Actividad de exploración personal para hacer con un psicólogo o psicóloga. No es una prueba diagnóstica y no entrega puntajes. Las respuestas se guardan solo en esta pestaña del navegador y se borran al cerrarla.</p>
+</main>
+
+
+<div id="print"></div>
+
+<script>
+const KEY='bitacora_v13';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const EMOS=[['😄','Alegría'],['😌','Calma'],['🤩','Entusiasmo'],['🥱','Cansancio'],['😟','Preocupación'],['😬','Nervios'],['😢','Tristeza'],['😠','Enojo'],['😤','Frustración'],['😑','Aburrimiento'],['😵‍💫','Confusión'],['🤷','No sé bien']];
+const BODY=['Cabeza','Garganta','Pecho','Estómago','Hombros o espalda','Manos o piernas','No lo noto en el cuerpo'];
+const STRENGTHS=['Creatividad','Humor','Curiosidad','Valentía','Paciencia','Responsabilidad','Amabilidad','Perseverancia','Saber escuchar','Lealtad','Imaginación','Talento práctico (deporte, música, arte…)','Otra'];
+const VALUES=['Familia','Amistad','Aprender','Ayudar a otros','Crear cosas','Justicia','Fe o espiritualidad','Naturaleza y animales','Deporte o movimiento','Libertad','Tranquilidad','Otra'];
+const CONF=['Participar en clases','Conocer a alguien nuevo','Intentar algo que me cuesta','Decir lo que pienso aunque otros piensen distinto','Pedir ayuda cuando la necesito','Reconocer algo bueno de mí','Mostrarme como soy en redes sociales'];
+const SCENES=[
+  {t:'Un error frente al curso',x:'Respondes una pregunta en clases, te equivocas y algunas personas se ríen.',c:['Me quedo en silencio el resto de la clase','Me río también, para que no se note','Pienso que a cualquiera le puede pasar','Me da rabia con quienes se rieron']},
+  {t:'Las historias del fin de semana',x:'El domingo ves en Instagram que un grupo del curso salió junto. A ti no te avisaron.',c:['Pienso que no les caigo bien','Le pregunto a alguien del grupo qué pasó','Dejo de mirar el celular y hago otra cosa','Me quedo revisando las fotos un buen rato']},
+  {t:'En visto',x:'Escribes algo en el grupo de WhatsApp del curso. Pasan horas y nadie responde, aunque aparece como leído.',c:['Borro el mensaje','Pienso que dije algo mal','Lo dejo pasar: a veces la gente no contesta','Le escribo a alguien por privado']},
+  {t:'Algo que no sale',x:'Estás aprendiendo algo nuevo (un truco, una canción, un tema de matemáticas) y no te resulta a la primera.',c:['Lo dejo por ahora','Busco otra forma o pido ayuda','Me comparo con alguien a quien le sale fácil','Insisto hasta que me salga']},
+  {t:'Una discusión en casa',x:'Estás en algo que te importa y un adulto de tu casa te pide ayuda justo en ese momento. Terminan discutiendo.',c:['Me encierro en mi pieza','Digo algo de lo que después me arrepiento','Hago lo que me piden, pero con rabia','Más tarde busco hablar con calma']}
+];
+const RINGS=['Muy cerca','Cerca','Un poco más lejos'];
+const LISTS={emos:EMOS.map(e=>e[1]),body:BODY,strengths:STRENGTHS,values:VALUES};
+const STEPS=['inicio','acuerdo','emociones','fortalezas','confianza','historias','red','importa','mensaje','pausa','cierre','compartir'];
+const MISSION={emociones:1,fortalezas:2,confianza:3,historias:4,red:5,importa:6,mensaje:7};
+const RISK=/(suicid|matarme|me quiero morir|quiero morirme|no quiero vivir|no quiero seguir viviendo|desaparecer para siempre|cortarme|me corto|hacerme da[ñn]o|me hago da[ñn]o|autolesi|me pegan|me golpean|me tocan|abus[oa])/i;
+
+function shuffle(n){const a=[...Array(n).keys()];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fresh(){return{step:0,alias:'',assent:false,
+  moodPre:{emos:[],int:null,body:[],why:''},
+  strengths:[],strengthOther:'',strengthExample:'',
+  conf:CONF.map(()=>null),confIdx:0,
+  scenes:SCENES.map(s=>({order:shuffle(s.c.length),choice:null,other:'',thought:'',feeling:'',skipped:false})),sceneIdx:0,
+  network:[],netNoteShown:false,wish:'',
+  values:[],valueOther:'',valueWhy:'',message:'',
+  moodPost:{emos:[],int:null},breathDone:false,surprise:'',skipped:{},
+  share:{emociones:true,fortalezas:true,confianza:true,historias:true,red:true,importa:true,mensaje:true,cierre:true}}}
+function load(){try{const r=sessionStorage.getItem(KEY);return r?JSON.parse(r):null}catch(e){return null}}
+function save(){try{sessionStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+let S=load()||fresh();
+
+window.addEventListener('beforeunload',e=>{if(S.step>0&&STEPS[S.step]!=='compartir'){e.preventDefault();e.returnValue=''}});
+
+function getPath(p){return p.split('.').reduce((o,k)=>o==null?o:o[k],S)}
+function setPath(p,v){const k=p.split('.');let o=S;for(let i=0;i<k.length-1;i++)o=o[k[i]];o[k[k.length-1]]=v}
+function realList(arr,other){return arr.map(v=>v==='Otra'?(other.trim()||'Otra'):v)}
+
+/* piezas de interfaz */
+function head(st,title){return `<span class="sticker">${st}</span><h1 id="h" tabindex="-1">${title}</h1>`}
+function actions(left,right){return `<div class="actions"><div>${left||''}</div><div class="right">${right||''}</div></div>`}
+function b(label,act,cls='primary',extra=''){return `<button type="button" class="${cls}" data-act="${act}" ${extra}>${label}</button>`}
+function fid(p){return 'f_'+p.replace(/\W/g,'_')}
+function ta(path,label,ph=''){return `<label for="${fid(path)}">${label}</label><textarea id="${fid(path)}" data-bind="${path}" placeholder="${esc(ph)}">${esc(getPath(path))}</textarea>`}
+function inp(path,label,ph='',max=60){return `<label for="${fid(path)}">${label}</label><input type="text" id="${fid(path)}" data-bind="${path}" maxlength="${max}" placeholder="${esc(ph)}" value="${esc(getPath(path))}">`}
+function picks(list,path,max){
+  const L=LISTS[list],arr=getPath(path),full=arr.length>=max,isEmo=list==='emos';
+  const words={3:'tres',4:'cuatro'};
+  return `<div class="${isEmo?'grid':'chips'}">${L.map((v,i)=>{
+    const emo=isEmo?`<span class="e" aria-hidden="true">${EMOS[i][0]}</span>`:'';
+    return `<button type="button" class="${isEmo?'opt':'chip'}" aria-pressed="${arr.includes(v)}" data-act="toggle" data-list="${list}" data-path="${path}" data-i="${i}" data-max="${max}" data-fid="${path}-${i}">${emo}${esc(v)}</button>`}).join('')}</div>`+
+    (full&&max<L.length?`<p class="helper" role="status">Ya elegiste ${words[max]||max}. Para cambiar una, desmarca otra primero.</p>`:'')}
+function range(path,min,max,label,lo,hi,mid){
+  const v=getPath(path),set=typeof v==='number',n=fid(path);
+  return `<div class="rangebox"><label for="r${n}">${label}</label>
+  <div class="big" id="${n}" aria-hidden="true">${set?v:'–'}</div>
+  <input id="r${n}" type="range" min="${min}" max="${max}" step="1" value="${set?v:Math.round((min+max)/2)}" class="${set?'':'unset'}" data-range="${path}" data-num="${n}">
+  <div class="scale"><span>${lo}</span>${mid?`<span>${mid}</span>`:''}<span>${hi}</span></div>
+  ${set?'':`<p class="helper" id="${n}_h">Mueve el control para responder.</p>`}</div>`}
+
+/* vistas */
+const V={
+inicio(){return head('Antes de partir','Una bitácora para conocerte un poco más')+
+`<p class="lead">Son siete misiones cortas sobre lo que sientes, lo que se te da bien, lo que te importa y cómo reaccionas en algunas situaciones. Toma más o menos 15 minutos.</p>
+<p>No hay respuestas correctas ni notas. Puedes saltar cualquier pregunta o volver atrás cuando quieras.</p>
+${inp('alias','¿Cómo quieres que te llame la bitácora? (opcional)','Tu apodo',30)}`+actions('',b('Comenzar','next'))},
+
+acuerdo(){return head('Lo que tienes que saber','Quién ve lo que escribes')+
+`<div class="rules">
+<p>Tus respuestas se guardan solo en este navegador y se borran al cerrar la pestaña. No se suben a internet.</p>
+<p>Tu psicólogo o psicóloga las verá solo si al final decides compartirlas, y tú eliges qué partes.</p>
+<p>Lo que conversan en sesión es confidencial. Hay una excepción: si cuentas algo que muestra que tu vida o la de otra persona corre peligro, o que alguien te está haciendo daño, tendrá que avisarle a un adulto que pueda protegerte. Si eso pasa, primero te lo dirá a ti.</p>
+<p>Si en algún momento algo te incomoda o te sientes mal, puedes parar y decírselo a tu psicólogo o psicóloga.</p>
+</div>
+<label class="check big"><input type="checkbox" id="assent" ${S.assent?'checked':''}> Entendí y quiero seguir</label>`+
+actions(b('Volver','back','secondary'),b('Continuar','next','primary',S.assent?'':'disabled'))},
+
+emociones(){const m=S.moodPre;return head('Misión 1: radar','¿Qué hay en tu radar hoy?')+
+`<p>Elige hasta tres. Es normal sentir cosas distintas al mismo tiempo, incluso cosas que parecen opuestas.</p>
+${picks('emos','moodPre.emos',3)}
+${m.emos.length?range('moodPre.int',1,10,'¿Qué tan fuerte lo sientes?','1 Poco','10 Muchísimo')+
+`<fieldset><legend>¿Dónde lo notas en el cuerpo?</legend>${picks('body','moodPre.body',BODY.length)}</fieldset>`:''}
+${ta('moodPre.why','¿Quieres contar qué pasó? (opcional)','Puedes escribir lo que quieras, o nada.')}
+<div id="care"></div>`+actions(b('Volver','back','secondary'),b('Saltar misión','skip','ghost')+b('Continuar','next'))},
+
+fortalezas(){return head('Misión 2: fortalezas','Lo que se te da bien')+
+`<p>Elige hasta cuatro cualidades que sientas tuyas. Si te cuesta, piensa qué diría de ti un buen amigo o una buena amiga.</p>
+${picks('strengths','strengths',4)}
+${S.strengths.includes('Otra')?inp('strengthOther','¿Cuál es esa otra cualidad?','Escríbela aquí',40):''}
+${ta('strengthExample','¿Te acuerdas de una vez en que usaste alguna?','Algo chico también cuenta.')}
+<div id="care"></div>`+actions(b('Volver','back','secondary'),b('Saltar misión','skip','ghost')+b('Continuar','next'))},
+
+confianza(){const i=S.confIdx;return head('Misión 3: confianza','¿Cuánta confianza sientes?')+
+`<p class="count">Situación ${i+1} de ${CONF.length}</p>
+<div class="card"><h2>${CONF[i]}</h2></div>
+${range('conf.'+i,0,10,'Tu nivel de confianza en esta situación','0 Nada','10 Mucha','5 A veces')}
+${S.conf[i]==='skip'?'<p class="helper">Marcaste «Prefiero no responder». Si cambias de idea, mueve el control.</p>':''}
+<p class="helper">El número describe cómo te sientes hoy frente a esto. No mide cuánto vales.</p>`+
+actions(b('Anterior','back','secondary'),b('Prefiero no responder','confSkip','ghost')+b(i<CONF.length-1?'Siguiente':'Continuar','next'))},
+
+historias(){const i=S.sceneIdx,s=SCENES[i],a=S.scenes[i];
+const opts=a.order.map(k=>`<button type="button" class="opt" aria-pressed="${a.choice===k}" data-act="scene" data-i="${k}" data-fid="sc-${i}-${k}">${esc(s.c[k])}</button>`).join('')+
+`<button type="button" class="opt" aria-pressed="${a.choice===-1}" data-act="scene" data-i="-1" data-fid="sc-${i}-o">Otra cosa</button>`;
+return head('Misión 4: historias','¿Qué harías tú?')+
+`<p class="count">Historia ${i+1} de ${SCENES.length}</p>
+<div class="card"><h2>${s.t}</h2><p>${s.x}</p></div>
+<div class="grid two" role="group" aria-label="Posibles reacciones">${opts}</div>
+${a.choice===-1?inp(`scenes.${i}.other`,'¿Qué harías?','Escríbelo con tus palabras',140):''}
+<details class="deeper" ${a.thought||a.feeling?'open':''}><summary>Si quieres, ve un poco más allá</summary>
+${inp(`scenes.${i}.thought`,'¿Qué pasaría por tu cabeza?','Por ejemplo: «seguro piensan que…»',160)}
+${inp(`scenes.${i}.feeling`,'¿Qué sentirías? ¿Dónde lo notarías en el cuerpo?','',160)}
+</details>
+<div id="care"></div>
+<p class="helper">Todas estas reacciones le pasan a mucha gente. Lo interesante es conversar por qué elegiste la tuya.</p>`+
+actions(b('Anterior','back','secondary'),b('Saltar esta historia','sceneSkip','ghost')+b(i<SCENES.length-1?'Siguiente historia':'Continuar','next'))},
+
+red(){const empty=!S.network.length,warn=S.netNoteShown&&empty;return head('Misión 5: tu gente','¿Quiénes están de tu lado?')+
+`<p>Ubica en el mapa a las personas con las que puedes hablar o con quienes cuentas. No hace falta poner nombres: basta con «mi abuela», «un profe» o «amiga del básquetbol».</p>
+<div class="netwrap">${netSVG()}
+<div class="netform">
+<label for="pRole">Persona</label><input type="text" id="pRole" maxlength="28" placeholder="Por ejemplo: mi tía" data-fid="prole">
+<label for="pRing">¿Qué tan cerca la sientes?</label>
+<select id="pRing">${RINGS.map((r,k)=>`<option value="${k+1}">${r}</option>`).join('')}</select>
+<button type="button" class="secondary" data-act="addPerson">Agregar al mapa</button>
+${S.network.length?`<ul class="plist">${S.network.map((p,k)=>`<li><span>${esc(p.role)} <small>(${RINGS[p.ring-1].toLowerCase()})</small></span><button type="button" class="link" data-act="delPerson" data-i="${k}" aria-label="Quitar ${esc(p.role)}">Quitar</button></li>`).join('')}</ul>`:''}
+</div></div>
+${warn?`<div class="note" role="status" tabindex="-1" data-fid="netnote"><p>A veces cuesta pensar en alguien, y eso le pasa a más gente de la que parece. Es un buen tema para conversar con tu psicólogo o psicóloga: entre los dos pueden pensar quién podría estar en tu mapa.</p></div>`:''}
+${ta('wish','¿Qué te gustaría que los demás entendieran mejor de ti?','Si quieres, cuéntalo aquí…')}
+<div id="care"></div>`+actions(b('Volver','back','secondary'),b('Saltar misión','skip','ghost')+b(warn?'Seguir de todas formas':'Continuar','next'))},
+
+importa(){return head('Misión 6: lo que importa','Lo que te importa de verdad')+
+`<p>Elige hasta tres cosas que para ti tienen mucho valor.</p>
+${picks('values','values',3)}
+${S.values.includes('Otra')?inp('valueOther','¿Qué otra cosa?','Escríbela aquí',40):''}
+${ta('valueWhy','Piensa en una persona, una causa o algo que quieras lograr. ¿Por qué o por quién vale la pena esforzarte?','Puede ser algo grande o algo de todos los días.')}
+<div id="care"></div>`+actions(b('Volver','back','secondary'),b('Saltar misión','skip','ghost')+b('Continuar','next'))},
+
+mensaje(){return head('Misión 7: próximo capítulo','Un mensaje para ti, dentro de un mes')+
+`<p>Imagina que en un mes vuelves a leer lo que escribas ahora. ¿Qué te gustaría recordarte?</p>
+${ta('message','Mi mensaje','Me gustaría acordarme de que…')}
+<p class="helper">También puedes dejarlo en blanco.</p>
+<div id="care"></div>`+actions(b('Volver','back','secondary'),b('Saltar misión','skip','ghost')+b('Continuar','next'))},
+
+pausa(){return head('Antes de terminar','Un minuto para bajar las revoluciones')+
+`<p>Algunas preguntas pueden mover emociones. Sigue el círculo: toma aire mientras crece y suéltalo despacio mientras se achica. Son tres respiraciones.</p>
+<div class="breathbox"><div class="breath" id="breath"></div><div class="breathtxt" id="breathTxt" aria-live="polite">${S.breathDone?'Listo':'Cuando quieras'}</div></div>
+<p class="center"><button type="button" class="secondary" id="breathBtn" data-act="breathe">${S.breathDone?'Repetir':'Empezar'}</button></p>
+<h2>¿Cómo te sientes ahora?</h2><p>Elige hasta tres.</p>
+${picks('emos','moodPost.emos',3)}
+${S.moodPost.emos.length?range('moodPost.int',1,10,'¿Qué tan fuerte lo sientes?','1 Poco','10 Muchísimo'):''}`+
+actions(b('Volver','back','secondary'),b('Ver mi bitácora','next'))},
+
+cierre(){
+const st=realList(S.strengths,S.strengthOther),vl=realList(S.values,S.valueOther);
+const tags=a=>`<div class="tags">${a.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`;
+const mood=m=>m.emos.length?esc(m.emos.join(', '))+(typeof m.int==='number'?` (intensidad ${m.int} de 10)`:''):'sin respuesta';
+return head('Bitácora completa',S.alias?`${esc(S.alias)}, gracias por darte este tiempo`:'Gracias por darte este tiempo')+
+`<p>Lo que sientes va cambiando con los días. Y tu valor no depende de acertar siempre.</p>
+<div class="card"><h2>Tus fortalezas</h2>${st.length?tags(st):'<p>Todavía las estás descubriendo, y eso está bien.</p>'}</div>
+${vl.length?`<div class="card"><h2>Lo que te importa</h2>${tags(vl)}</div>`:''}
+${S.message.trim()?`<div class="card"><h2>Tu mensaje para dentro de un mes</h2><blockquote>${esc(S.message)}</blockquote></div>`:''}
+<div class="card"><h2>Dónde sientes más confianza</h2>${confBars()}<p class="helper">Es un mapa para conversar, no un puntaje.</p></div>
+<div class="card"><h2>Tu radar</h2><p>Al empezar: ${mood(S.moodPre)}</p><p>Al terminar: ${mood(S.moodPost)}</p></div>
+${ta('surprise','¿Hubo algo de tus respuestas que te sorprendió?','')}
+<div id="care"></div>`+actions(b('Empezar de nuevo','reset','secondary'),b('Elegir qué compartir','next'))},
+
+compartir(){const sec=[['emociones','Radar emocional (inicio y final)'],['fortalezas','Fortalezas'],['confianza','Medidor de confianza'],['historias','Historias'],['red','Mapa de personas'],['importa','Lo que me importa'],['mensaje','Mensaje para dentro de un mes'],['cierre','Lo que me sorprendió']];
+return head('Compartir','Tú eliges qué compartir')+
+`<p>Marca las partes que quieres mostrarle a tu psicólogo o psicóloga. Abajo ves exactamente lo que va a leer. Lo ideal es hacer esto con esa persona al lado.</p>
+<fieldset><legend>Incluir</legend>${sec.map(([k,l])=>`<label class="check"><input type="checkbox" data-share="${k}" ${S.share[k]?'checked':''}> ${l}</label>`).join('')}</fieldset>
+<h2 style="margin-top:22px">Vista previa</h2><div class="preview" id="preview">${summaryHTML()}</div>`+
+actions(b('Volver','back','secondary'),b('Descargar registro','json','secondary')+b('Imprimir resumen','print'))}
+};
+
+function confBars(){return CONF.map((c,i)=>{const v=S.conf[i],n=typeof v==='number';
+  return `<div class="bar"><span>${c}</span><span class="bt"><span style="width:${n?v*10:0}%"></span></span><span class="bv">${n?v:'–'}</span></div>`}).join('')}
+
+function netSVG(){
+  const cx=170,cy=170,R=[26,62,112,162],mid=[0,44,87,137];
+  let g=`<svg class="net" viewBox="-60 -6 460 352" role="img" aria-label="Mapa de personas: ${S.network.length?S.network.length+' en total':'todavía vacío'}">`;
+  for(let r=3;r>=1;r--)g+=`<circle class="ring r${r}" cx="${cx}" cy="${cy}" r="${R[r]}"/>`;
+  [1,2,3].forEach(r=>{g+=`<text class="rl" x="${cx}" y="${cy-R[r]+14}" text-anchor="middle">${RINGS[r-1]}</text>`});
+  g+=`<circle class="me" cx="${cx}" cy="${cy}" r="${R[0]}"/><text class="metxt" x="${cx}" y="${cy+5}" text-anchor="middle">Tú</text>`;
+  [1,2,3].forEach(r=>{const ps=S.network.filter(p=>p.ring===r);ps.forEach((p,k)=>{
+    const ang=-Math.PI/2+0.55+(k/ps.length)*2*Math.PI;const cs=Math.cos(ang),sn=Math.sin(ang);
+    const x=cx+cs*mid[r],y=cy+sn*mid[r];
+    const lab=p.role.length>14?p.role.slice(0,13)+'…':p.role;
+    const anchor=cs>0.25?'start':cs<-0.25?'end':'middle';
+    const lx=x+(anchor==='start'?10:anchor==='end'?-10:0),ly=y+(anchor==='middle'?(sn>0?20:-12):4);
+    g+=`<circle class="pd" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="7"/><text class="pt" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${anchor}">${esc(lab)}</text>`})});
+  return g+'</svg>'}
+
+function sceneAnswer(i){const a=S.scenes[i];if(a.skipped)return 'Prefirió saltarla';if(a.choice===null)return 'Sin respuesta';if(a.choice===-1)return 'Otra: '+(a.other.trim()||'sin detalle');return SCENES[i].c[a.choice]}
+
+function summaryHTML(){
+  const sk=k=>S.skipped[k]?'<p><em>Prefirió saltar esta misión.</em></p>':'';
+  const q=t=>t&&t.trim()?`«${esc(t.trim())}»`:'';
+  const mood=m=>m.emos.length?esc(m.emos.join(', '))+(typeof m.int==='number'?`, intensidad ${m.int} de 10`:''):'sin respuesta';
+  let h=`<h3>${S.alias?esc(S.alias):'Sin apodo'} · ${new Date().toLocaleDateString('es-CL')}</h3>`;
+  const any=Object.values(S.share).some(Boolean);
+  if(!any)return h+'<p>No marcaste ninguna parte para compartir.</p>';
+  if(S.share.emociones){h+=`<h3>Radar emocional</h3>${sk('emociones')}<p>Al empezar: ${mood(S.moodPre)}.${S.moodPre.body.length?' En el cuerpo: '+esc(S.moodPre.body.join(', '))+'.':''}</p>${S.moodPre.why.trim()?`<p>Contó: ${q(S.moodPre.why)}</p>`:''}<p>Al terminar: ${mood(S.moodPost)}.</p>`}
+  if(S.share.fortalezas){const st=realList(S.strengths,S.strengthOther);h+=`<h3>Fortalezas</h3>${sk('fortalezas')}<p>${st.length?esc(st.join(', ')):'No eligió ninguna por ahora.'}</p>${S.strengthExample.trim()?`<p>Ejemplo: ${q(S.strengthExample)}</p>`:''}`}
+  if(S.share.confianza){h+=`<h3>Medidor de confianza</h3>${confBars()}${S.conf.some(v=>v==='skip')?'<p>Las marcadas con «–» quedaron sin responder o prefirió no responderlas.</p>':''}`}
+  if(S.share.historias){h+=`<h3>Historias</h3><ul>${SCENES.map((s,i)=>{const a=S.scenes[i];return `<li><strong>${s.t}:</strong> ${esc(sceneAnswer(i))}${a.thought.trim()?`. Pensaría: ${q(a.thought)}`:''}${a.feeling.trim()?`. Sentiría: ${q(a.feeling)}`:''}</li>`}).join('')}</ul>`}
+  if(S.share.red){h+=`<h3>Mapa de personas</h3>${sk('red')}${S.network.length?`<ul>${[1,2,3].map(r=>{const ps=S.network.filter(p=>p.ring===r);return ps.length?`<li>${RINGS[r-1]}: ${esc(ps.map(p=>p.role).join(', '))}</li>`:''}).join('')}</ul>`:'<p>No ubicó personas en el mapa.</p>'}${S.wish.trim()?`<p>Le gustaría que entendieran: ${q(S.wish)}</p>`:''}`}
+  if(S.share.importa){const vl=realList(S.values,S.valueOther);h+=`<h3>Lo que me importa</h3>${sk('importa')}<p>${vl.length?esc(vl.join(', ')):'Sin respuesta.'}</p>${S.valueWhy.trim()?`<p>Por qué o por quién: ${q(S.valueWhy)}</p>`:''}`}
+  if(S.share.mensaje){h+=`<h3>Mensaje para dentro de un mes</h3>${sk('mensaje')}<p>${q(S.message)||'Lo dejó en blanco.'}</p>`}
+  if(S.share.cierre&&S.surprise.trim()){h+=`<h3>Lo que me sorprendió</h3><p>${q(S.surprise)}</p>`}
+  return h}
+
+/* navegación */
+function goStep(n,dir){S.step=n;const id=STEPS[n];
+  if(id==='confianza')S.confIdx=dir>0?0:CONF.length-1;
+  if(id==='historias')S.sceneIdx=dir>0?0:SCENES.length-1;
+  save();render()}
+function advance(){const id=STEPS[S.step];
+  if(id==='acuerdo'&&!S.assent)return;
+  if(id==='confianza'&&S.confIdx<CONF.length-1){S.confIdx++;save();return render()}
+  if(id==='historias'&&S.sceneIdx<SCENES.length-1){S.sceneIdx++;save();return render()}
+  if(id==='red'&&!S.network.length&&!S.netNoteShown){S.netNoteShown=true;save();return render('netnote')}
+  if(MISSION[id])delete S.skipped[id];
+  if(S.step<STEPS.length-1)goStep(S.step+1,1)}
+function retreat(){const id=STEPS[S.step];
+  if(id==='confianza'&&S.confIdx>0){S.confIdx--;save();return render()}
+  if(id==='historias'&&S.sceneIdx>0){S.sceneIdx--;save();return render()}
+  if(S.step>0)goStep(S.step-1,-1)}
+
+let breathTimer=null;
+function startBreath(){const c=$('#breath'),t=$('#breathTxt'),btn=$('#breathBtn');if(!c)return;
+  clearTimeout(breathTimer);btn.disabled=true;let cycle=0;
+  const inhale=()=>{t.textContent='Toma aire';c.style.transitionDuration='4s';c.style.transform='scale(1.4)';breathTimer=setTimeout(exhale,4000)};
+  const exhale=()=>{t.textContent='Suelta despacio';c.style.transitionDuration='6s';c.style.transform='scale(1)';
+    breathTimer=setTimeout(()=>{cycle++;if(cycle<3)inhale();else{t.textContent='Listo';S.breathDone=true;save();btn.disabled=false;btn.textContent='Repetir'}},6000)};
+  inhale()}
+
+function act(a,d){const id=STEPS[S.step];
+  switch(a){
+    case 'next':return advance();
+    case 'back':return retreat();
+    case 'skip':S.skipped[id]=true;return goStep(S.step+1,1);
+    case 'toggle':{const arr=getPath(d.path),v=LISTS[d.list][+d.i],k=arr.indexOf(v);
+      if(k>=0)arr.splice(k,1);else if(arr.length<+d.max)arr.push(v);save();return render(d.fid)}
+    case 'confSkip':S.conf[S.confIdx]='skip';return advance();
+    case 'scene':{const s=S.scenes[S.sceneIdx];s.choice=+d.i;s.skipped=false;save();return render(d.fid)}
+    case 'sceneSkip':{const s=S.scenes[S.sceneIdx];s.skipped=true;s.choice=null;return advance()}
+    case 'addPerson':{const r=$('#pRole'),role=r.value.trim();if(!role){r.focus();return}
+      S.network.push({role,ring:+$('#pRing').value});save();return render('prole')}
+    case 'delPerson':S.network.splice(+d.i,1);save();return render('prole');
+    case 'breathe':return startBreath();
+    case 'reset':if(confirm('¿Empezar de nuevo y borrar todas las respuestas de esta pestaña?')){try{sessionStorage.removeItem(KEY)}catch(e){}S=fresh();render()}return;
+    case 'print':return doPrint();
+    case 'json':return exportJSON();
+  }}
+
+function checkRisk(v){const box=$('#care');if(!box||box.dataset.on)return;
+  if(RISK.test(v)){box.dataset.on='1';box.innerHTML=`<div class="care" role="status"><p>Lo que escribiste suena importante, y no tienes por qué cargar con esto sin ayuda. Si quieres, puedes parar aquí y conversarlo ahora con tu psicólogo o psicóloga.</p></div>`}}
+
+function setRange(el){setPath(el.dataset.range,Number(el.value));el.classList.remove('unset');
+  const n=document.getElementById(el.dataset.num);if(n)n.textContent=el.value;
+  const h=document.getElementById(el.dataset.num+'_h');if(h)h.remove();save()}
+
+function renderTrail(){const id=STEPS[S.step],m=MISSION[id]||0,after=S.step>STEPS.indexOf('mensaje');
+  const st=[];for(let i=1;i<=7;i++)st.push(after||i<m?'done':i===m?'now':'');
+  $('#trail').innerHTML=st.map((s,i)=>(i?`<span class="seg ${st[i-1]==='done'&&s!==''?'done':''}"></span>`:'')+`<span class="dot ${s}" aria-hidden="true">${i+1}</span>`).join('');
+  $('#stage').textContent=m?`Misión ${m} de 7`:(S.step<2?'Inicio':'Cierre');
+  $('#trail').setAttribute('aria-label',m?`Misión ${m} de 7`:'Avance')}
+
+function render(focusId){clearTimeout(breathTimer);
+  $('#app').innerHTML=V[STEPS[S.step]]();renderTrail();
+  document.querySelectorAll('#app [data-bind]').forEach(el=>checkRisk(el.value));
+  const el=focusId&&document.querySelector(`[data-fid="${focusId}"]`);
+  if(el){el.focus();return}
+  window.scrollTo(0,0);const h=$('#h');if(h)h.focus({preventScroll:true})}
+
+function doPrint(){$('#print').innerHTML=`<h1>Mi bitácora</h1><p>Actividad exploratoria no validada, versión 12 a 15 años. No es una prueba diagnóstica.</p>`+summaryHTML();window.print()}
+
+function exportJSON(){
+  const o={tipo:'Actividad exploratoria no validada, versión 12 a 15 años. No es diagnóstico.',fecha:new Date().toISOString(),apodo:S.alias||null,misionesSaltadas:Object.keys(S.skipped)};
+  if(S.share.emociones)o.radar={inicio:S.moodPre,final:S.moodPost};
+  if(S.share.fortalezas)o.fortalezas={elegidas:realList(S.strengths,S.strengthOther),ejemplo:S.strengthExample};
+  if(S.share.confianza)o.confianza=CONF.map((c,i)=>({situacion:c,valor:typeof S.conf[i]==='number'?S.conf[i]:(S.conf[i]==='skip'?'prefirió no responder':'sin respuesta')}));
+  if(S.share.historias)o.historias=SCENES.map((s,i)=>({historia:s.t,reaccion:sceneAnswer(i),pensamiento:S.scenes[i].thought,sentimiento:S.scenes[i].feeling}));
+  if(S.share.red)o.mapaDePersonas={personas:S.network.map(p=>({persona:p.role,cercania:RINGS[p.ring-1]})),quisieraQueEntendieran:S.wish};
+  if(S.share.importa)o.loQueImporta={valores:realList(S.values,S.valueOther),porQueOPorQuien:S.valueWhy};
+  if(S.share.mensaje)o.mensajeFuturo=S.message;
+  if(S.share.cierre)o.loQueLeSorprendio=S.surprise;
+  const blob=new Blob([JSON.stringify(o,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='bitacora_autoconocimiento.json';
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}
+
+
+/* eventos */
+const app=$('#app');
+app.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(el&&!el.disabled)act(el.dataset.act,el.dataset);
+  if(e.target.matches('input[type=range]'))setRange(e.target)});
+app.addEventListener('input',e=>{const el=e.target;
+  if(el.dataset.bind){setPath(el.dataset.bind,el.value);save();checkRisk(el.value)}
+  if(el.dataset.range)setRange(el)});
+app.addEventListener('change',e=>{const el=e.target;
+  if(el.id==='assent'){S.assent=el.checked;save();const n=app.querySelector('[data-act="next"]');if(n)n.disabled=!el.checked}
+  if(el.dataset.share){S.share[el.dataset.share]=el.checked;save();$('#preview').innerHTML=summaryHTML()}});
+app.addEventListener('keydown',e=>{if(e.target.id==='pRole'&&e.key==='Enter'){e.preventDefault();act('addPerson',{})}});
+
+render();
+</script>
+</body>
+</html>
