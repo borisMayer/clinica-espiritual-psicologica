@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 
 type Message = {
   id: string; content: string; sentAt: string; status: string
-  sender: { id: string; name: string; role: string }
+  sender: { id: string; name: string; role: string }; receiver: { id: string; name: string; role: string }
 }
 type Terapeuta = { id: string; name: string }
 
@@ -47,7 +47,7 @@ export default function MensajesPage() {
   }
 
   const filtered = messages.filter(m =>
-    m.sender.id === selectedTerapeuta || m.sender.id === userId
+    (m.sender.id === selectedTerapeuta && m.receiver?.id === userId) || (m.sender.id === userId && m.receiver?.id === selectedTerapeuta)
   )
 
   return (
@@ -86,7 +86,7 @@ export default function MensajesPage() {
               </div>
               <div>
                 <p className="font-semibold text-[#1a2e1e] text-sm">{terapeutas.find(t => t.id === selectedTerapeuta)?.name}</p>
-                <p className="text-[#8a9b8e] text-xs">Terapeuta · Mensajes encriptados</p>
+                <p className="text-[#8a9b8e] text-xs">Terapeuta · Mensajería privada</p>
               </div>
             </div>
           )}
