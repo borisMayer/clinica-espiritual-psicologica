@@ -8,7 +8,7 @@ export default function ProfessionalTracking() {
   const [entries,setEntries] = useState<Entry[]>([])
   const [error,setError] = useState('')
   useEffect(() => {
-    fetch('/api/admin/pacientes').then(r => { if(!r.ok) throw new Error(); return r.json() }).then(data => {
+    fetch('/api/paciente/seguimiento?list=patients').then(r => { if(!r.ok) throw new Error(); return r.json() }).then(data => {
       const rows = data.pacientes || data.patients || []
       setPatients(rows.map((p: Patient) => ({ id:p.id, name:p.name })))
     }).catch(() => setError('No fue posible cargar la lista de pacientes.'))
