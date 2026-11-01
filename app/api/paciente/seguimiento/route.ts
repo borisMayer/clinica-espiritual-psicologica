@@ -19,7 +19,17 @@ async function user() {
 export async function GET(req: NextRequest) {
   const u = await user()
   if (!u) return NextResponse.json({ error: 'No autorizado' }, { status: 401, headers })
-  const patientId = new URL(req.url).searchParams.get('patientId') || u.id
+  const params = new URL(req.url).searchParams
+  if (params.get('list') === 'patients') {
+    if (u.role !== 'THERAPIST' && u.role !== 'ADMIN') return NextResponse.json({ error: 'Acceso denegado' }, { status: 403, headers })
+    const appointments = await prisma.appointment.findMany({
+      where: { therapistId: u.id },
+      select: { patient: { select: { id: true, name: true } } }, take: 500,
+    })
+    const patients = Array.from(new Map(appointments.map(a => [a.patient.id, a.patient])).values())
+    return NextResponse.json({ patients }, { headers })
+  }
+  const patientId = params.get('patientId') || u.id
   if (u.role === 'PATIENT' && patientId !== u.id) return NextResponse.json({ error: 'Acceso denegado' }, { status: 403, headers })
   if (u.role !== 'PATIENT') {
     if (u.role !== 'ADMIN' && u.role !== 'THERAPIST') return NextResponse.json({ error: 'Acceso denegado' }, { status: 403, headers })
