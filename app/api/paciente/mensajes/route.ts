@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
+import { protect, reveal } from '@/lib/private-content'
 
 export async function GET() {
   const session = await auth()
@@ -19,7 +20,7 @@ export async function GET() {
     where: { receiverId: session.user.id, isDeleted: false, status: { not: 'READ' } },
     data: { status: 'READ', readAt: new Date() },
   })
-  return NextResponse.json({ messages }, { headers: { 'Cache-Control': 'no-store' } })
+  return NextResponse.json({ messages: messages.map(m => ({ ...m, content: reveal(m.content) })) }, { headers: { 'Cache-Control': 'no-store' } })
 }
 
 const messageSchema = z.object({ content: z.string().trim().min(1).max(4000), receiverId: z.string().uuid() })
@@ -41,8 +42,8 @@ export async function POST(req: NextRequest) {
     if (!linked && !prior) return NextResponse.json({ error: 'Paciente no vinculado al profesional' }, { status: 403 })
   }
   const message = await prisma.message.create({
-    data: { senderId: session.user.id, receiverId: receiver.id, content: parsed.data.content, status: 'SENT' },
+    data: { senderId: session.user.id, receiverId: receiver.id, content: protect(parsed.data.content), status: 'SENT' },
     include: { sender: { select: { id: true, name: true, role: true } }, receiver: { select: { id: true, name: true, role: true } } },
   })
-  return NextResponse.json({ message }, { status: 201 })
+  return NextResponse.json({ message: { ...message, content: parsed.data.content } }, { status: 201 })
 }
