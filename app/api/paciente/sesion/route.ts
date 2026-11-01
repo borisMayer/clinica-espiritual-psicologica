@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { createMeetEvent } from '@/lib/google-meet'
 
 async function createDailyRoom(appointmentId: string, expiresAt: Date) {
   const apiKey = process.env.DAILY_API_KEY
@@ -76,6 +77,23 @@ export async function POST(req: NextRequest) {
 
   if (appointment.status !== 'CONFIRMED') {
     return NextResponse.json({ error: 'La sesión debe estar confirmada para acceder a la sala' }, { status: 400 })
+  }
+
+  if (appointment.sessionType !== 'CHAT') {
+    try {
+      const existing = appointment.dailyRoomUrl
+      if (existing?.startsWith('https://meet.google.com/')) return NextResponse.json({ provider: 'google-meet', roomUrl: existing, userName: session.user.name })
+      if (!existing) {
+        const meet = await createMeetEvent(appointment)
+        const claim = await prisma.appointment.updateMany({ where: { id: appointmentId, dailyRoomUrl: null }, data: { dailyRoomUrl: meet.url, dailyRoomName: meet.eventId } })
+        if (claim.count) return NextResponse.json({ provider: 'google-meet', roomUrl: meet.url, userName: session.user.name })
+        const latest = await prisma.appointment.findUnique({ where: { id: appointmentId }, select: { dailyRoomUrl: true } })
+        if (latest?.dailyRoomUrl?.startsWith('https://meet.google.com/')) return NextResponse.json({ provider: 'google-meet', roomUrl: latest.dailyRoomUrl, userName: session.user.name })
+      }
+    } catch (error) {
+      console.error('Meet unavailable:', error instanceof Error ? error.message : 'unknown')
+      if (!process.env.DAILY_API_KEY) return NextResponse.json({ error: 'Google Meet no está conectado. Autoriza Google Calendar desde /api/google/oauth/connect.' }, { status: 503 })
+    }
   }
 
   try {
