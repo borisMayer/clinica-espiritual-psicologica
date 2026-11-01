@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { clinician } from '@/lib/mi-universo'
+import { sameOrigin } from '@/lib/mi-universo-origin'
 
 export async function GET(req: NextRequest) {
+  const user = await clinician()
+  if (!user) return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
   try {
     const { searchParams } = new URL(req.url)
     const search = searchParams.get('search') ?? ''
@@ -120,6 +124,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
+  const user = await clinician()
+  if (!user || user.role !== 'ADMIN' || !sameOrigin(req)) return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
   try {
     const { id, isActive } = await req.json()
     await prisma.user.update({ where: { id }, data: { isActive } })
