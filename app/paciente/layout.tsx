@@ -27,6 +27,7 @@ export default async function PacienteLayout({ children }: { children: React.Rea
             { href:'/paciente/mensajes', icon:'💬', label:'Mensajes' },
             { href:'/paciente/reportes', icon:'📊', label:'Mis reportes' },
             { href:'/paciente/seguimiento', icon:'📈', label:'Mi seguimiento' },
+            { href:'/paciente/preparacion', icon:'📝', label:'Preparar sesión' },
           ].map(item => (
             <Link
               key={item.href}
