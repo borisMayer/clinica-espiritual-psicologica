@@ -17,6 +17,7 @@ export async function GET(req: NextRequest) {
 
     const baseWhere: any = {
       role: 'PATIENT',
+      ...(user.role === 'THERAPIST' ? { patientAppointments: { some: { therapistId: user.id } } } : {}),
       ...(search ? {
         OR: [
           { name: { contains: search, mode: 'insensitive' } },
