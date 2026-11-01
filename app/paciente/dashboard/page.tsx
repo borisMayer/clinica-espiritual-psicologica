@@ -54,16 +54,21 @@ export default function PacienteDashboard() {
   const [loading, setLoading] = useState(true)
   const [diario, setDiario] = useState('')
   const [diarioGuardado, setDiarioGuardado] = useState(false)
+  const [diarioError, setDiarioError] = useState('')
+  const [guardando, setGuardando] = useState(false)
+  const [nombre, setNombre] = useState('')
   const [preguntaIdx] = useState(() => new Date().getDay() % PREGUNTAS_GUIADAS.length)
   const pregunta = PREGUNTAS_GUIADAS[preguntaIdx]
 
   useEffect(() => {
+    fetch('/api/auth/session').then(r => r.json()).then(s => setNombre((s?.user?.name || '').split(' ')[0])).catch(() => {})
+    fetch('/api/paciente/diario', { cache: 'no-store' }).then(r => { if (!r.ok) throw new Error('No se pudo cargar el diario'); return r.json() }).then(d => setDiario(d.text || '')).catch(() => setDiarioError('No fue posible cargar tu diario privado.'))
     fetch('/api/paciente/agenda')
       .then(r => r.json())
       .then(d => { setCitas(d.citas ?? []); setLoading(false) })
   }, [])
 
-  const proximaCita = citas.find(c =>
+  const proximaCita = [...citas].sort((a,b) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime()).find(c =>
     ['CONFIRMED','PENDING'].includes(c.status) && new Date(c.scheduledAt) > new Date()
   )
   const sesionesCompletadas = citas.filter(c => c.status === 'COMPLETED').length
@@ -73,20 +78,24 @@ export default function PacienteDashboard() {
   const hora = new Date().getHours()
   const saludo = hora < 12 ? 'Buenos días' : hora < 19 ? 'Buenas tardes' : 'Buenas noches'
 
-  function guardarDiario() {
-    if (!diario.trim()) return
-    setDiarioGuardado(true)
-    setTimeout(() => setDiarioGuardado(false), 3000)
+  async function guardarDiario() {
+    setGuardando(true); setDiarioError(''); setDiarioGuardado(false)
+    try {
+      const response = await fetch('/api/paciente/diario', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: diario }) })
+      if (!response.ok) throw new Error('No se pudo guardar el diario')
+      setDiarioGuardado(true)
+    } catch { setDiarioError('No se guardó el diario. Inténtalo nuevamente.') }
+    finally { setGuardando(false) }
   }
 
   return (
-    <div className="max-w-4xl">
+    <div className="max-w-5xl w-full mx-auto">
 
       {/* ── ENCABEZADO ── */}
       <div className="mb-10">
         <p className="text-[#4a7c59] text-sm font-medium mb-1">{saludo}</p>
         <h1 style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold text-[#1a2e1e] mb-2">
-          Tu proceso continúa.
+          {nombre ? `Hola, ${nombre}. Tu proceso continúa.` : 'Tu proceso continúa.'}
         </h1>
         <p className="text-[#8a9b8e] text-sm">Este espacio es parte del trabajo, no solo un panel de control.</p>
       </div>
@@ -121,10 +130,10 @@ export default function PacienteDashboard() {
               {new Date(proximaCita.scheduledAt).toLocaleTimeString('es-AR', { hour:'2-digit', minute:'2-digit' })} hs
             </p>
             <p className="text-white/40 text-xs mt-0.5">con {proximaCita.therapist.name}</p>
-            <div className="flex gap-3 mt-4">
-              <Link href="/paciente/agenda"
+            <div className="flex flex-wrap gap-3 mt-4">
+              <Link href={proximaCita.status === 'CONFIRMED' ? `/paciente/sesion/${proximaCita.id}` : '/paciente/agenda'}
                 className="bg-[#4a7c59] text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-[#5a9c6f] transition-colors">
-                Preparar sesión →
+                {proximaCita.status === 'CONFIRMED' ? 'Preparar sesión →' : 'Ver cita pendiente →'}
               </Link>
               <Link href="/paciente/mensajes"
                 className="border border-white/20 text-white/70 text-sm px-5 py-2 rounded-full hover:bg-white/5 transition-colors">
@@ -177,27 +186,29 @@ export default function PacienteDashboard() {
             <p className="text-[#8a9b8e] text-xs font-semibold uppercase tracking-wide">Diario del proceso</p>
           </div>
           <p className="text-[#8a9b8e] text-xs mb-3 leading-relaxed">
-            Escribe lo que emerja antes de tu próxima sesión. Nadie más lo verá.
+            Tu diario se guarda cifrado y solo es accesible desde tu cuenta. No se comparte automáticamente con tu terapeuta.
           </p>
           <textarea
             value={diario}
             onChange={e => setDiario(e.target.value)}
             placeholder="¿Qué está pasando en tu interior esta semana? ¿Qué quieres llevar a sesión?"
             rows={4}
+            maxLength={12000}
             className="w-full text-sm text-[#1a2e1e] placeholder-[#c8c0b8] border border-[#e8dfd0] rounded-xl p-3 resize-none focus:outline-none focus:ring-2 focus:ring-[#4a7c59]/30 leading-relaxed"
           />
           <div className="flex items-center justify-between mt-3">
             <p className="text-[#b0a898] text-xs">{diario.length} caracteres</p>
+            {diarioError && <p role="alert" className="text-red-700 text-xs">{diarioError}</p>}
             <button
               onClick={guardarDiario}
-              disabled={!diario.trim()}
+              disabled={guardando}
               className={`text-xs font-semibold px-4 py-1.5 rounded-full transition-colors ${
                 diarioGuardado
                   ? 'bg-green-50 text-green-600 border border-green-200'
                   : 'bg-[#4a7c59] text-white hover:bg-[#3d6849] disabled:opacity-40'
               }`}
             >
-              {diarioGuardado ? '✓ Guardado' : 'Guardar'}
+              {guardando ? 'Guardando...' : diarioGuardado ? '✓ Guardado' : 'Guardar'}
             </button>
           </div>
         </div>
