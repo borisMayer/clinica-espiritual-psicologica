@@ -46,9 +46,10 @@ const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto'
 const DIAS = ['Do','Lu','Ma','Mi','Ju','Vi','Sá']
 
 const AGENDA_EN:Record<string,string>={"Sesión individual":"Individual session","Espacio terapéutico de exploración y acompañamiento inicial o puntual.":"A space for an initial or one-time consultation.","60 minutos":"60 minutes","Diagnóstico · Exploración · Consulta":"Assessment · Exploration · Consultation","Proceso mensual":"Monthly program","Acompañamiento continuo con cuatro sesiones estructuradas en el mes.":"Ongoing support with four structured sessions per month.","4 sesiones · 60 min cada una":"4 sessions · 60 minutes each","Proceso · Profundidad · Seguimiento":"Ongoing work · Depth · Follow-up","Proceso intensivo":"Intensive program","Para situaciones que requieren mayor frecuencia e intervención sostenida.":"For situations requiring more frequent and sustained support.","8 sesiones · 60 min cada una":"8 sessions · 60 minutes each","Intervención profunda · Crisis · Transformación":"Focused support · Crisis · Change","Estado del proceso":"Journey status","Sin sesiones programadas":"No appointments scheduled","Puede agendar su primera sesión cuando lo considere oportuno.":"You can book your first session whenever you are ready.","Proceso activo":"Active journey","Trayecto recorrido":"Progress so far","Próxima sesión":"Next session","Historial":"History","Modalidades de acompañamiento":"Support options","Sesión individual · Proceso mensual · Proceso intensivo":"Individual session · Monthly program · Intensive program","Seleccione la modalidad que mejor se adapta a su proceso":"Choose the option that best fits your needs","Más solicitado":"Most popular","desde":"from","Su primera sesión está incluida en el proceso sin costo adicional.":"Your first session is included at no additional cost.","Especialista":"Practitioner","Fecha":"Date","Horario disponible":"Available times","No hay disponibilidad para esta fecha. Por favor seleccione otro día.":"No times are available on this date. Please select another day.","Resumen de la sesión":"Session summary","Total":"Total","Esta es su primera sesión. No se requiere pago para confirmarla.":"This is your first session. No payment is required to confirm it.","Procesando...":"Processing...","Pendiente de confirmación":"Pending confirmation","Confirmar sesión":"Confirm session","Duración":"Duration","Sesión incluida · Sin cargo":"Included session · No charge","Pago seguro · Puede reprogramar con 24 horas de anticipación":"Secure payment · You can reschedule with 24 hours' notice","Crisis vocacional":"Vocational concerns","Orden relacional":"Relationship support","Sanación del alma":"Inner healing","Transformación personal":"Personal growth","Liderazgo espiritual":"Spiritual leadership","Duelo":"Grief","Ansiedad espiritual":"Spiritual anxiety","Su sesión inicial ha sido confirmada. Le esperamos.":"Your initial appointment is confirmed. We look forward to meeting you.","No fue posible procesar la solicitud.":"Could not process your request.","Error al procesar el pago.":"Payment could not be processed."}
+const AGENDA_EXTRA_EN:Record<string,string> = {"{tr('Tu proceso terapéutico')}":"Your therapeutic journey","{tr('Agenda y gestiona tus sesiones de manera simple y confidencial.')}":"Schedule and manage your appointments simply and confidentially.","{tr('La primera sesión está incluida en su proceso sin costo adicional.')}":"Your first session is included at no additional cost.","{tr('Agendar sesión')}":"Book appointment","Agendar otra sesión":"Book another appointment","Confirmada":"Confirmed","Pendiente de confirmación":"Awaiting confirmation","Completar pago":"Complete payment","Unirse a sesión":"Join session","Realizada":"Completed","Cancelada":"Cancelled","Pendiente":"Pending","Agendar":"Book","Seleccionar modalidad":"Choose a program","Seleccionar fecha y hora":"Choose date and time","Confirmar sesión":"Confirm appointment","Continuar":"Continue","Modalidad":"Program","Hora":"Time","Sin costo":"Free","Confirmar y proceder al pago":"Confirm and proceed to payment","{tr('Modificar fecha u hora')}":"Change date or time","Sesión incluida · Sin cargo":"Included session · No charge","Pago seguro · Puede reprogramar con 24 horas de anticipación":"Secure payment · Reschedule with 24 hours' notice"}
 export default function AgendaPacientePage() {
   const lang=usePortalLocale()
-  const tr=(es:string)=>lang==='en'?(AGENDA_EN[es]||es):es
+  const tr=(es:string)=>lang==='en'?(AGENDA_EXTRA_EN[es]||AGENDA_EN[es]||es):es
   const [vista, setVista] = useState<'principal' | 'modalidades' | 'agendar'>('principal')
   const [paso, setPaso] = useState<1|2|3>(1)
   const [citas, setCitas] = useState<Cita[]>([])
@@ -153,14 +154,14 @@ export default function AgendaPacientePage() {
           {/* Hero clínico */}
           <div className="mb-8">
             <h1 style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold text-[#1a2e1e] mb-2">
-              Tu proceso terapéutico
+              {tr('Tu proceso terapéutico')}
             </h1>
             <p className="text-[#6a7b6e] text-sm leading-relaxed">
-              Agenda y gestiona tus sesiones de manera simple y confidencial.
+              {tr('Agenda y gestiona tus sesiones de manera simple y confidencial.')}
             </p>
             {esPrimerPaciente && !loading && (
               <p className="text-[#6a7b6e] text-xs mt-2 italic">
-                La primera sesión está incluida en su proceso sin costo adicional.
+                {tr('La primera sesión está incluida en su proceso sin costo adicional.')}
               </p>
             )}
           </div>
@@ -186,14 +187,14 @@ export default function AgendaPacientePage() {
                       <div className="w-1.5 h-1.5 rounded-full bg-[#4a7c59]" />
                       <p style={{fontFamily:'Georgia,serif'}} className="text-[#1a2e1e] font-semibold">{tr("Proceso activo")}</p>
                     </div>
-                    <p className="text-[#9a9088] text-xs mt-1">{completadas.length} sesión{completadas.length!==1?'es':''} realizada{completadas.length!==1?'s':''}</p>
+                    <p className="text-[#9a9088] text-xs mt-1">{lang==='en'?`${completadas.length} completed sessions`:`${completadas.length} sesión${completadas.length!==1?'es':''} realizada${completadas.length!==1?'s':''}`}</p>
                   </>
                 )}
               </div>
               <button
                 onClick={() => { setVista('agendar'); resetFlujo() }}
                 className="bg-[#1a2e1e] text-white text-sm font-medium px-5 py-2.5 rounded-full hover:bg-[#2d4a32] transition-colors flex-shrink-0">
-                Agendar sesión
+                {tr('Agendar sesión')}
               </button>
             </div>
 
@@ -202,7 +203,7 @@ export default function AgendaPacientePage() {
               <div className="mt-5 pt-5 border-t border-[#f0ebe3]">
                 <div className="flex justify-between text-xs text-[#9a9088] mb-2">
                   <span>{tr("Trayecto recorrido")}</span>
-                  <span>{completadas.length} de 12 sesiones</span>
+                  <span>{lang==='en'?`${completadas.length} of 12 sessions`:`${completadas.length} de 12 sesiones`}</span>
                 </div>
                 <div className="h-1 bg-[#f0ebe3] rounded-full overflow-hidden">
                   <div className="h-full bg-[#4a7c59] rounded-full transition-all" style={{width:`${Math.min(100,(completadas.length/12)*100)}%`}} />
@@ -221,30 +222,30 @@ export default function AgendaPacientePage() {
                     {new Date(proxima.scheduledAt).getDate()}
                   </p>
                   <p className="text-[#9a9088] text-xs uppercase mt-1">
-                    {MESES[new Date(proxima.scheduledAt).getMonth()].slice(0,3)}
+                    {new Date(proxima.scheduledAt).toLocaleDateString(lang==='en'?'en-US':'es-CL',{month:'short'})}
                   </p>
                 </div>
                 <div className="flex-1 border-l border-[#f0ebe3] pl-5">
                   <p style={{fontFamily:'Georgia,serif'}} className="text-[#1a2e1e] font-semibold">{proxima.therapist.name}</p>
                   <p className="text-[#9a9088] text-sm mt-0.5">
-                    {new Date(proxima.scheduledAt).toLocaleString('es-AR',{weekday:'long'})} · {new Date(proxima.scheduledAt).toLocaleTimeString(lang==='en'?'en-US':'es-CL',{hour:'2-digit',minute:'2-digit'})} h · 60 min
+                    {new Date(proxima.scheduledAt).toLocaleString(lang==='en'?'en-US':'es-CL',{weekday:'long'})} · {new Date(proxima.scheduledAt).toLocaleTimeString(lang==='en'?'en-US':'es-CL',{hour:'2-digit',minute:'2-digit'})} h · 60 min
                   </p>
                   <div className="flex items-center gap-3 mt-3">
                     <span className={`text-xs px-2.5 py-1 rounded-full font-medium border ${proxima.status==='CONFIRMED' ? 'bg-[#f0f7f2] text-[#2d5a3d] border-[#b8d8c0]' : 'bg-[#fdf8f0] text-[#7a5a2a] border-[#e8d4a8]'}`}>
-                      {proxima.status==='CONFIRMED' ? 'Confirmada' : 'Pendiente de confirmación'}
+                      {proxima.status==='CONFIRMED' ? tr('Confirmada') : tr('Pendiente de confirmación')}
                     </span>
                     {proxima.status==='PENDING' && (
                       <button
                         onClick={() => pagar(proxima.id)}
                         disabled={pagando}
                         className="text-xs text-[#1a2e1e] underline hover:no-underline transition-all disabled:opacity-50">
-                        {pagando ? 'Procesando...' : 'Completar pago'}
+                        {pagando ? tr('Procesando...') : tr('Completar pago')}
                       </button>
                     )}
                     {proxima.status==='CONFIRMED' && (
                       <a href={`/paciente/sesion/${proxima.id}`}
                         className="flex items-center gap-1.5 bg-[#1a2e1e] text-white text-xs font-semibold px-4 py-2 rounded-full hover:bg-[#2d4a32] transition-colors">
-                        🎥 Unirse a sesión
+                        🎥 {tr('Unirse a sesión')}
                       </a>
                     )}
                   </div>
@@ -259,30 +260,30 @@ export default function AgendaPacientePage() {
               <div className="flex items-center justify-between px-6 py-4 border-b border-[#f0ebe3]">
                 <p className="text-[#9a9088] text-xs uppercase tracking-widest font-medium">{tr("Historial")}</p>
                 <button onClick={()=>setVista('agendar')} className="text-xs text-[#4a7c59] hover:underline">
-                  + Agendar otra sesión
+                  + {tr('Agendar otra sesión')}
                 </button>
               </div>
               <div className="divide-y divide-[#f5f2ef]">
                 {citas.filter(c=>c.status!=='PENDING'||new Date(c.scheduledAt)<new Date()).slice(0,5).map(c => {
                   const f = new Date(c.scheduledAt)
                   const statusMap: Record<string,{label:string,cls:string}> = {
-                    COMPLETED: {label:'Realizada', cls:'text-[#4a7c59]'},
-                    CONFIRMED: {label:'Confirmada', cls:'text-[#2d5a3d]'},
-                    CANCELLED: {label:'Cancelada', cls:'text-[#9a9088]'},
-                    PENDING: {label:'Pendiente', cls:'text-[#7a5a2a]'},
+                    COMPLETED: {label:tr('Realizada'), cls:'text-[#4a7c59]'},
+                    CONFIRMED: {label:tr('Confirmada'), cls:'text-[#2d5a3d]'},
+                    CANCELLED: {label:tr('Cancelada'), cls:'text-[#9a9088]'},
+                    PENDING: {label:tr('Pendiente'), cls:'text-[#7a5a2a]'},
                   }
                   const s = statusMap[c.status] ?? {label:c.status, cls:'text-[#9a9088]'}
                   return (
                     <div key={c.id} className="flex items-center gap-4 px-6 py-4 hover:bg-[#faf8f4] transition-colors">
                       <div className="w-8 text-center flex-shrink-0">
                         <p style={{fontFamily:'Georgia,serif'}} className="text-lg font-bold text-[#1a2e1e] leading-none">{f.getDate()}</p>
-                        <p className="text-[#9a9088] text-xs">{MESES[f.getMonth()].slice(0,3)}</p>
+                        <p className="text-[#9a9088] text-xs">{f.toLocaleDateString(lang==='en'?'en-US':'es-CL',{month:'short'})}</p>
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-[#1a2e1e] text-sm font-medium">{c.therapist.name}</p>
-                        <p className="text-[#9a9088] text-xs">{f.toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})} h · 60 min</p>
+                        <p className="text-[#9a9088] text-xs">{f.toLocaleTimeString(lang==='en'?'en-US':'es-CL',{hour:'2-digit',minute:'2-digit'})} h · 60 min</p>
                       </div>
-                      <span className={`text-xs font-medium flex-shrink-0 ${s.cls}`}>{s.label}</span>
+                      <span className={`text-xs font-medium flex-shrink-0 ${s.cls}`}>{tr(s.label)}</span>
                     </div>
                   )
                 })}
@@ -334,7 +335,7 @@ export default function AgendaPacientePage() {
                     <button
                       onClick={() => { setModalidad(m.id); setVista('agendar'); setPaso(2) }}
                       className="mt-3 bg-[#1a2e1e] text-white text-xs font-medium px-4 py-2 rounded-full hover:bg-[#2d4a32] transition-colors">
-                      Agendar
+                      {tr('Agendar')}
                     </button>
                   </div>
                 </div>
@@ -352,7 +353,7 @@ export default function AgendaPacientePage() {
             <button onClick={()=>{setVista('principal');resetFlujo()}} className="text-[#9a9088] hover:text-[#1a2e1e] transition-colors text-sm">←</button>
             <div className="flex-1">
               <h1 style={{fontFamily:'Georgia,serif'}} className="text-2xl font-bold text-[#1a2e1e]">
-                {paso===1 ? 'Seleccionar modalidad' : paso===2 ? 'Seleccionar fecha y hora' : 'Confirmar sesión'}
+                {tr(paso===1 ? 'Seleccionar modalidad' : paso===2 ? 'Seleccionar fecha y hora' : 'Confirmar sesión')}
               </h1>
               <div className="flex items-center gap-2 mt-2">
                 {[1,2,3].map(s => (
@@ -411,7 +412,7 @@ export default function AgendaPacientePage() {
                           <p className="text-[#1a2e1e] font-medium text-sm">{t.name}</p>
                           {t.bio && <p className="text-[#9a9088] text-xs truncate">{t.bio}</p>}
                           <div className="flex gap-1 mt-0.5">
-                            {t.specialties?.slice(0,2).map(s=><span key={s} className="text-[#9a9088] text-xs">{ESP[s]??s}{t.specialties.indexOf(s)<t.specialties.slice(0,2).length-1?'·':''} </span>)}
+                            {t.specialties?.slice(0,2).map(s=><span key={s} className="text-[#9a9088] text-xs">{tr(ESP[s]??s)}{t.specialties.indexOf(s)<t.specialties.slice(0,2).length-1?'·':''} </span>)}
                           </div>
                         </div>
                       </div>
@@ -466,7 +467,7 @@ export default function AgendaPacientePage() {
                   ) : (
                     <div className="grid grid-cols-3 gap-2">
                       {slots.map(s=>{
-                        const hora=new Date(s).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})
+                        const hora=new Date(s).toLocaleTimeString(lang==='en'?'en-US':'es-CL',{hour:'2-digit',minute:'2-digit'})
                         const sel=slotSel===s
                         return (
                           <button key={s} onClick={()=>setSlotSel(s)}
@@ -483,7 +484,7 @@ export default function AgendaPacientePage() {
               {slotSel && (
                 <div className="flex justify-end">
                   <button onClick={()=>setPaso(3)} className="bg-[#1a2e1e] text-white text-sm font-medium px-6 py-2.5 rounded-full hover:bg-[#2d4a32] transition-colors">
-                    Continuar →
+                    {tr('Continuar')} →
                   </button>
                 </div>
               )}
@@ -501,19 +502,19 @@ export default function AgendaPacientePage() {
                   {[
                     {label:'Modalidad', val:modalidadSel?.nombre??'—'},
                     {label:'Especialista', val:terapeutas.find(t=>t.id===terapeuta)?.name??'—'},
-                    {label:'Fecha', val:new Date(slotSel).toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'})},
-                    {label:'Hora', val:`${new Date(slotSel).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})} h`},
+                    {label:'Fecha', val:new Date(slotSel).toLocaleDateString(lang==='en'?'en-US':'es-CL',{weekday:'long',day:'numeric',month:'long',year:'numeric'})},
+                    {label:'Hora', val:`${new Date(slotSel).toLocaleTimeString(lang==='en'?'en-US':'es-CL',{hour:'2-digit',minute:'2-digit'})} h`},
                     {label:'Duración', val:'60 minutos'},
                   ].map(r=>(
-                    <div key={r.label} className="flex justify-between items-baseline">
-                      <span className="text-[#9a9088] text-sm">{r.label}</span>
-                      <span className="text-[#1a2e1e] text-sm font-medium text-right max-w-xs">{r.val}</span>
+                    <div key={tr(r.label)} className="flex justify-between items-baseline">
+                      <span className="text-[#9a9088] text-sm">{tr(r.label)}</span>
+                      <span className="text-[#1a2e1e] text-sm font-medium text-right max-w-xs">{r.label==='Modalidad'?tr(r.val):r.val}</span>
                     </div>
                   ))}
                   <div className="pt-3 border-t border-[#f0ebe3] flex justify-between items-baseline">
                     <span className="text-[#9a9088] text-sm">{tr("Total")}</span>
                     <span style={{fontFamily:'Georgia,serif'}} className="text-xl font-bold text-[#1a2e1e]">
-                      {esPrimerPaciente ? 'Sin costo' : `USD ${modalidadSel?.precio??10}`}
+                      {esPrimerPaciente ? tr('Sin costo') : `USD ${modalidadSel?.precio??10}`}
                     </span>
                   </div>
                 </div>
@@ -530,15 +531,15 @@ export default function AgendaPacientePage() {
                   className="w-full bg-[#1a2e1e] text-white text-sm font-semibold py-3.5 rounded-full hover:bg-[#2d4a32] transition-colors disabled:opacity-50 flex items-center justify-center gap-2">
                   {guardando||pagando
                     ? <><span className="w-4 h-4 border border-white border-t-transparent rounded-full animate-spin"/>{tr("Procesando...")}</>
-                    : esPrimerPaciente ? 'Confirmar sesión' : 'Confirmar y proceder al pago'
+                    : esPrimerPaciente ? tr('Confirmar sesión') : tr('Confirmar y proceder al pago')
                   }
                 </button>
                 <button onClick={()=>setPaso(2)} className="w-full text-[#9a9088] text-sm py-2 hover:text-[#1a2e1e] transition-colors">
-                  Modificar fecha u hora
+                  {tr('Modificar fecha u hora')}
                 </button>
               </div>
               <p className="text-center text-[#b0a898] text-xs mt-4">
-                {esPrimerPaciente ? 'Sesión incluida · Sin cargo' : 'Pago seguro · Puede reprogramar con 24 horas de anticipación'}
+                {tr(esPrimerPaciente ? 'Sesión incluida · Sin cargo' : 'Pago seguro · Puede reprogramar con 24 horas de anticipación')}
               </p>
             </div>
           )}
