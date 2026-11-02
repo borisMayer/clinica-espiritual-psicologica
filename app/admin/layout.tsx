@@ -109,6 +109,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname()
   const language = usePortalLocale()
   const t = portalText(language)
+  async function changeLanguage(value: string) {
+    if(value!=='es' && value!=='en') return
+    const r=await fetch('/api/idioma',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({language:value})})
+    if(r.ok) window.location.reload()
+  }
   const label = (value: string) => ({ 'Dashboard':language==='en'?'Dashboard':'Panel', 'Agenda':t.schedule,'Pacientes':t.patients,'Terapeutas':t.therapists,'Mensajes':t.messages,'Preparar sesiones':t.prepare,'Seguimiento':t.progress,'Instrumentos':t.tools,'Pagos':t.payments,'Reportes':t.reports } as Record<string,string>)[value] || value
   const { data: session } = useSession()
   const [collapsed, setCollapsed] = useState(false)
@@ -196,6 +201,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* Bottom */}
+        {!collapsed && <div style={{padding:'4px 16px',color:'#F7F4EE',fontSize:11}}><label htmlFor="admin-language">{t.language}</label><select id="admin-language" aria-label={t.language} value={language} onChange={e=>changeLanguage(e.target.value)} style={{display:'block',width:'100%',marginTop:4,background:'#173224',color:'#fff',border:'1px solid #486452',borderRadius:5,padding:5}}><option value="es">Español</option><option value="en">English</option></select></div>}
         <div style={{padding: collapsed ? '12px 8px' : '12px 14px', borderTop:'0.5px solid rgba(200,169,107,0.08)', flexShrink:0}}>
           <Link href="/" style={{...S.bottomLink(), justifyContent: collapsed ? 'center' : 'flex-start', gap: collapsed ? 0 : 8}}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" style={{flexShrink:0}}>
