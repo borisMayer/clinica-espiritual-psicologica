@@ -17,6 +17,7 @@ const NAV_MAIN = [
 const NAV_GESTION = [
   { href: '/admin/mensajes', label: 'Mensajes', icon: 'M21 11.5a8.4 8.4 0 01-.9 3.8A8.5 8.5 0 0112.5 20a8.4 8.4 0 01-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 01-.9-3.8A8.5 8.5 0 0112.5 3 8.5 8.5 0 0121 11.5z' },
   { href: '/admin/mi-universo', label: 'Mi Universo', icon: 'M12 3a9 9 0 100 18 9 9 0 000-18zm0 4v5l3 2' },
+  { href: '/admin/preparaciones', label: 'Preparar sesiones', icon: 'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01' },
   { href: '/admin/seguimiento', label: 'Seguimiento', icon: 'M3 17l6-6 4 4 8-8' },
   { href: '/admin/instrumentos', label: 'Instrumentos', icon: 'M9 12h6m-6 4h6M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z' },
   { href: '/admin/pagos', label: 'Pagos',
