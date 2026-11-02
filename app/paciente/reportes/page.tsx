@@ -267,7 +267,7 @@ export default function ReportesPage() {
             {PATRONES_TIPO.slice(0, Math.min(completadas.length + 1, PATRONES_TIPO.length)).map((p, i) => (
               <div key={i} className="flex items-start gap-3 p-4 bg-[#f5f3ef] rounded-xl border border-[#e8dfd0]">
                 <span className="text-[#4a7c59] font-bold mt-0.5 flex-shrink-0">→</span>
-                <p className="text-[#5a6b5e] text-sm leading-relaxed"{tr(p)}</p>
+                <p className="text-[#5a6b5e] text-sm leading-relaxed">{tr(p)}</p>
               </div>
             ))}
             <p className="text-[#b0a898] text-xs px-1">{tr("Los patrones se refinan con cada sesión. El terapeuta actualizará esta lectura.")}</p>
