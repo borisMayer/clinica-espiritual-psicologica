@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import { usePortalLocale } from '@/lib/use-portal-locale'
+import { portalText } from '@/lib/portal-dictionary'
 
 const NAV_MAIN = [
   { href: '/admin/dashboard', label: 'Dashboard',
@@ -105,6 +107,9 @@ const S = {
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const language = usePortalLocale()
+  const t = portalText(language)
+  const label = (value: string) => ({ 'Dashboard':language==='en'?'Dashboard':'Panel', 'Agenda':t.schedule,'Pacientes':t.patients,'Terapeutas':t.therapists,'Mensajes':t.messages,'Preparar sesiones':t.prepare,'Seguimiento':t.progress,'Instrumentos':t.tools,'Pagos':t.payments,'Reportes':t.reports } as Record<string,string>)[value] || value
   const { data: session } = useSession()
   const [collapsed, setCollapsed] = useState(false)
 
@@ -120,7 +125,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside style={S.sidebar(W)}>
 
         {/* Collapse btn */}
-        <button onClick={() => setCollapsed(c => !c)} aria-label="Colapsar menú" style={{
+        <button onClick={() => setCollapsed(c => !c)} aria-label={language==='en'?'Collapse menu':'Colapsar menú'} style={{
           position:'absolute', top:18, right:-10,
           width:20, height:20, background:'#071B14',
           border:'0.5px solid rgba(200,169,107,0.3)', borderRadius:'50%',
@@ -162,20 +167,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Nav */}
         <nav style={{padding:'10px', flex:1, overflowY:'auto', overflowX:'hidden'}}>
-          {!collapsed && <div style={S.sectionLabel()}>Principal</div>}
+          {!collapsed && <div style={S.sectionLabel()} >{t.main}</div>}
           {NAV_MAIN.map(item => {
             const active = !!pathname?.startsWith(item.href)
             return (
               <Link key={item.href} href={item.href} style={S.navLink(active, collapsed)}>
                 {active && <div style={S.activePill()} />}
                 <span style={S.navIconColor(active)}><Icon d={item.icon} /></span>
-                {!collapsed && <span style={S.navLabel(active)}>{item.label}</span>}
+                {!collapsed && <span style={S.navLabel(active)}>{label(item.label)}</span>}
               </Link>
             )
           })}
 
           {!collapsed
-            ? <div style={{...S.sectionLabel(), paddingTop:16}}>Gestión</div>
+            ? <div style={{...S.sectionLabel(), paddingTop:16}} >{t.management}</div>
             : <div style={{height:10}} />
           }
           {NAV_GESTION.map(item => {
