@@ -1,10 +1,13 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { usePortalLocale } from '@/lib/use-portal-locale'
 
 type Person = { id: string; name: string; role: string }
 type Message = { id: string; content: string; sentAt: string; status: string; sender: Person; receiver: Person }
 
 export default function ProfessionalMessages() {
+ const lang=usePortalLocale()
+ const tr=(es:string,en:string)=>lang==='en'?en:es
   const [messages, setMessages] = useState<Message[]>([])
   const [selfId, setSelfId] = useState('')
   const [selected, setSelected] = useState('')
@@ -48,7 +51,7 @@ export default function ProfessionalMessages() {
     {error && <p role="alert" className="text-red-700 mb-3">{error}</p>}
     <div className="grid md:grid-cols-[260px_1fr] gap-4 min-h-[60vh]">
       <aside className="rounded-xl border bg-white p-3">
-        <h2 className="font-semibold mb-3">Conversaciones</h2>
+        <h2 className="font-semibold mb-3">{tr("Conversaciones","Conversations")}</h2>
         {patients.length === 0 && <p className="text-sm text-gray-500">Aún no hay mensajes recibidos.</p>}
         {patients.map(p => <button key={p.id} onClick={() => setSelected(p.id)} className={'block w-full text-left rounded-lg p-3 mb-1 ' + (active === p.id ? 'bg-[#dce9df]' : 'hover:bg-gray-100')}>
           {p.name} {unread(p.id) > 0 && <span className="text-xs text-green-800">({unread(p.id)})</span>}
