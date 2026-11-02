@@ -21,7 +21,7 @@ export async function PUT(req:NextRequest) {
  const u=await patient()
  if(!u) return NextResponse.json({error:'No autorizado'},{status:403,headers})
  if(req.headers.get('origin')!==new URL(req.url).origin) return NextResponse.json({error:'Origen no autorizado'},{status:403,headers})
- const parsed=z.object({focus:z.string().trim().max(1500),feeling:z.string().trim().max(1000),question:z.string().trim().max(1000),consent:z.boolean()}).safeParse(await req.json().catch(()=>null))
+ const parsed=z.object({focus:z.string().trim().max(1500),feeling:z.string().trim().max(1000),question:z.string().trim().max(1000),consent:z.boolean(),shareWithTherapist:z.boolean().default(false)}).safeParse(await req.json().catch(()=>null))
  if(!parsed.success) return NextResponse.json({error:'Datos inválidos'},{status:400,headers})
  await store(u.id,parsed.data)
  return NextResponse.json({saved:true,summary:parsed.data.consent?summary({...parsed.data,createdAt:new Date().toISOString()}):null},{headers})
