@@ -1,540 +1,154 @@
 import Link from 'next/link'
 import { cookies } from 'next/headers'
 import PublicLanguageSwitch from '@/components/PublicLanguageSwitch'
-import { publicText } from '@/lib/public-i18n'
 
 export default async function HomePage() {
-  const language = (await cookies()).get('public_locale')?.value === 'en' ? 'en' : 'es'
-  const t = (value: string) => publicText(language,value)
+  const en = (await cookies()).get('public_locale')?.value === 'en'
+  const t = (es:string, english:string) => en ? english : es
+  const services = [
+    {n:'01',title:t('Sentido y propósito','Meaning & purpose'),desc:t('Explora decisiones, identidad y momentos de cambio con una conversación orientada al sentido.','Explore decisions, identity and life transitions through meaning-centered conversations.')},
+    {n:'02',title:t('Relaciones y vínculos','Relationships & connection'),desc:t('Un espacio para comprender patrones de relación, comunicación y conflictos cotidianos.','A space to understand relationship patterns, communication and everyday conflict.')},
+    {n:'03',title:t('Vocación y liderazgo','Calling & leadership'),desc:t('Acompañamiento para quienes viven exigencias personales, profesionales o ministeriales.','Support for people navigating personal, professional or ministry demands.')},
+    {n:'04',title:t('Fe y vida interior','Faith & inner life'),desc:t('Reflexión espiritual desde una perspectiva cristiana reformada, respetando tu libertad de conciencia.','Spiritual reflection from a Reformed Christian perspective, respecting your freedom of conscience.')}
+  ]
+  const plans = [
+    {name:t('Sesión individual','Individual session'),price:'USD 10',detail:t('60 minutos · encuentro individual','60 minutes · individual meeting')},
+    {name:t('Programa mensual','Monthly program'),price:'USD 35',detail:t('4 sesiones de 60 minutos','4 sessions of 60 minutes')},
+    {name:t('Programa intensivo','Intensive program'),price:'USD 64',detail:t('8 sesiones de 60 minutos','8 sessions of 60 minutes')}
+  ]
+  const questions = [
+    {q:t('¿Necesito pertenecer a una iglesia?','Do I need to belong to a church?'),a:t('No. Puedes conocer el enfoque y decidir libremente si se ajusta a tus necesidades.','No. You can learn about the approach and decide freely whether it suits your needs.')},
+    {q:t('¿Cómo se realiza la atención?','How do appointments work?'),a:t('La plataforma permite agendar sesiones, acceder a encuentros virtuales y comunicarse mediante mensajería privada.','The platform lets you schedule appointments, join virtual meetings and communicate through private messaging.')},
+    {q:t('¿Es un servicio de emergencias?','Is this an emergency service?'),a:t('No. La plataforma no sustituye los servicios de urgencia ni la atención especializada que pueda requerirse.','No. The platform does not replace emergency services or specialized care when needed.')},
+    {q:t('¿Qué ocurre con mis datos?','What happens to my data?'),a:t('La información se gestiona según los controles de privacidad de la plataforma. Revisa los permisos antes de compartir contenidos con tu profesional.','Information is managed according to the platform’s privacy controls. Review permissions before sharing content with your practitioner.')}
+  ]
   return (
-    <div className="min-h-screen bg-[#0e1a12] text-white" style={{fontFamily:'system-ui,sans-serif'}}>
-
-      {/* ── NAV ── */}
-      <nav className="fixed top-0 w-full z-50 bg-[#0e1a12]/95 backdrop-blur-md border-b border-white/8">
-        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full border border-[#c9a84c]/60 flex items-center justify-center">
-              <span className="text-[#c9a84c] text-sm">✦</span>
-            </div>
-            <div>
-              <span style={{fontFamily:'Georgia,serif'}} className="font-bold text-white text-sm tracking-wide">{t("Clínica del Alma")}</span>
-              <span className="text-[#c9a84c]/60 text-xs ml-2 hidden md:inline">{t("Restauración Integral")}</span>
-            </div>
+    <div className="min-h-screen bg-[#f7f6f2] text-[#172b20]">
+      <nav aria-label={t('Navegación principal','Main navigation')} className="sticky top-0 z-50 border-b border-[#d9dfd5] bg-[#f7f6f2]/95 backdrop-blur-xl">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 h-20 flex items-center justify-between gap-3">
+          <Link href="/" className="flex items-center gap-3 min-w-0">
+            <span aria-hidden="true" className="w-10 h-10 rounded-full bg-[#173626] text-[#d8bc7b] grid place-items-center text-xl">✦</span>
+            <span className="font-semibold tracking-tight text-base sm:text-lg" style={{fontFamily:'Georgia,serif'}}>{t('Clínica Espiritual','Spiritual Clinic')}</span>
+          </Link>
+          <div className="hidden lg:flex items-center gap-8 text-sm text-[#52665a]">
+            <a href="#enfoque" className="hover:text-[#173626]">{t('Enfoque','Approach')}</a>
+            <a href="#servicios" className="hover:text-[#173626]">{t('Áreas de apoyo','Support areas')}</a>
+            <a href="#precios" className="hover:text-[#173626]">{t('Precios','Pricing')}</a>
+            <a href="#preguntas" className="hover:text-[#173626]">{t('Preguntas','FAQ')}</a>
           </div>
-          <div className="hidden md:flex items-center gap-8 text-sm text-white/50">
-            <a href="#problema" className="hover:text-white transition-colors">{t("El problema")}</a>
-            <a href="#metodo" className="hover:text-white transition-colors">{t("Método")}</a>
-            <a href="#servicios" className="hover:text-white transition-colors">{t("Servicios")}</a>
-            <a href="#precios" className="hover:text-white transition-colors">{t("Inversión")}</a>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <PublicLanguageSwitch language={language} />
-            <Link href="/login" className="text-sm text-white/60 hover:text-white transition-colors">{t("Acceder")}</Link>
-            <Link href="/register" className="bg-[#c9a84c] text-[#0e1a12] text-sm font-bold px-5 py-2 rounded-full hover:bg-[#d4b86a] transition-colors">
-              {t("Primera sesión →")}
-            </Link>
+          <div className="flex items-center gap-2 sm:gap-4">
+            <PublicLanguageSwitch language={en?'en':'es'} />
+            <Link href="/login" className="hidden sm:inline text-sm font-medium hover:underline">{t('Ingresar','Log in')}</Link>
+            <Link href="/register" className="rounded-full bg-[#173626] px-4 sm:px-5 py-3 text-white text-xs sm:text-sm font-semibold hover:bg-[#28563a] transition-colors">{t('Comenzar','Get started')}</Link>
           </div>
         </div>
       </nav>
 
-      {/* ── HERO ── */}
-      <section className="min-h-screen flex items-center justify-center px-6 pt-16 relative overflow-hidden">
-        {/* Background texture */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,#1a3a20_0%,#0e1a12_60%)]" />
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-[#c9a84c]/5 blur-[120px] pointer-events-none" />
-
-        <div className="relative max-w-4xl mx-auto text-center">
-          {/* Eyebrow */}
-          <div className="inline-flex items-center gap-3 mb-8">
-            <div className="h-px w-12 bg-[#c9a84c]/40" />
-            <span className="text-[#c9a84c] text-xs font-semibold tracking-[0.25em] uppercase">{t("Psicología · Logoterapia · Fe Reformada")}</span>
-            <div className="h-px w-12 bg-[#c9a84c]/40" />
+      <main>
+        <section className="relative overflow-hidden bg-[#142b1e] text-white">
+          <div className="absolute -top-48 -right-32 w-[650px] h-[650px] rounded-full border border-[#e2c788]/20" aria-hidden="true" />
+          <div className="absolute -top-20 -right-20 w-[440px] h-[440px] rounded-full border border-[#e2c788]/20" aria-hidden="true" />
+          <div className="absolute top-24 right-28 w-[250px] h-[250px] rounded-full bg-[#d4b77b]/10 blur-3xl" aria-hidden="true" />
+          <div className="relative max-w-7xl mx-auto px-6 sm:px-8 py-28 md:py-40">
+            <div className="max-w-4xl">
+              <p className="text-[#d9be80] uppercase tracking-[0.22em] text-xs font-semibold mb-8">{t('Acompañamiento humano · Reflexión · Propósito','Human support · Reflection · Purpose')}</p>
+              <h1 className="text-5xl sm:text-6xl lg:text-8xl tracking-tight leading-[1.06] font-normal mb-8" style={{fontFamily:'Georgia,serif'}}>
+                {t('Un espacio para','A space to')}<br/><span className="text-[#e0c58b]">{t('reencontrar sentido.','rediscover meaning.')}</span>
+              </h1>
+              <p className="text-lg sm:text-xl text-white/70 leading-relaxed max-w-2xl mb-10">{t('Conversaciones con profundidad humana y una perspectiva espiritual clara, en un entorno digital diseñado para acompañar tu proceso.','Thoughtful human conversations with a clear spiritual perspective, in a digital space designed to support your journey.')}</p>
+              <div className="flex flex-wrap gap-3">
+                <Link href="/register" className="bg-[#e1c58a] text-[#142b1e] font-semibold px-7 py-4 rounded-full hover:bg-[#f0d8a4] transition-colors">{t('Solicitar primera sesión','Request your first session')} <span aria-hidden="true">↗</span></Link>
+                <a href="#enfoque" className="border border-white/30 px-7 py-4 rounded-full hover:bg-white/10 transition-colors">{t('Conocer el enfoque','Explore our approach')}</a>
+              </div>
+              <p className="mt-9 text-sm text-white/45">{t('Atención virtual · Primera sesión sin costo según condiciones de reserva','Online appointments · First session at no charge, subject to booking conditions')}</p>
+            </div>
           </div>
+        </section>
 
-          {/* Headline */}
-          <h1 style={{fontFamily:'Georgia,serif'}} className="text-5xl md:text-7xl font-bold leading-[1.05] mb-8">
-            {t("El alma no se repara")}<br/>
-            <span className="text-[#c9a84c]">{t("sin verdad.")}</span>
-          </h1>
-
-          <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto mb-4 leading-relaxed">
-            {t("No tratamos síntomas. Restauramos el orden interior del alma con fundamento clínico y teológico.")}
-          </p>
-          <p className="text-white/40 text-sm max-w-xl mx-auto mb-12">
-            {t("Para líderes, pastores, profesionales y familias que buscan algo más profundo que el alivio temporal.")}
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Link href="/register" className="bg-[#c9a84c] text-[#0e1a12] font-bold px-8 py-4 rounded-full hover:bg-[#d4b86a] transition-all text-base">
-              {t("Agendar sesión inicial gratuita")}
-            </Link>
-            <a href="#metodo" className="border border-white/20 text-white/70 font-medium px-8 py-4 rounded-full hover:bg-white/5 hover:border-white/40 transition-colors text-base">
-              {t("Conocer el método →")}
-            </a>
-          </div>
-
-          {/* Trust bar */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-white/30 text-xs">
-            <span className="flex items-center gap-2"><span className="text-[#c9a84c]">✦</span> {t("Confidencialidad absoluta")}</span>
-            <span className="w-px h-3 bg-white/20 hidden sm:block" />
-            <span className="flex items-center gap-2"><span className="text-[#c9a84c]">✦</span> {t("Primera sesión sin costo")}</span>
-            <span className="w-px h-3 bg-white/20 hidden sm:block" />
-            <span className="flex items-center gap-2"><span className="text-[#c9a84c]">✦</span> {t("Sin compromiso")}</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ── EL PROBLEMA REAL ── */}
-      <section id="problema" className="py-28 px-6 bg-[#faf8f4] text-[#1a2e1e]">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+        <section id="enfoque" className="px-6 sm:px-8 py-24 md:py-32">
+          <div className="max-w-7xl mx-auto grid lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-24 items-start">
             <div>
-              <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">{t("El diagnóstico que nadie hace")}</p>
-              <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl md:text-5xl font-bold leading-tight mb-6">
-                {t("Algo está roto.")}<br/>{t("Y lo sabes.")}
-              </h2>
-              <p className="text-[#5a6b5e] text-lg leading-relaxed mb-6">
-                {t("Has intentado la terapia convencional. Has leído los libros. Has orado. Y sin embargo, algo fundamental en tu interior sigue sin resolverse.")}
-              </p>
-              <p className="text-[#5a6b5e] leading-relaxed">
-                {t("El problema no es falta de voluntad. Es que la mayoría de los enfoques terapéuticos tratan el síntoma sin tocar el alma. Y el alma tiene sus propias leyes.")}
-              </p>
+              <p className="text-[#68836e] uppercase tracking-[0.2em] text-xs font-bold mb-5">{t('Nuestro enfoque','Our approach')}</p>
+              <h2 className="text-4xl sm:text-5xl leading-tight" style={{fontFamily:'Georgia,serif'}}>{t('Escuchar, comprender y avanzar.','Listen, understand, move forward.')}</h2>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-6">
+              <p className="text-[#52665a] text-lg leading-relaxed">{t('Integramos reflexión sobre el sentido de vida, diálogo personal y una perspectiva de fe cristiana reformada. Cada encuentro parte de tu historia, tus preguntas y tus objetivos.','We bring together reflection on life’s meaning, personal dialogue and a Reformed Christian faith perspective. Each meeting begins with your story, questions and goals.')}</p>
+              <div className="grid sm:grid-cols-3 gap-3">
+                {[t('Escucha respetuosa','Respectful listening'),t('Objetivos claros','Clear goals'),t('Participación activa','Active participation')].map(x=><div key={x} className="border-t-2 border-[#c8aa6b] pt-4 text-sm font-semibold">{x}</div>)}
+              </div>
+              <p className="text-[#7a887d] text-sm leading-relaxed">{t('El acompañamiento espiritual no reemplaza una evaluación médica o psicológica cuando esta sea necesaria.','Spiritual support does not replace medical or psychological assessment when such care is needed.')}</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="servicios" className="bg-white px-6 sm:px-8 py-24 md:py-28">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6 mb-12">
+              <div><p className="text-[#68836e] uppercase tracking-[0.2em] text-xs font-bold mb-4">{t('Áreas de acompañamiento','Areas of support')}</p><h2 className="text-4xl sm:text-5xl" style={{fontFamily:'Georgia,serif'}}>{t('Lo que podemos explorar.','What we can explore.')}</h2></div>
+              <p className="text-[#6a7b70] max-w-sm text-sm">{t('Una orientación inicial permite conversar sobre tus necesidades y el alcance del servicio.','An initial conversation helps clarify your needs and the scope of support.')}</p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-px bg-[#dce4dc] border border-[#dce4dc] rounded-3xl overflow-hidden">
+              {services.map(s=><article key={s.n} className="bg-[#f9faf7] p-8 md:p-12 hover:bg-[#f0f5ed] transition-colors">
+                <span className="text-[#a68d55] text-xs font-semibold tracking-widest">{s.n} / 04</span>
+                <h3 className="text-2xl mt-8 mb-4" style={{fontFamily:'Georgia,serif'}}>{s.title}</h3>
+                <p className="text-[#617267] leading-relaxed max-w-md">{s.desc}</p>
+              </article>)}
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-[#e9eee7] px-6 sm:px-8 py-24">
+          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-24">
+            <div><p className="text-[#68836e] uppercase tracking-[0.2em] text-xs font-bold mb-4">{t('Una experiencia sencilla','A simple experience')}</p><h2 className="text-4xl sm:text-5xl leading-tight" style={{fontFamily:'Georgia,serif'}}>{t('Tu proceso, paso a paso.','Your journey, step by step.')}</h2></div>
+            <div className="space-y-8">
               {[
-                { icon: '⚡', t: t("Lideras pero estás vacío por dentro"), d: t("El agotamiento vocacional no es falta de fe. Es una fractura profunda entre llamado y alma.") },
-                { icon: '🌀', t: t("Buscas sentido y solo encuentras ruido"), d: t("La ansiedad moderna es, en el fondo, una crisis de propósito. Viktor Frankl lo llamó \"vacío existencial\".") },
-                { icon: '🔗', t: t("Tus relaciones siguen los mismos patrones"), d: t("Los vínculos rotos se repiten porque el patrón vive en capas más profundas que la conducta.") },
-                { icon: '📖', t: t("La fe se volvió obligación sin vida"), d: t("Cuando la teología se desconecta del alma, la religiosidad mata lo que debería sanar.") },
-              ].map(p => (
-                <div key={p.t} className="flex gap-4 p-4 bg-white rounded-xl border border-[#e8dfd0]">
-                  <span className="text-xl flex-shrink-0 mt-0.5">{p.icon}</span>
-                  <div>
-                    <p className="font-semibold text-[#1a2e1e] text-sm mb-1">{p.t}</p>
-                    <p className="text-[#8a9b8e] text-xs leading-relaxed">{p.d}</p>
-                  </div>
-                </div>
-              ))}
+                [t('01 · Crea tu cuenta','01 · Create your account'),t('Regístrate y accede a tu espacio personal.','Sign up and access your personal space.')],
+                [t('02 · Agenda un encuentro','02 · Schedule a meeting'),t('Elige una fecha disponible y confirma tu reserva.','Choose an available date and confirm your booking.')],
+                [t('03 · Continúa a tu ritmo','03 · Continue at your pace'),t('Consulta tus sesiones, mensajes y herramientas de seguimiento.','View appointments, messages and progress tools.')]
+              ].map(([title,desc])=><div key={title} className="border-b border-[#cbd8cc] pb-7"><h3 className="font-semibold text-xl mb-2">{title}</h3><p className="text-[#617267]">{desc}</p></div>)}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── MÉTODO ── */}
-      <section id="metodo" className="py-28 px-6 bg-[#0e1a12] text-white">
-        <div className="max-w-5xl mx-auto text-center">
-          <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">{t("Nuestra diferencia")}</p>
-          <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl md:text-5xl font-bold mb-6">
-            {t("Restauración integral.")}<br/>{t("No alivio temporal.")}
-          </h2>
-          <p className="text-white/50 max-w-2xl mx-auto mb-16 text-lg leading-relaxed">
-            {t("Integramos tres disciplinas que raramente se encuentran juntas: rigor clínico, profundidad psicoanalítica y fundamento teológico reformado.")}
-          </p>
-
-          <div className="grid md:grid-cols-3 gap-6 mb-16">
-            {[
-              {
-                num: '01', color: 'border-[#4a7c59]', accentBg: 'bg-[#4a7c59]/10', accent: 'text-[#7ab893]',
-                title: t("Fundamento Clínico"),
-                sub: t("Psicoanálisis + Logoterapia"),
-                desc: t("No improvisamos. Cada proceso parte de un diagnóstico riguroso. Usamos herramientas probadas: psicoanálisis para el inconsciente, logoterapia para el sentido."),
-                tags: ['Viktor Frankl', 'Freud / Lacan', 'DSM-5'],
-              },
-              {
-                num: '02', color: 'border-[#c9a84c]', accentBg: 'bg-[#c9a84c]/10', accent: 'text-[#c9a84c]',
-                title: t("Verdad Revelada"),
-                sub: t("Teología Reformada"),
-                desc: t("El alma fue creada con un orden. Trabajamos desde la Escritura como autoridad final, no como recurso adicional. Sin sincretismo, sin ambigüedad."),
-                tags: ['Calvino / Lutero', t('Hermenéutica'), 'Sola Scriptura'],
-              },
-              {
-                num: '03', color: 'border-[#5a7a9a]', accentBg: 'bg-[#5a7a9a]/10', accent: 'text-[#8ab0c8]',
-                title: t("Raíces Hebreas"),
-                sub: t("Pensamiento bíblico profundo"),
-                desc: t("El lenguaje original de la fe es hebreo. Volvemos a las raíces conceptuales de la espiritualidad bíblica para una comprensión más completa del ser humano."),
-                tags: [t('Pensamiento hebreo'), 'Shalom', 'Nephesh'],
-              },
-            ].map(m => (
-              <div key={m.num} className={`p-6 rounded-2xl border ${m.color} bg-white/3 text-left`}>
-                <div className={`${m.accentBg} w-10 h-10 rounded-xl flex items-center justify-center mb-5`}>
-                  <span className={`${m.accent} font-bold text-sm`}>{m.num}</span>
-                </div>
-                <h3 style={{fontFamily:'Georgia,serif'}} className="text-xl font-bold mb-1">{m.title}</h3>
-                <p className={`${m.accent} text-xs font-semibold uppercase tracking-wide mb-4`}>{m.sub}</p>
-                <p className="text-white/50 text-sm leading-relaxed mb-5">{m.desc}</p>
-                <div className="flex flex-wrap gap-2">
-                  {m.tags.map(t => (
-                    <span key={t} className="text-xs border border-white/10 text-white/30 px-2.5 py-1 rounded-full">{t}</span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Manifiesto */}
-          <div className="border border-[#c9a84c]/20 rounded-2xl p-8 bg-[#c9a84c]/5 max-w-3xl mx-auto">
-            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">{t("Lo que no somos")}</p>
-            <div className="grid sm:grid-cols-3 gap-4 text-sm">
-              {[
-                { x: '✗', t: t("No somos coaching motivacional"), d: t("Sin técnicas de positivismo vacío ni afirmaciones sin fundamento.") },
-                { x: '✗', t: t("No somos terapia sin alma"), d: t("La psicología sin dimensión espiritual trata al ser humano incompleto.") },
-                { x: '✗', t: t("No somos espiritualidad new age"), d: t("Sin misticismo ambiguo ni sincretismo que diluye la verdad.") },
-              ].map(n => (
-                <div key={n.t} className="text-left">
-                  <p className="text-red-400/70 font-semibold mb-1">{n.x} {n.t}</p>
-                  <p className="text-white/30 text-xs leading-relaxed">{n.d}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── SERVICIOS ── */}
-      <section id="servicios" className="py-28 px-6 bg-[#faf8f4] text-[#1a2e1e]">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">{t("Áreas de restauración")}</p>
-            <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl md:text-5xl font-bold">{t("Trabajamos lo que otros")}<br/>{t("no se atreven a tocar")}</h2>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {[
-              { icon:'🔥', title: t("Crisis Vocacional del Alma"), old:t("Burnout espiritual"), desc: t("El agotamiento del líder no es falta de disciplina. Es una fractura entre llamado, identidad y alma que requiere restauración profunda."), who:t("Pastores · Líderes · Coaches") },
-              { icon:'🏛️', title: t("Restauración del Orden Relacional"), old:t("Terapia familiar"), desc: t("Los vínculos rotos siguen un patrón. Trabajamos las raíces sistémicas y espirituales que perpetúan el conflicto generacional."), who:t("Familias · Parejas · Relaciones") },
-              { icon:'⚓', title: t("Desintegración y Reconstrucción"), old:t("Ansiedad y trauma"), desc: t("El trauma no es solo un recuerdo. Es una realidad inscrita en el cuerpo y el alma. Abordamos su reconstrucción desde adentro."), who:t("Trauma · Duelo · Ansiedad") },
-              { icon:'📜', title: t("Discernimiento y Verdad Revelada"), old:t("Consejería bíblica"), desc: t("Decisiones de vida, vocación, crisis de fe. Acompañamiento desde la Escritura como luz, no como código de conducta."), who:t("Fe · Vocación · Propósito") },
-              { icon:'🧬', title: t("Vacío Existencial y Sentido"), old:t("Logoterapia"), desc: t("Inspirados en Viktor Frankl: cuando la vida pierde sentido, el sufrimiento se vuelve insoportable. Trabajamos para restaurar el para qué."), who:t("Crisis existencial · Propósito · Identidad") },
-              { icon:'🌿', title: t("Transformación Personal Profunda"), old:t("Crecimiento personal"), desc: t("No crecimiento superficial. Un proceso estructurado de autoconocimiento, integración y transformación orientado a la plenitud real."), who:t("Individual · Proceso · Profundidad") },
-            ].map(s => (
-              <div key={s.title} className="bg-white rounded-2xl p-6 border border-[#e8dfd0] hover:border-[#4a7c59]/40 hover:shadow-lg transition-all group">
-                <div className="text-3xl mb-4">{s.icon}</div>
-                <p className="text-[#8a9b8e] text-xs uppercase tracking-wide mb-1">{t('Antes llamado:')} {s.old}</p>
-                <h3 style={{fontFamily:'Georgia,serif'}} className="text-xl font-bold text-[#1a2e1e] mb-3">{s.title}</h3>
-                <p className="text-[#5a6b5e] text-sm leading-relaxed mb-4">{s.desc}</p>
-                <p className="text-[#4a7c59] text-xs font-semibold">{s.who}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── AUTORIDAD ── */}
-      <section className="py-28 px-6 bg-[#1a2e1e] text-white">
-        <div className="max-w-5xl mx-auto">
-
-          {/* Header */}
-          <div className="text-center mb-16">
-            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">{t("Fundamento")}</p>
-            <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl md:text-5xl font-bold mb-4">
-              {t("La confianza no se construye")}<br/>{t("con números, sino con verdad.")}
-            </h2>
-            <p className="text-white/40 max-w-xl mx-auto text-lg leading-relaxed">
-              {t("Ni terapia superficial, ni espiritualidad sin fundamento.")}<br/>{t("Integración clínica y verdad teológica, sin concesiones.")}
-            </p>
-          </div>
-
-          {/* Grid de distinciones */}
-          <div className="grid md:grid-cols-3 gap-5 mb-16">
-            {[
-              {
-                neg:t("Esto no es coaching motivacional"),
-                pos:t("Es trabajo estructural del alma"),
-                desc: t("No ofrecemos técnicas de positivismo ni afirmaciones sin base. El trabajo que hacemos toca capas que el coaching no está formado para abordar."),
-              },
-              {
-                neg:t("Esto no es terapia secular aislada"),
-                pos:t("Integra la dimensión espiritual real"),
-                desc: t("La psicología sin alma trata al ser humano incompleto. No separamos lo clínico de lo espiritual como si fueran departamentos distintos."),
-              },
-              {
-                neg:t("Esto no es espiritualidad superficial"),
-                pos:t("Está anclada en verdad teológica sólida"),
-                desc: t("Sin misticismo ambiguo, sin sincretismo, sin sensaciones como criterio. La fe que integramos tiene nombre, texto y estructura."),
-              },
-            ].map(d => (
-              <div key={d.neg} className="border border-white/10 rounded-2xl p-6">
-                <p className="text-red-400/60 text-xs font-semibold mb-1 line-through">{d.neg}</p>
-                <p style={{fontFamily:'Georgia,serif'}} className="text-white font-bold text-lg mb-3">{d.pos}</p>
-                <p className="text-white/40 text-sm leading-relaxed">{d.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Estructura del método */}
-          <div className="border border-white/8 rounded-2xl p-8 bg-white/3 mb-16">
-            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-8 text-center">{t("Estructura del método")}</p>
-            <div className="grid md:grid-cols-4 gap-0">
-              {[
-                { n:'I', title: t("Comprensión profunda"), sub: t("Psicoanálisis"), desc: t("El inconsciente no es metáfora. Es el lugar donde viven los conflictos no resueltos que dirigen la vida desde abajo."), color:'border-[#4a7c59]' },
-                { n:'II', title: t("Sentido y dirección"), sub: t("Logoterapia · Frankl"), desc: t("El sufrimiento sin sentido destruye. Con sentido, puede transformarse en el material de la construcción del alma."), color:'border-[#c9a84c]' },
-                { n:'III', title: t("Verdad y orden"), sub: t("Teología Reformada"), desc: t("El alma fue creada con un orden. La Escritura no es un recurso adicional — es el marco desde el que leemos la realidad."), color:'border-blue-500/50' },
-                { n:'IV', title: t("Integración del alma"), sub: t("Restauración"), desc: t("El objetivo no es ajuste conductual. Es que identidad, propósito, vínculos y fe operen desde un centro restaurado."), color:'border-purple-500/50' },
-              ].map((m, i) => (
-                <div key={m.n} className={`p-6 ${i < 3 ? 'border-r border-white/8' : ''}`}>
-                  <div className={`text-xs font-bold tracking-widest mb-1 ${i===0?'text-[#7ab893]':i===1?'text-[#c9a84c]':i===2?'text-blue-400':'text-purple-400'}`}>{m.n}</div>
-                  <h3 style={{fontFamily:'Georgia,serif'}} className="font-bold text-white text-base mb-1">{m.title}</h3>
-                  <p className="text-white/30 text-xs font-semibold uppercase tracking-wide mb-3">{m.sub}</p>
-                  <p className="text-white/40 text-xs leading-relaxed">{m.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Declaración clínica */}
-          <div className="grid md:grid-cols-2 gap-10 items-start">
-            <div>
-              <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">{t("Declaración de trabajo")}</p>
-              <blockquote style={{fontFamily:'Georgia,serif'}} className="text-2xl font-bold text-white leading-snug mb-6">
-                {t("\"No trabajamos para que te sientas mejor sin verdad. Trabajamos para que tu vida se ordene desde lo que es real.\"")}
-              </blockquote>
-              <p className="text-white/40 text-sm leading-relaxed">
-                {t("El alivio emocional sin comprensión profunda es anestesia. Puede silenciar el síntoma sin tocar su raíz. Nuestro trabajo apunta más abajo.")}
-              </p>
-            </div>
-            <div className="space-y-3">
-              {[
-                { t: t("Formación clínica real, no aproximaciones informales"), d: t("Psicoanálisis y logoterapia con base teórica y supervisión activa.") },
-                { t: t("Teología reformada sin sincretismo"), d: t("Marco doctrinal claro. Sola Scriptura como autoridad, sin mezclas que diluyen.") },
-                { t: t("Supervisión constante del proceso"), d: t("Cada caso es revisado. Ningún proceso opera sin control de calidad clínico.") },
-                { t: t("Confidencialidad como principio estructural"), d: t("No como política de privacidad. Como compromiso ético irrenunciable.") },
-              ].map(v => (
-                <div key={v.t} className="flex items-start gap-4 p-4 bg-white/3 border border-white/8 rounded-xl">
-                  <span className="text-[#c9a84c] flex-shrink-0 mt-0.5">✦</span>
-                  <div>
-                    <p className="text-white/80 text-sm font-semibold">{v.t}</p>
-                    <p className="text-white/30 text-xs mt-0.5 leading-relaxed">{v.d}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-
-      {/* ── PRECIOS ── */}
-      <section id="precios" className="py-28 px-6 bg-[#faf8f4] text-[#1a2e1e]">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">{t("Inversión en el alma")}</p>
-            <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold">{t("Transparencia total")}</h2>
-            <p className="text-[#8a9b8e] mt-4 text-lg">{t("Sin costos ocultos. Sin contratos. Sin presión.")}</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6 items-start">
-            {[
-              { name:t("Sesión única"), price:'USD 10', period:t("por sesión"), desc: t("Para comenzar o para consultas puntuales sin compromiso."), features:[t("60 min de sesión profunda"),t("Video o chat seguro"),t("Notas post-sesión"),t("Acceso a tu dashboard")], cta:t("Reservar sesión"), featured:false },
-              { name:t("Proceso Mensual"), price:'USD 35', period:t("4 sesiones / mes"), desc: t("El más elegido. Proceso terapéutico real y sostenido."), features:[t("4 sesiones de 60 min"),t("Video o chat seguro"),t("Mensajes entre sesiones"),t("Reportes de proceso"),t("Prioridad en agenda")], cta:t("Iniciar proceso"), featured:true },
-              { name:t("Proceso Intensivo"), price:'USD 64', period:t("8 sesiones / mes"), desc: t("Para crisis agudas o procesos que requieren mayor profundidad."), features:[t("8 sesiones de 60 min"),t("Video o chat seguro"),t("Chat directo ilimitado"),t("Reportes detallados"),t("Terapeuta dedicado")], cta:t("Consultar"), featured:false },
-            ].map(p => (
-              <div key={p.name} className={`rounded-2xl p-7 flex flex-col border-2 ${p.featured ? 'border-[#4a7c59] bg-[#4a7c59] text-white shadow-xl shadow-[#4a7c59]/20' : 'border-[#e8dfd0] bg-white'}`}>
-                {p.featured && <div className="text-xs font-bold tracking-widest uppercase bg-white/20 w-fit px-3 py-1 rounded-full mb-4">{t("Más elegido")}</div>}
-                <h3 style={{fontFamily:'Georgia,serif'}} className={`text-xl font-bold mb-1 ${p.featured?'text-white':'text-[#1a2e1e]'}`}>{p.name}</h3>
-                <p className={`text-sm mb-5 ${p.featured?'text-white/70':'text-[#8a9b8e]'}`}>{p.desc}</p>
-                <div className="mb-6">
-                  <span style={{fontFamily:'Georgia,serif'}} className={`text-4xl font-bold ${p.featured?'text-white':'text-[#1a2e1e]'}`}>{p.price}</span>
-                  <span className={`text-sm ml-2 ${p.featured?'text-white/60':'text-[#8a9b8e]'}`}>{p.period}</span>
-                </div>
-                <ul className="space-y-2.5 mb-8 flex-1">
-                  {p.features.map(f => (
-                    <li key={f} className={`flex items-start gap-2 text-sm ${p.featured?'text-white/90':'text-[#5a6b5e]'}`}>
-                      <span className={`flex-shrink-0 mt-0.5 ${p.featured?'text-[#c9a84c]':'text-[#4a7c59]'}`}>{t("✓")}</span> {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/register" className={`text-center font-bold py-3 rounded-full transition-all text-sm ${p.featured?'bg-white text-[#4a7c59] hover:bg-[#f0f7f2]':'bg-[#4a7c59] text-white hover:bg-[#3d6849]'}`}>
-                  {p.cta}
-                </Link>
-              </div>
-            ))}
-          </div>
-          <p className="text-center text-[#8a9b8e] text-sm mt-8">{t("Primera sesión gratuita · Pagos seguros · Precios en USD · Cancela cuando quieras")}</p>
-        </div>
-      </section>
-
-      {/* ── PROCESO TERAPÉUTICO ── */}
-      <section className="py-28 px-6 bg-[#0e1a12] text-white">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">{t("Claridad antes de comenzar")}</p>
-            <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold">{t("Cómo trabajamos contigo")}</h2>
-            <p className="text-white/40 mt-4 max-w-xl mx-auto">{t("La gente no compra historias. Necesita entender si este enfoque puede realmente ayudarle.")}</p>
-          </div>
-          <div className="grid md:grid-cols-4 gap-4 mb-16">
-            {[
-              { n:'01', title: t("Diagnóstico profundo"), desc: t("Historia personal, estructura interna, conflictos centrales. Sin atajos. Sin suponer. Sin improvisar."), icon:'🔍' },
-              { n:'02', title: t("Identificación del conflicto real"), desc: t("No el síntoma que traes. El nudo que lo genera. Psicoanalítico, existencial y teológico."), icon:'⚡' },
-              { n:'03', title: t("Intervención integrada"), desc: t("Herramientas clínicas + trabajo de sentido + verdad revelada. Cada sesión con dirección clara."), icon:'🔧' },
-              { n:'04', title: t("Reordenamiento del alma"), desc: t("No ajuste de conducta. Restitución del orden interior: identidad, propósito, vínculos, fe."), icon:'🌿' },
-            ].map(s => (
-              <div key={s.n} className="p-5 rounded-2xl border border-white/8 bg-white/3">
-                <div className="text-2xl mb-4">{s.icon}</div>
-                <div className="text-[#c9a84c]/40 text-xs font-bold tracking-widest mb-2">{s.n}</div>
-                <h3 style={{fontFamily:'Georgia,serif'}} className="font-bold text-white mb-3">{s.title}</h3>
-                <p className="text-white/40 text-xs leading-relaxed">{s.desc}</p>
-              </div>
-            ))}
-          </div>
-          <div>
-            <div className="text-center mb-10">
-              <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-3">{t("Situaciones que trabajamos")}</p>
-              <h3 style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold">{t("Casos representativos")}</h3>
-              <p className="text-white/30 text-sm mt-2">{t("Situaciones reales, presentadas con rigor clínico. Sin nombres ni datos identificatorios.")}</p>
-            </div>
+        <section id="precios" className="px-6 sm:px-8 py-24 md:py-28 bg-[#f7f6f2]">
+          <div className="max-w-7xl mx-auto">
+            <p className="text-[#68836e] uppercase tracking-[0.2em] text-xs font-bold mb-4">{t('Opciones de atención','Appointment options')}</p>
+            <h2 className="text-4xl sm:text-5xl mb-5" style={{fontFamily:'Georgia,serif'}}>{t('Precios claros.','Clear pricing.')}</h2>
+            <p className="text-[#617267] mb-12">{t('Elige la modalidad que mejor se adapte a tu disponibilidad.','Choose the option that best suits your schedule.')}</p>
             <div className="grid md:grid-cols-3 gap-5">
-              {[
-                { tag:t("Crisis vocacional"), title: t("Líder espiritual, 42 años"), situacion:t("Pastor con 18 años de ministerio. Funciona externamente pero siente vacío interior creciente. Irritabilidad, pérdida de sentido, desconexión de la fe."), conflicto:t("Identidad construida sobre el rol. Teología del rendimiento internalizada. Vergüenza encubierta."), intervencion:t("Psicoanálisis de la estructura del yo. Logoterapia para reorientar el sentido. Trabajo teológico sobre gracia vs. performance."), resultado:t("Reintegración de identidad disociada. Ministerio sostenido desde plenitud, no desde obligación.") },
-                { tag:t("Vacío existencial"), title: t("Profesional, 35 años"), situacion:t("Éxito profesional visible. Ansiedad crónica, insomnio, sensación de que algo esencial falta. Tres terapias anteriores sin resolución."), conflicto:t("Logros como sustitutos del sentido. Estructura de vida sin orientación trascendente. Trauma de apego no elaborado."), intervencion:t("Exploración psicoanalítica del vacío. Frankl aplicado al proyecto existencial. Reconstrucción del marco de sentido."), resultado:t("Transición profesional con propósito claro. Ansiedad remite al trabajar la raíz, no el síntoma.") },
-                { tag:t("Restauración familiar"), title: t("Pareja, 12 años juntos"), situacion:t("Conflicto crónico sin resolución. Comunicación deteriorada. Historia familiar de ambos replicándose en el vínculo presente."), conflicto:t("Heridas de origen activadas en el vínculo. Patrones de apego inseguro. Teología distorsionada sobre el matrimonio."), intervencion:t("Trabajo sistémico psicoanalítico. Revisión del orden relacional bíblico. Intervención en patrones transgeneracionales."), resultado:t("Restauración del vínculo desde comprensión profunda. No ajuste conductual sino transformación de la dinámica de base.") },
-              ].map(c => (
-                <div key={c.title} className="border border-white/10 rounded-2xl overflow-hidden">
-                  <div className="bg-[#4a7c59]/20 px-5 py-3 border-b border-white/5">
-                    <span className="text-[#7ab893] text-xs font-semibold uppercase tracking-wide">{c.tag}</span>
-                    <p className="text-white font-semibold text-sm mt-0.5">{c.title}</p>
-                  </div>
-                  <div className="p-5 space-y-3">
-                    {[
-                      { label: t("Situación"), val:c.situacion },
-                      { label: t("Conflicto central"), val:c.conflicto },
-                      { label: t("Intervención"), val:c.intervencion },
-                      { label: t("Resultado observable"), val:c.resultado },
-                    ].map(r => (
-                      <div key={r.label}>
-                        <p className="text-[#c9a84c] text-xs font-semibold uppercase tracking-wide mb-1">{r.label}</p>
-                        <p className="text-white/50 text-xs leading-relaxed">{r.val}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
+              {plans.map((p,i)=><article key={p.name} className={`rounded-3xl p-8 border ${i===1?'bg-[#173626] text-white border-[#173626]':'bg-white border-[#dce4dc]'}`}>
+                <p className={`text-sm mb-8 ${i===1?'text-[#b9d4be]':'text-[#68836e]'}`}>{p.name}</p>
+                <p className="text-4xl font-semibold mb-4" style={{fontFamily:'Georgia,serif'}}>{p.price}</p>
+                <p className={`text-sm mb-10 ${i===1?'text-white/65':'text-[#617267]'}`}>{p.detail}</p>
+                <Link href="/register" className={`inline-flex items-center justify-center w-full rounded-full py-3 font-semibold text-sm ${i===1?'bg-[#e1c58a] text-[#173626]':'bg-[#173626] text-white'}`}>{t('Consultar disponibilidad','Check availability')} ↗</Link>
+              </article>)}
+            </div>
+            <p className="text-xs text-[#78867c] mt-6">{t('Precios publicados en USD. Revisa las condiciones aplicables antes de confirmar una reserva.','Prices shown in USD. Review applicable terms before confirming a booking.')}</p>
+          </div>
+        </section>
+
+        <section id="preguntas" className="bg-white px-6 sm:px-8 py-24">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-4xl sm:text-5xl mb-10" style={{fontFamily:'Georgia,serif'}}>{t('Preguntas frecuentes.','Frequently asked questions.')}</h2>
+            <div className="divide-y divide-[#dce4dc] border-y border-[#dce4dc]">
+              {questions.map(x=><details key={x.q} className="group py-6"><summary className="cursor-pointer list-none flex justify-between items-center gap-5 font-semibold text-lg">{x.q}<span aria-hidden="true" className="text-[#68836e] text-2xl group-open:rotate-45 transition-transform">+</span></summary><p className="text-[#617267] leading-relaxed mt-4 max-w-2xl">{x.a}</p></details>)}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── PRINCIPIOS + A QUIÉN NO ES ── */}
-      <section className="py-28 px-6 bg-[#faf8f4] text-[#1a2e1e]">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12">
-            <div>
-              <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">{t("Manifiesto profesional")}</p>
-              <h2 style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold text-[#1a2e1e] mb-8">{t("Nuestros principios")}<br/>{t("de trabajo")}</h2>
-              <div className="space-y-4">
-                {[
-                  { p:t("No tratamos síntomas sin abordar la raíz"), d: t("El alivio sin comprensión es anestesia, no restauración.") },
-                  { p:t("No reemplazamos la verdad por bienestar emocional"), d: t("Sentirse bien no es necesariamente estar bien. La verdad puede incomodar antes de liberar.") },
-                  { p:t("No espiritualizamos lo que requiere análisis"), d: t("Orar sobre un conflicto psicológico sin elaborarlo no es fe, es evasión.") },
-                  { p:t("No reducimos el alma a lo psicológico"), d: t("La dimensión espiritual no es opcional ni metafórica. Es constitutiva del ser humano.") },
-                  { p:t("No trabajamos sin dirección terapéutica clara"), d: t("Cada sesión tiene propósito, estructura y orientación definida. No improvisamos.") },
-                ].map(p => (
-                  <div key={p.p} className="flex gap-4 items-start">
-                    <span className="text-[#4a7c59] mt-1 flex-shrink-0 font-bold">{t("→")}</span>
-                    <div>
-                      <p className="font-semibold text-[#1a2e1e] text-sm">{p.p}</p>
-                      <p className="text-[#8a9b8e] text-xs mt-0.5 leading-relaxed">{p.d}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">{t("Filtro honesto")}</p>
-              <h2 style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold text-[#1a2e1e] mb-3">{t("Esto NO es para ti si...")}</h2>
-              <p className="text-[#8a9b8e] text-sm mb-8">{t("La claridad genera confianza. Preferiríamos no tomar tu tiempo si este no es el espacio correcto.")}</p>
-              <div className="space-y-3">
-                {[
-                  { t: t("Buscas soluciones rápidas sin profundidad"), d: t("Los procesos reales requieren tiempo y disposición. No vendemos atajos.") },
-                  { t: t("Quieres validación sin confrontación"), d: t("Trabajamos con verdad. Eso implica señalar lo que necesita ser señalado.") },
-                  { t: t("Prefieres espiritualidad sin base sólida"), d: t("No ofrecemos sensaciones espirituales. Ofrecemos trabajo serio con fundamento.") },
-                  { t: t("Esperas que el terapeuta te arregle"), d: t("El proceso requiere tu participación activa. No somos reparadores, somos acompañantes.") },
-                ].map(n => (
-                  <div key={n.t} className="flex gap-4 p-4 rounded-xl border border-[#e8dfd0] bg-white">
-                    <span className="text-red-400 flex-shrink-0 font-bold mt-0.5">{t("✗")}</span>
-                    <div>
-                      <p className="font-semibold text-[#1a2e1e] text-sm">{n.t}</p>
-                      <p className="text-[#8a9b8e] text-xs mt-0.5 leading-relaxed">{n.d}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 p-4 bg-[#f0f7f2] rounded-xl border border-[#4a7c59]/20">
-                <p className="text-[#4a7c59] text-sm font-semibold mb-1">{t("✦ Esto SÍ es para ti si...")}</p>
-                <p className="text-[#5a6b5e] text-xs leading-relaxed">{t("Estás dispuesto a ir a las raíces. Prefieres verdad a comodidad. Buscas restauración real, no alivio temporal. Reconoces que el alma necesita más que técnicas.")}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+        <section className="bg-[#142b1e] text-white px-6 sm:px-8 py-24 md:py-32 text-center">
+          <p className="text-[#d9be80] uppercase tracking-[0.2em] text-xs font-bold mb-5">{t('El siguiente paso','Your next step')}</p>
+          <h2 className="text-4xl sm:text-6xl mb-8 max-w-3xl mx-auto" style={{fontFamily:'Georgia,serif'}}>{t('Toda conversación significativa comienza con una pregunta.','Every meaningful conversation begins with a question.')}</h2>
+          <Link href="/register" className="inline-block bg-[#e1c58a] text-[#142b1e] px-8 py-4 rounded-full font-semibold hover:bg-[#f0d8a4]">{t('Solicitar primera sesión','Request your first session')} ↗</Link>
+        </section>
+      </main>
 
-
-      {/* ── FAQ ── */}
-      <section id="faq" className="py-28 px-6 bg-[#faf8f4] text-[#1a2e1e]">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">{t("Preguntas reales")}</p>
-            <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl font-bold">{t("Lo que necesitas saber")}</h2>
-          </div>
-          <div className="space-y-3">
-            {[
-              { q:t("¿Necesito ser creyente o pertenecer a una iglesia?"), a:t("No. Trabajamos con personas de diversas trayectorias espirituales. Lo que sí requieren nuestros procesos es apertura a la dimensión espiritual del ser humano y a la búsqueda de verdad.") },
-              { q:t("¿En qué se diferencia esto de una terapia común?"), a:t("Una terapia convencional trabaja la psique. Nosotros trabajamos la psique y el alma en integración. No separamos la dimensión espiritual como \"extra opcional\", sino como constitutiva del ser humano.") },
-              { q:t("¿Es esto consejería pastoral o psicoterapia?"), a:t("Es ambas, integradas. Nuestros terapeutas tienen formación clínica acreditada y formación teológica seria. No improvisamos en ninguna de las dos dimensiones.") },
-              { q:t("¿Cómo funciona el pago?"), a:t("Los pagos se realizan de forma segura a través de Mercado Pago. La primera sesión de diagnóstico es gratuita. El acceso a cada sesión se confirma una vez procesado el pago.") },
-              { q:t("¿Puedo cancelar en cualquier momento?"), a:t("Sí. No hay contratos ni compromisos. Puedes reprogramar o cancelar con 24 horas de anticipación sin costo.") },
-              { q:t("¿Son realmente confidenciales las sesiones?"), a:t("Confidencialidad absoluta, garantizada. Todo lo compartido está protegido bajo estrictos estándares de privacidad clínica y nuestra política de datos.") },
-            ].map((f, i) => (
-              <details key={i} className="bg-white border border-[#e8dfd0] rounded-xl group">
-                <summary className="flex justify-between items-center p-5 cursor-pointer font-semibold text-[#1a2e1e] list-none text-sm">
-                  {f.q}
-                  <span className="text-[#4a7c59] text-xl group-open:rotate-45 transition-transform flex-shrink-0 ml-4">{t("+")}</span>
-                </summary>
-                <div className="px-5 pb-5 text-[#5a6b5e] text-sm leading-relaxed">{f.a}</div>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA FINAL ── */}
-      <section className="py-28 px-6 bg-[#0e1a12] text-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#1a3a20_0%,#0e1a12_70%)]" />
-        <div className="relative max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-3 mb-8">
-            <div className="h-px w-16 bg-[#c9a84c]/30" />
-            <span className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase">{t("El primer paso")}</span>
-            <div className="h-px w-16 bg-[#c9a84c]/30" />
-          </div>
-          <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl md:text-5xl font-bold text-white mb-6">
-            {t("La restauración")}<br/>{t("comienza con una")}<br/><span className="text-[#c9a84c]">{t("conversación honesta.")}</span>
-          </h2>
-          <p className="text-white/50 text-lg mb-10 leading-relaxed">
-            {t("Una sesión inicial gratuita. Sin compromiso. Solo un espacio para que puedas ser visto y escuchado con la profundidad que mereces.")}
-          </p>
-          <Link href="/register" className="bg-[#c9a84c] text-[#0e1a12] font-bold px-10 py-4 rounded-full hover:bg-[#d4b86a] transition-all inline-block text-base">
-            {t("Agendar sesión inicial gratuita →")}
-          </Link>
-          <p className="text-white/20 text-xs mt-6">{t("Primera sesión sin costo · Confidencialidad absoluta · Sin contratos")}</p>
-        </div>
-      </section>
-
-      {/* ── FOOTER ── */}
-      <footer className="bg-[#080f09] text-white/20 py-10 px-6">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 text-xs">
-          <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-full border border-[#c9a84c]/40 flex items-center justify-center">
-              <span className="text-[#c9a84c] text-[8px]">✦</span>
-            </div>
-            <span className="text-white/40 font-medium">{t("Clínica del Alma · Restauración Integral")}</span>
-          </div>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-white/60 transition-colors">{t("Privacidad")}</a>
-            <a href="#" className="hover:text-white/60 transition-colors">{t("Términos")}</a>
-            <Link href="/login" className="hover:text-white/60 transition-colors">{t("Portal paciente")}</Link>
-          </div>
-          <p>{t("© 2026 · Todos los derechos reservados")}</p>
+      <footer className="bg-[#0c1c13] text-white/60 px-6 sm:px-8 py-10">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between gap-5 items-start sm:items-center text-sm">
+          <p>✦ {t('Clínica Espiritual','Spiritual Clinic')} · © 2026</p>
+          <div className="flex flex-wrap gap-6"><Link href="/login" className="hover:text-white">{t('Portal de pacientes','Patient portal')}</Link><a href="#preguntas" className="hover:text-white">{t('Información y privacidad','Information & privacy')}</a></div>
         </div>
       </footer>
-
     </div>
   )
 }
