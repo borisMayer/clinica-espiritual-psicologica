@@ -2,7 +2,7 @@ import 'server-only'
 import { prisma } from '@/lib/prisma'
 import { encrypt, decrypt } from '@/lib/mi-universo'
 export const RESOURCE = 'PHASE3_SESSION_PREPARATION'
-export type Preparation = { focus: string; feeling: string; question: string; consent: boolean; createdAt: string }
+export type Preparation = { focus: string; feeling: string; question: string; consent: boolean; shareWithTherapist?: boolean; createdAt: string }
 export const RESOURCES = [
  { id:'grounding', title:'Orientación al presente', category:'Autorregulación', minutes:3, description:'Observa cinco cosas que ves, cuatro que sientes, tres que oyes, dos que hueles y una que saboreas. Si te incomoda, detente.' },
  { id:'breathing', title:'Respiración tranquila', category:'Autorregulación', minutes:3, description:'Respira a un ritmo cómodo, sin forzar ni retener el aire. Vuelve a tu respiración natural si aparece malestar.' },
