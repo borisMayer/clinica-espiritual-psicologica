@@ -13,7 +13,8 @@ export default async function PacienteLayout({ children }: { children: React.Rea
   if (!user?.isActive) redirect('/login')
   const t=translations[locale(user.language)]
   return (
-    <div className="min-h-screen bg-[#f5f3ef] flex flex-col md:flex-row">\n      <a href="#patient-main" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:p-3 focus:text-black">{t.skip}</a>
+    <div className="min-h-screen bg-[#f5f3ef] flex flex-col md:flex-row">
+      <a href="#patient-main" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:p-3 focus:text-black">{t.skip}</a>
 
       {/* ── SIDEBAR ── */}
       <aside className="w-full md:w-64 bg-[#1a2e1e] text-white flex flex-col md:fixed md:h-full z-40">
@@ -22,7 +23,7 @@ export default async function PacienteLayout({ children }: { children: React.Rea
             <div className="w-7 h-7 rounded-full bg-[#4a7c59] flex items-center justify-center text-xs">✦</div>
             <span style={{fontFamily:'Georgia,serif'}} className="font-bold text-sm">Clínica Espiritual</span>
           </div>
-          <p className="text-[#7ab893] text-xs mt-3">Portal Paciente</p>
+          <p className="text-[#7ab893] text-xs mt-3">{locale(user.language) === 'en' ? 'Patient portal' : 'Portal Paciente'}</p>
         </div>
 
         <nav className="flex-1 p-3 md:p-4 flex md:block gap-1 overflow-x-auto md:space-y-1">
@@ -48,10 +49,10 @@ export default async function PacienteLayout({ children }: { children: React.Rea
 
         <div className="hidden md:block p-4 border-t border-white/10 space-y-1">
           <Link href="/" className="flex items-center gap-3 px-3 py-2 rounded-lg text-[#5a7a64] hover:text-[#7ab893] transition-colors text-xs">
-            ← Volver al sitio
+            ← {locale(user.language) === 'en' ? 'Back to website' : 'Volver al sitio'}
           </Link>
           <Link href="/api/auth/signout" className="flex items-center gap-3 px-3 py-2 rounded-lg text-[#5a7a64] hover:text-red-400 transition-colors text-xs">
-            Cerrar sesión
+            {locale(user.language) === 'en' ? 'Sign out' : 'Cerrar sesión'}
           </Link>
         </div>
       </aside>
