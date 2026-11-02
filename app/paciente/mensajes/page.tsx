@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { usePortalLocale } from '@/lib/use-portal-locale'
 
 type Message = {
   id: string; content: string; sentAt: string; status: string
@@ -8,6 +9,8 @@ type Message = {
 type Terapeuta = { id: string; name: string }
 
 export default function MensajesPage() {
+ const lang=usePortalLocale()
+ const tr=(es:string,en:string)=>lang==='en'?en:es
   const [messages, setMessages] = useState<Message[]>([])
   const [terapeutas, setTerapeutas] = useState<Terapeuta[]>([])
   const [selectedTerapeuta, setSelectedTerapeuta] = useState('')
@@ -53,8 +56,8 @@ export default function MensajesPage() {
   return (
     <div className="flex flex-col h-[calc(100vh-120px)]">
       <div className="mb-6">
-        <h1 style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold text-[#1a2e1e]">Mensajes</h1>
-        <p className="text-[#8a9b8e] text-sm mt-1">Comunicación segura con tu terapeuta</p>
+        <h1 style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold text-[#1a2e1e]">{tr("Mensajes","Messages")}</h1>
+        <p className="text-[#8a9b8e] text-sm mt-1">{tr("Comunicación segura con tu terapeuta","Secure communication with your therapist")}</p>
       </div>
 
       {terapeutas.length === 0 ? (
@@ -98,7 +101,7 @@ export default function MensajesPage() {
             ) : filtered.length === 0 ? (
               <div className="text-center py-12">
                 <div className="text-3xl mb-3">💬</div>
-                <p className="text-[#8a9b8e] text-sm">No hay mensajes aún. Inicia la conversación.</p>
+                <p className="text-[#8a9b8e] text-sm">{tr("No hay mensajes aún. Inicia la conversación.","No messages yet. Start the conversation.")}</p>
               </div>
             ) : (
               filtered.map(m => {
