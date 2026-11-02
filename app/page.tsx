@@ -145,14 +145,14 @@ export default async function HomePage() {
                 title: t("Verdad Revelada"),
                 sub: t("Teología Reformada"),
                 desc: t("El alma fue creada con un orden. Trabajamos desde la Escritura como autoridad final, no como recurso adicional. Sin sincretismo, sin ambigüedad."),
-                tags: ['Calvino / Lutero', 'Hermenéutica', 'Sola Scriptura'],
+                tags: ['Calvino / Lutero', t('Hermenéutica'), 'Sola Scriptura'],
               },
               {
                 num: '03', color: 'border-[#5a7a9a]', accentBg: 'bg-[#5a7a9a]/10', accent: 'text-[#8ab0c8]',
                 title: t("Raíces Hebreas"),
                 sub: t("Pensamiento bíblico profundo"),
                 desc: t("El lenguaje original de la fe es hebreo. Volvemos a las raíces conceptuales de la espiritualidad bíblica para una comprensión más completa del ser humano."),
-                tags: ['Pensamiento hebreo', 'Shalom', 'Nephesh'],
+                tags: [t('Pensamiento hebreo'), 'Shalom', 'Nephesh'],
               },
             ].map(m => (
               <div key={m.num} className={`p-6 rounded-2xl border ${m.color} bg-white/3 text-left`}>
@@ -237,18 +237,18 @@ export default async function HomePage() {
           <div className="grid md:grid-cols-3 gap-5 mb-16">
             {[
               {
-                neg: 'Esto no es coaching motivacional',
-                pos: 'Es trabajo estructural del alma',
+                neg:t("Esto no es coaching motivacional"),
+                pos:t("Es trabajo estructural del alma"),
                 desc: t("No ofrecemos técnicas de positivismo ni afirmaciones sin base. El trabajo que hacemos toca capas que el coaching no está formado para abordar."),
               },
               {
-                neg: 'Esto no es terapia secular aislada',
-                pos: 'Integra la dimensión espiritual real',
+                neg:t("Esto no es terapia secular aislada"),
+                pos:t("Integra la dimensión espiritual real"),
                 desc: t("La psicología sin alma trata al ser humano incompleto. No separamos lo clínico de lo espiritual como si fueran departamentos distintos."),
               },
               {
-                neg: 'Esto no es espiritualidad superficial',
-                pos: 'Está anclada en verdad teológica sólida',
+                neg:t("Esto no es espiritualidad superficial"),
+                pos:t("Está anclada en verdad teológica sólida"),
                 desc: t("Sin misticismo ambiguo, sin sincretismo, sin sensaciones como criterio. La fe que integramos tiene nombre, texto y estructura."),
               },
             ].map(d => (
@@ -383,9 +383,9 @@ export default async function HomePage() {
             </div>
             <div className="grid md:grid-cols-3 gap-5">
               {[
-                { tag:'Crisis vocacional', title: t("Líder espiritual, 42 años"), situacion:'Pastor con 18 años de ministerio. Funciona externamente pero siente vacío interior creciente. Irritabilidad, pérdida de sentido, desconexión de la fe.', conflicto:'Identidad construida sobre el rol. Teología del rendimiento internalizada. Vergüenza encubierta.', intervencion:'Psicoanálisis de la estructura del yo. Logoterapia para reorientar el sentido. Trabajo teológico sobre gracia vs. performance.', resultado:'Reintegración de identidad disociada. Ministerio sostenido desde plenitud, no desde obligación.' },
-                { tag:'Vacío existencial', title: t("Profesional, 35 años"), situacion:'Éxito profesional visible. Ansiedad crónica, insomnio, sensación de que algo esencial falta. Tres terapias anteriores sin resolución.', conflicto:'Logros como sustitutos del sentido. Estructura de vida sin orientación trascendente. Trauma de apego no elaborado.', intervencion:'Exploración psicoanalítica del vacío. Frankl aplicado al proyecto existencial. Reconstrucción del marco de sentido.', resultado:'Transición profesional con propósito claro. Ansiedad remite al trabajar la raíz, no el síntoma.' },
-                { tag:'Restauración familiar', title: t("Pareja, 12 años juntos"), situacion:'Conflicto crónico sin resolución. Comunicación deteriorada. Historia familiar de ambos replicándose en el vínculo presente.', conflicto:'Heridas de origen activadas en el vínculo. Patrones de apego inseguro. Teología distorsionada sobre el matrimonio.', intervencion:'Trabajo sistémico psicoanalítico. Revisión del orden relacional bíblico. Intervención en patrones transgeneracionales.', resultado:'Restauración del vínculo desde comprensión profunda. No ajuste conductual sino transformación de la dinámica de base.' },
+                { tag:t("Crisis vocacional"), title: t("Líder espiritual, 42 años"), situacion:t("Pastor con 18 años de ministerio. Funciona externamente pero siente vacío interior creciente. Irritabilidad, pérdida de sentido, desconexión de la fe."), conflicto:t("Identidad construida sobre el rol. Teología del rendimiento internalizada. Vergüenza encubierta."), intervencion:t("Psicoanálisis de la estructura del yo. Logoterapia para reorientar el sentido. Trabajo teológico sobre gracia vs. performance."), resultado:t("Reintegración de identidad disociada. Ministerio sostenido desde plenitud, no desde obligación.") },
+                { tag:t("Vacío existencial"), title: t("Profesional, 35 años"), situacion:t("Éxito profesional visible. Ansiedad crónica, insomnio, sensación de que algo esencial falta. Tres terapias anteriores sin resolución."), conflicto:t("Logros como sustitutos del sentido. Estructura de vida sin orientación trascendente. Trauma de apego no elaborado."), intervencion:t("Exploración psicoanalítica del vacío. Frankl aplicado al proyecto existencial. Reconstrucción del marco de sentido."), resultado:t("Transición profesional con propósito claro. Ansiedad remite al trabajar la raíz, no el síntoma.") },
+                { tag:t("Restauración familiar"), title: t("Pareja, 12 años juntos"), situacion:t("Conflicto crónico sin resolución. Comunicación deteriorada. Historia familiar de ambos replicándose en el vínculo presente."), conflicto:t("Heridas de origen activadas en el vínculo. Patrones de apego inseguro. Teología distorsionada sobre el matrimonio."), intervencion:t("Trabajo sistémico psicoanalítico. Revisión del orden relacional bíblico. Intervención en patrones transgeneracionales."), resultado:t("Restauración del vínculo desde comprensión profunda. No ajuste conductual sino transformación de la dinámica de base.") },
               ].map(c => (
                 <div key={c.title} className="border border-white/10 rounded-2xl overflow-hidden">
                   <div className="bg-[#4a7c59]/20 px-5 py-3 border-b border-white/5">
