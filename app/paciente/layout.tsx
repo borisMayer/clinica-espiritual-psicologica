@@ -21,7 +21,7 @@ export default async function PacienteLayout({ children }: { children: React.Rea
         <div className="p-6 border-b border-white/10">
           <div className="flex items-center gap-2 mb-1">
             <div className="w-7 h-7 rounded-full bg-[#4a7c59] flex items-center justify-center text-xs">✦</div>
-            <span style={{fontFamily:'Georgia,serif'}} className="font-bold text-sm">Clínica Espiritual</span>
+            <span style={{fontFamily:'Georgia,serif'}} className="font-bold text-sm">{locale(user.language) === 'en' ? 'Spiritual Clinic' : 'Clínica Espiritual'}</span>
           </div>
           <p className="text-[#7ab893] text-xs mt-3">{locale(user.language) === 'en' ? 'Patient portal' : 'Portal Paciente'}</p>
         </div>
