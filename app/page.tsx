@@ -31,7 +31,7 @@ export default async function HomePage() {
             <PublicLanguageSwitch language={language} />
             <Link href="/login" className="text-sm text-white/60 hover:text-white transition-colors">{t("Acceder")}</Link>
             <Link href="/register" className="bg-[#c9a84c] text-[#0e1a12] text-sm font-bold px-5 py-2 rounded-full hover:bg-[#d4b86a] transition-colors">
-              Primera sesión →
+              {t("Primera sesión →")}
             </Link>
           </div>
         </div>
@@ -53,23 +53,23 @@ export default async function HomePage() {
 
           {/* Headline */}
           <h1 style={{fontFamily:'Georgia,serif'}} className="text-5xl md:text-7xl font-bold leading-[1.05] mb-8">
-            El alma no se repara<br/>
+            {t("El alma no se repara")}<br/>
             <span className="text-[#c9a84c]">{t("sin verdad.")}</span>
           </h1>
 
           <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto mb-4 leading-relaxed">
-            No tratamos síntomas. Restauramos el orden interior del alma con fundamento clínico y teológico.
+            {t("No tratamos síntomas. Restauramos el orden interior del alma con fundamento clínico y teológico.")}
           </p>
           <p className="text-white/40 text-sm max-w-xl mx-auto mb-12">
-            Para líderes, pastores, profesionales y familias que buscan algo más profundo que el alivio temporal.
+            {t("Para líderes, pastores, profesionales y familias que buscan algo más profundo que el alivio temporal.")}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <Link href="/register" className="bg-[#c9a84c] text-[#0e1a12] font-bold px-8 py-4 rounded-full hover:bg-[#d4b86a] transition-all text-base">
-              Agendar sesión inicial gratuita
+              {t("Agendar sesión inicial gratuita")}
             </Link>
             <a href="#metodo" className="border border-white/20 text-white/70 font-medium px-8 py-4 rounded-full hover:bg-white/5 hover:border-white/40 transition-colors text-base">
-              Conocer el método →
+              {t("Conocer el método →")}
             </a>
           </div>
 
@@ -91,13 +91,13 @@ export default async function HomePage() {
             <div>
               <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">{t("El diagnóstico que nadie hace")}</p>
               <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl md:text-5xl font-bold leading-tight mb-6">
-                Algo está roto.<br/>Y lo sabes.
+                {t("Algo está roto.")}<br/>{t("Y lo sabes.")}
               </h2>
               <p className="text-[#5a6b5e] text-lg leading-relaxed mb-6">
-                Has intentado la terapia convencional. Has leído los libros. Has orado. Y sin embargo, algo fundamental en tu interior sigue sin resolverse.
+                {t("Has intentado la terapia convencional. Has leído los libros. Has orado. Y sin embargo, algo fundamental en tu interior sigue sin resolverse.")}
               </p>
               <p className="text-[#5a6b5e] leading-relaxed">
-                El problema no es falta de voluntad. Es que la mayoría de los enfoques terapéuticos tratan el síntoma sin tocar el alma. Y el alma tiene sus propias leyes.
+                {t("El problema no es falta de voluntad. Es que la mayoría de los enfoques terapéuticos tratan el síntoma sin tocar el alma. Y el alma tiene sus propias leyes.")}
               </p>
             </div>
             <div className="space-y-4">
@@ -125,10 +125,10 @@ export default async function HomePage() {
         <div className="max-w-5xl mx-auto text-center">
           <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">{t("Nuestra diferencia")}</p>
           <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl md:text-5xl font-bold mb-6">
-            Restauración integral.<br/>No alivio temporal.
+            {t("Restauración integral.")}<br/>{t("No alivio temporal.")}
           </h2>
           <p className="text-white/50 max-w-2xl mx-auto mb-16 text-lg leading-relaxed">
-            Integramos tres disciplinas que raramente se encuentran juntas: rigor clínico, profundidad psicoanalítica y fundamento teológico reformado.
+            {t("Integramos tres disciplinas que raramente se encuentran juntas: rigor clínico, profundidad psicoanalítica y fundamento teológico reformado.")}
           </p>
 
           <div className="grid md:grid-cols-3 gap-6 mb-16">
@@ -199,16 +199,16 @@ export default async function HomePage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              { icon:'🔥', title: t("Crisis Vocacional del Alma"), old:'Burnout espiritual', desc: t("El agotamiento del líder no es falta de disciplina. Es una fractura entre llamado, identidad y alma que requiere restauración profunda."), who:'Pastores · Líderes · Coaches' },
-              { icon:'🏛️', title: t("Restauración del Orden Relacional"), old:'Terapia familiar', desc: t("Los vínculos rotos siguen un patrón. Trabajamos las raíces sistémicas y espirituales que perpetúan el conflicto generacional."), who:'Familias · Parejas · Relaciones' },
-              { icon:'⚓', title: t("Desintegración y Reconstrucción"), old:'Ansiedad y trauma', desc: t("El trauma no es solo un recuerdo. Es una realidad inscrita en el cuerpo y el alma. Abordamos su reconstrucción desde adentro."), who:'Trauma · Duelo · Ansiedad' },
-              { icon:'📜', title: t("Discernimiento y Verdad Revelada"), old:'Consejería bíblica', desc: t("Decisiones de vida, vocación, crisis de fe. Acompañamiento desde la Escritura como luz, no como código de conducta."), who:'Fe · Vocación · Propósito' },
-              { icon:'🧬', title: t("Vacío Existencial y Sentido"), old:'Logoterapia', desc: t("Inspirados en Viktor Frankl: cuando la vida pierde sentido, el sufrimiento se vuelve insoportable. Trabajamos para restaurar el para qué."), who:'Crisis existencial · Propósito · Identidad' },
-              { icon:'🌿', title: t("Transformación Personal Profunda"), old:'Crecimiento personal', desc: t("No crecimiento superficial. Un proceso estructurado de autoconocimiento, integración y transformación orientado a la plenitud real."), who:'Individual · Proceso · Profundidad' },
+              { icon:'🔥', title: t("Crisis Vocacional del Alma"), old:t("Burnout espiritual"), desc: t("El agotamiento del líder no es falta de disciplina. Es una fractura entre llamado, identidad y alma que requiere restauración profunda."), who:t("Pastores · Líderes · Coaches") },
+              { icon:'🏛️', title: t("Restauración del Orden Relacional"), old:t("Terapia familiar"), desc: t("Los vínculos rotos siguen un patrón. Trabajamos las raíces sistémicas y espirituales que perpetúan el conflicto generacional."), who:t("Familias · Parejas · Relaciones") },
+              { icon:'⚓', title: t("Desintegración y Reconstrucción"), old:t("Ansiedad y trauma"), desc: t("El trauma no es solo un recuerdo. Es una realidad inscrita en el cuerpo y el alma. Abordamos su reconstrucción desde adentro."), who:t("Trauma · Duelo · Ansiedad") },
+              { icon:'📜', title: t("Discernimiento y Verdad Revelada"), old:t("Consejería bíblica"), desc: t("Decisiones de vida, vocación, crisis de fe. Acompañamiento desde la Escritura como luz, no como código de conducta."), who:t("Fe · Vocación · Propósito") },
+              { icon:'🧬', title: t("Vacío Existencial y Sentido"), old:t("Logoterapia"), desc: t("Inspirados en Viktor Frankl: cuando la vida pierde sentido, el sufrimiento se vuelve insoportable. Trabajamos para restaurar el para qué."), who:t("Crisis existencial · Propósito · Identidad") },
+              { icon:'🌿', title: t("Transformación Personal Profunda"), old:t("Crecimiento personal"), desc: t("No crecimiento superficial. Un proceso estructurado de autoconocimiento, integración y transformación orientado a la plenitud real."), who:t("Individual · Proceso · Profundidad") },
             ].map(s => (
               <div key={s.title} className="bg-white rounded-2xl p-6 border border-[#e8dfd0] hover:border-[#4a7c59]/40 hover:shadow-lg transition-all group">
                 <div className="text-3xl mb-4">{s.icon}</div>
-                <p className="text-[#8a9b8e] text-xs uppercase tracking-wide mb-1">Antes llamado: {s.old}</p>
+                <p className="text-[#8a9b8e] text-xs uppercase tracking-wide mb-1">{t('Antes llamado:')} {s.old}</p>
                 <h3 style={{fontFamily:'Georgia,serif'}} className="text-xl font-bold text-[#1a2e1e] mb-3">{s.title}</h3>
                 <p className="text-[#5a6b5e] text-sm leading-relaxed mb-4">{s.desc}</p>
                 <p className="text-[#4a7c59] text-xs font-semibold">{s.who}</p>
@@ -226,10 +226,10 @@ export default async function HomePage() {
           <div className="text-center mb-16">
             <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">{t("Fundamento")}</p>
             <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl md:text-5xl font-bold mb-4">
-              La confianza no se construye<br/>con números, sino con verdad.
+              {t("La confianza no se construye")}<br/>{t("con números, sino con verdad.")}
             </h2>
             <p className="text-white/40 max-w-xl mx-auto text-lg leading-relaxed">
-              Ni terapia superficial, ni espiritualidad sin fundamento.<br/>Integración clínica y verdad teológica, sin concesiones.
+              {t("Ni terapia superficial, ni espiritualidad sin fundamento.")}<br/>{t("Integración clínica y verdad teológica, sin concesiones.")}
             </p>
           </div>
 
@@ -285,10 +285,10 @@ export default async function HomePage() {
             <div>
               <p className="text-[#c9a84c] text-xs font-semibold tracking-[0.2em] uppercase mb-4">{t("Declaración de trabajo")}</p>
               <blockquote style={{fontFamily:'Georgia,serif'}} className="text-2xl font-bold text-white leading-snug mb-6">
-                "No trabajamos para que te sientas mejor sin verdad. Trabajamos para que tu vida se ordene desde lo que es real."
+                {t("\"No trabajamos para que te sientas mejor sin verdad. Trabajamos para que tu vida se ordene desde lo que es real.\"")}
               </blockquote>
               <p className="text-white/40 text-sm leading-relaxed">
-                El alivio emocional sin comprensión profunda es anestesia. Puede silenciar el síntoma sin tocar su raíz. Nuestro trabajo apunta más abajo.
+                {t("El alivio emocional sin comprensión profunda es anestesia. Puede silenciar el síntoma sin tocar su raíz. Nuestro trabajo apunta más abajo.")}
               </p>
             </div>
             <div className="space-y-3">
@@ -323,9 +323,9 @@ export default async function HomePage() {
           </div>
           <div className="grid md:grid-cols-3 gap-6 items-start">
             {[
-              { name:'Sesión única', price:'USD 10', period:'por sesión', desc: t("Para comenzar o para consultas puntuales sin compromiso."), features:['60 min de sesión profunda','Video o chat seguro','Notas post-sesión','Acceso a tu dashboard'], cta:'Reservar sesión', featured:false },
-              { name:'Proceso Mensual', price:'USD 35', period:'4 sesiones / mes', desc: t("El más elegido. Proceso terapéutico real y sostenido."), features:['4 sesiones de 60 min','Video o chat seguro','Mensajes entre sesiones','Reportes de proceso','Prioridad en agenda'], cta:'Iniciar proceso', featured:true },
-              { name:'Proceso Intensivo', price:'USD 64', period:'8 sesiones / mes', desc: t("Para crisis agudas o procesos que requieren mayor profundidad."), features:['8 sesiones de 60 min','Video o chat seguro','Chat directo ilimitado','Reportes detallados','Terapeuta dedicado'], cta:'Consultar', featured:false },
+              { name:t("Sesión única"), price:'USD 10', period:t("por sesión"), desc: t("Para comenzar o para consultas puntuales sin compromiso."), features:[t("60 min de sesión profunda"),t("Video o chat seguro"),t("Notas post-sesión"),t("Acceso a tu dashboard")], cta:t("Reservar sesión"), featured:false },
+              { name:t("Proceso Mensual"), price:'USD 35', period:t("4 sesiones / mes"), desc: t("El más elegido. Proceso terapéutico real y sostenido."), features:[t("4 sesiones de 60 min"),t("Video o chat seguro"),t("Mensajes entre sesiones"),t("Reportes de proceso"),t("Prioridad en agenda")], cta:t("Iniciar proceso"), featured:true },
+              { name:t("Proceso Intensivo"), price:'USD 64', period:t("8 sesiones / mes"), desc: t("Para crisis agudas o procesos que requieren mayor profundidad."), features:[t("8 sesiones de 60 min"),t("Video o chat seguro"),t("Chat directo ilimitado"),t("Reportes detallados"),t("Terapeuta dedicado")], cta:t("Consultar"), featured:false },
             ].map(p => (
               <div key={p.name} className={`rounded-2xl p-7 flex flex-col border-2 ${p.featured ? 'border-[#4a7c59] bg-[#4a7c59] text-white shadow-xl shadow-[#4a7c59]/20' : 'border-[#e8dfd0] bg-white'}`}>
                 {p.featured && <div className="text-xs font-bold tracking-widest uppercase bg-white/20 w-fit px-3 py-1 rounded-full mb-4">{t("Más elegido")}</div>}
@@ -421,11 +421,11 @@ export default async function HomePage() {
               <h2 style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold text-[#1a2e1e] mb-8">{t("Nuestros principios")}<br/>{t("de trabajo")}</h2>
               <div className="space-y-4">
                 {[
-                  { p:'No tratamos síntomas sin abordar la raíz', d: t("El alivio sin comprensión es anestesia, no restauración.") },
-                  { p:'No reemplazamos la verdad por bienestar emocional', d: t("Sentirse bien no es necesariamente estar bien. La verdad puede incomodar antes de liberar.") },
-                  { p:'No espiritualizamos lo que requiere análisis', d: t("Orar sobre un conflicto psicológico sin elaborarlo no es fe, es evasión.") },
-                  { p:'No reducimos el alma a lo psicológico', d: t("La dimensión espiritual no es opcional ni metafórica. Es constitutiva del ser humano.") },
-                  { p:'No trabajamos sin dirección terapéutica clara', d: t("Cada sesión tiene propósito, estructura y orientación definida. No improvisamos.") },
+                  { p:t("No tratamos síntomas sin abordar la raíz"), d: t("El alivio sin comprensión es anestesia, no restauración.") },
+                  { p:t("No reemplazamos la verdad por bienestar emocional"), d: t("Sentirse bien no es necesariamente estar bien. La verdad puede incomodar antes de liberar.") },
+                  { p:t("No espiritualizamos lo que requiere análisis"), d: t("Orar sobre un conflicto psicológico sin elaborarlo no es fe, es evasión.") },
+                  { p:t("No reducimos el alma a lo psicológico"), d: t("La dimensión espiritual no es opcional ni metafórica. Es constitutiva del ser humano.") },
+                  { p:t("No trabajamos sin dirección terapéutica clara"), d: t("Cada sesión tiene propósito, estructura y orientación definida. No improvisamos.") },
                 ].map(p => (
                   <div key={p.p} className="flex gap-4 items-start">
                     <span className="text-[#4a7c59] mt-1 flex-shrink-0 font-bold">{t("→")}</span>
@@ -476,12 +476,12 @@ export default async function HomePage() {
           </div>
           <div className="space-y-3">
             {[
-              { q:'¿Necesito ser creyente o pertenecer a una iglesia?', a:'No. Trabajamos con personas de diversas trayectorias espirituales. Lo que sí requieren nuestros procesos es apertura a la dimensión espiritual del ser humano y a la búsqueda de verdad.' },
-              { q:'¿En qué se diferencia esto de una terapia común?', a:'Una terapia convencional trabaja la psique. Nosotros trabajamos la psique y el alma en integración. No separamos la dimensión espiritual como "extra opcional", sino como constitutiva del ser humano.' },
-              { q:'¿Es esto consejería pastoral o psicoterapia?', a:'Es ambas, integradas. Nuestros terapeutas tienen formación clínica acreditada y formación teológica seria. No improvisamos en ninguna de las dos dimensiones.' },
-              { q:'¿Cómo funciona el pago?', a:'Los pagos se realizan de forma segura a través de Mercado Pago. La primera sesión de diagnóstico es gratuita. El acceso a cada sesión se confirma una vez procesado el pago.' },
-              { q:'¿Puedo cancelar en cualquier momento?', a:'Sí. No hay contratos ni compromisos. Puedes reprogramar o cancelar con 24 horas de anticipación sin costo.' },
-              { q:'¿Son realmente confidenciales las sesiones?', a:'Confidencialidad absoluta, garantizada. Todo lo compartido está protegido bajo estrictos estándares de privacidad clínica y nuestra política de datos.' },
+              { q:t("¿Necesito ser creyente o pertenecer a una iglesia?"), a:t("No. Trabajamos con personas de diversas trayectorias espirituales. Lo que sí requieren nuestros procesos es apertura a la dimensión espiritual del ser humano y a la búsqueda de verdad.") },
+              { q:t("¿En qué se diferencia esto de una terapia común?"), a:t("Una terapia convencional trabaja la psique. Nosotros trabajamos la psique y el alma en integración. No separamos la dimensión espiritual como \"extra opcional\", sino como constitutiva del ser humano.") },
+              { q:t("¿Es esto consejería pastoral o psicoterapia?"), a:t("Es ambas, integradas. Nuestros terapeutas tienen formación clínica acreditada y formación teológica seria. No improvisamos en ninguna de las dos dimensiones.") },
+              { q:t("¿Cómo funciona el pago?"), a:t("Los pagos se realizan de forma segura a través de Mercado Pago. La primera sesión de diagnóstico es gratuita. El acceso a cada sesión se confirma una vez procesado el pago.") },
+              { q:t("¿Puedo cancelar en cualquier momento?"), a:t("Sí. No hay contratos ni compromisos. Puedes reprogramar o cancelar con 24 horas de anticipación sin costo.") },
+              { q:t("¿Son realmente confidenciales las sesiones?"), a:t("Confidencialidad absoluta, garantizada. Todo lo compartido está protegido bajo estrictos estándares de privacidad clínica y nuestra política de datos.") },
             ].map((f, i) => (
               <details key={i} className="bg-white border border-[#e8dfd0] rounded-xl group">
                 <summary className="flex justify-between items-center p-5 cursor-pointer font-semibold text-[#1a2e1e] list-none text-sm">
@@ -505,13 +505,13 @@ export default async function HomePage() {
             <div className="h-px w-16 bg-[#c9a84c]/30" />
           </div>
           <h2 style={{fontFamily:'Georgia,serif'}} className="text-4xl md:text-5xl font-bold text-white mb-6">
-            La restauración<br/>{t("comienza con una")}<br/><span className="text-[#c9a84c]">{t("conversación honesta.")}</span>
+            {t("La restauración")}<br/>{t("comienza con una")}<br/><span className="text-[#c9a84c]">{t("conversación honesta.")}</span>
           </h2>
           <p className="text-white/50 text-lg mb-10 leading-relaxed">
-            Una sesión inicial gratuita. Sin compromiso. Solo un espacio para que puedas ser visto y escuchado con la profundidad que mereces.
+            {t("Una sesión inicial gratuita. Sin compromiso. Solo un espacio para que puedas ser visto y escuchado con la profundidad que mereces.")}
           </p>
           <Link href="/register" className="bg-[#c9a84c] text-[#0e1a12] font-bold px-10 py-4 rounded-full hover:bg-[#d4b86a] transition-all inline-block text-base">
-            Agendar sesión inicial gratuita →
+            {t("Agendar sesión inicial gratuita →")}
           </Link>
           <p className="text-white/20 text-xs mt-6">{t("Primera sesión sin costo · Confidencialidad absoluta · Sin contratos")}</p>
         </div>
