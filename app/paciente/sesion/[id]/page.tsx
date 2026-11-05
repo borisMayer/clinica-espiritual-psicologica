@@ -9,6 +9,7 @@ export default function SesionPage() {
   const [estado, setEstado] = useState<'cargando' | 'preparando' | 'sala' | 'error' | 'no-config'>('cargando')
   const [roomUrl, setRoomUrl] = useState('')
   const [token, setToken] = useState('')
+  const [provider, setProvider] = useState('daily')
   const [userName, setUserName] = useState('')
   const [error, setError] = useState('')
   const [tiempo, setTiempo] = useState(0)
@@ -26,6 +27,7 @@ export default function SesionPage() {
       .then(r => r.json())
       .then(data => {
         if (data.error) { setError(data.error); setEstado('error'); return }
+        if (data.provider === 'google-meet') { setRoomUrl(data.roomUrl); setProvider('google-meet'); setUserName(data.userName || ''); setEstado('preparando'); return }
         if (data.noDailyConfig) { setEstado('no-config'); setUserName(data.userName); return }
         setRoomUrl(`${data.roomUrl}?t=${data.token}`)
         setToken(data.token)
@@ -36,6 +38,7 @@ export default function SesionPage() {
   }, [id])
 
   function unirse() {
+    if (provider === 'google-meet') { window.open(roomUrl, '_blank', 'noopener,noreferrer'); return }
     setEstado('sala')
     timerRef.current = setInterval(() => setTiempo(t => t + 1), 1000)
   }
@@ -162,7 +165,7 @@ export default function SesionPage() {
         <button onClick={unirse}
           className="w-full bg-[#C8A96B] text-[#071B14] font-bold py-4 rounded-full text-base hover:bg-[#d4b87a] transition-all shadow-lg shadow-[#C8A96B]/20 flex items-center justify-center gap-3">
           <span className="text-xl">🎥</span>
-          Ingresar a la sesión
+          {provider === 'google-meet' ? 'Abrir Google Meet' : 'Ingresar a la sesión'}
         </button>
         <button onClick={() => router.push('/paciente/agenda')}
           className="w-full text-[#F7F4EE]/30 text-sm py-3 hover:text-[#F7F4EE]/60 transition-colors mt-3">

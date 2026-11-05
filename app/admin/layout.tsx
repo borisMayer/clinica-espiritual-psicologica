@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import { usePortalLocale } from '@/lib/use-portal-locale'
+import { portalText } from '@/lib/portal-dictionary'
 
 const NAV_MAIN = [
   { href: '/admin/dashboard', label: 'Dashboard',
@@ -15,6 +17,11 @@ const NAV_MAIN = [
     icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z' },
 ]
 const NAV_GESTION = [
+  { href: '/admin/mensajes', label: 'Mensajes', icon: 'M21 11.5a8.4 8.4 0 01-.9 3.8A8.5 8.5 0 0112.5 20a8.4 8.4 0 01-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 01-.9-3.8A8.5 8.5 0 0112.5 3 8.5 8.5 0 0121 11.5z' },
+  { href: '/admin/mi-universo', label: 'Mi Universo', icon: 'M12 3a9 9 0 100 18 9 9 0 000-18zm0 4v5l3 2' },
+  { href: '/admin/preparaciones', label: 'Preparar sesiones', icon: 'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01' },
+  { href: '/admin/seguimiento', label: 'Seguimiento', icon: 'M3 17l6-6 4 4 8-8' },
+  { href: '/admin/instrumentos', label: 'Instrumentos', icon: 'M9 12h6m-6 4h6M7 3h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V5a2 2 0 012-2z' },
   { href: '/admin/pagos', label: 'Pagos',
     icon: 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z' },
   { href: '/admin/reportes', label: 'Reportes',
@@ -100,6 +107,14 @@ const S = {
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const language = usePortalLocale()
+  const t = portalText(language)
+  async function changeLanguage(value: string) {
+    if(value!=='es' && value!=='en') return
+    const r=await fetch('/api/idioma',{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({language:value})})
+    if(r.ok) window.location.reload()
+  }
+  const label = (value: string) => ({ 'Dashboard':language==='en'?'Dashboard':'Panel', 'Agenda':t.schedule,'Pacientes':t.patients,'Terapeutas':t.therapists,'Mensajes':t.messages,'Preparar sesiones':t.prepare,'Seguimiento':t.progress,'Instrumentos':t.tools,'Pagos':t.payments,'Reportes':t.reports } as Record<string,string>)[value] || value
   const { data: session } = useSession()
   const [collapsed, setCollapsed] = useState(false)
 
@@ -115,7 +130,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <aside style={S.sidebar(W)}>
 
         {/* Collapse btn */}
-        <button onClick={() => setCollapsed(c => !c)} aria-label="Colapsar menú" style={{
+        <button onClick={() => setCollapsed(c => !c)} aria-label={language==='en'?'Collapse menu':'Colapsar menú'} style={{
           position:'absolute', top:18, right:-10,
           width:20, height:20, background:'#071B14',
           border:'0.5px solid rgba(200,169,107,0.3)', borderRadius:'50%',
@@ -157,20 +172,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
         {/* Nav */}
         <nav style={{padding:'10px', flex:1, overflowY:'auto', overflowX:'hidden'}}>
-          {!collapsed && <div style={S.sectionLabel()}>Principal</div>}
+          {!collapsed && <div style={S.sectionLabel()} >{t.main}</div>}
           {NAV_MAIN.map(item => {
             const active = !!pathname?.startsWith(item.href)
             return (
               <Link key={item.href} href={item.href} style={S.navLink(active, collapsed)}>
                 {active && <div style={S.activePill()} />}
                 <span style={S.navIconColor(active)}><Icon d={item.icon} /></span>
-                {!collapsed && <span style={S.navLabel(active)}>{item.label}</span>}
+                {!collapsed && <span style={S.navLabel(active)}>{label(item.label)}</span>}
               </Link>
             )
           })}
 
           {!collapsed
-            ? <div style={{...S.sectionLabel(), paddingTop:16}}>Gestión</div>
+            ? <div style={{...S.sectionLabel(), paddingTop:16}} >{t.management}</div>
             : <div style={{height:10}} />
           }
           {NAV_GESTION.map(item => {
@@ -186,6 +201,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </nav>
 
         {/* Bottom */}
+        {!collapsed && <div style={{padding:'4px 16px',color:'#F7F4EE',fontSize:11}}><label htmlFor="admin-language">{t.language}</label><select id="admin-language" aria-label={t.language} value={language} onChange={e=>changeLanguage(e.target.value)} style={{display:'block',width:'100%',marginTop:4,background:'#173224',color:'#fff',border:'1px solid #486452',borderRadius:5,padding:5}}><option value="es">Español</option><option value="en">English</option></select></div>}
         <div style={{padding: collapsed ? '12px 8px' : '12px 14px', borderTop:'0.5px solid rgba(200,169,107,0.08)', flexShrink:0}}>
           <Link href="/" style={{...S.bottomLink(), justifyContent: collapsed ? 'center' : 'flex-start', gap: collapsed ? 0 : 8}}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" style={{flexShrink:0}}>

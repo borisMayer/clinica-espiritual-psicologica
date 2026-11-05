@@ -1,0 +1,10 @@
+import {prisma} from '@/lib/prisma'
+import {clinician,decrypt,json} from '@/lib/mi-universo'
+import {sameOrigin} from '@/lib/mi-universo-origin'
+import {summarizeExploration} from '@/lib/exploratory-analysis'
+import {exploratoryForms} from '@/lib/exploratory-forms'
+export const runtime='nodejs'
+type Ctx={params:Promise<{id:string}>}
+async function find(id:string){const user=await clinician();if(!user)return null;const item=await prisma.miUniversoEvaluation.findFirst({where:{id,code:{startsWith:'EXPLORATORY:'},...(user.role==='ADMIN'?{}:{clinicianId:user.id})}});return item?{user,item}:null}
+export async function GET(_:Request,{params}:Ctx){const result=await find((await params).id);if(!result)return json({error:'No autorizado'},403);const {item,user}=result;const data=decrypt(item.encryptedAnswers) as {formId:string,answers:Record<string,number>,language:string};const form=exploratoryForms.find(f=>f.id===data.formId);if(!form)return json({error:'Formulario inválido'},422);await prisma.auditLog.create({data:{userId:user.id,action:'EXPLORATORY_REPORT_VIEWED',resource:'MiUniversoEvaluation',resourceId:item.id}});return json({id:item.id,code:item.code.slice(12),status:item.status,createdAt:item.createdAt,completedAt:item.completedAt,formId:data.formId,formTitle:form.title,answers:form.items.map(i=>({id:i.id,text:i[data.language==='en'?'en':'es'],value:data.answers?.[i.id]??null})),summary:summarizeExploration(data.formId,data.answers||{}),language:data.language})}
+export async function DELETE(req:Request,{params}:Ctx){if(!sameOrigin(req))return json({error:'Origen no permitido'},403);const result=await find((await params).id);if(!result)return json({error:'No autorizado'},403);const updated=await prisma.miUniversoEvaluation.updateMany({where:{id:result.item.id,status:'ACTIVE'},data:{status:'REVOKED'}});if(updated.count)await prisma.auditLog.create({data:{userId:result.user.id,action:'EXPLORATORY_REVOKED',resource:'MiUniversoEvaluation',resourceId:result.item.id}});return json({ok:true})}

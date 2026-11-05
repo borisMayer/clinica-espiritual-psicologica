@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mi bitácora · Actividad de autoconocimiento (12 a 15 años)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EDF0F7;--surface:#FFFFFF;--surface-2:#F4F5FB;--ink:#1D2140;--muted:#545A7A;--line:#D5D9E8;
+  --accent:#5A48D6;--accent-ink:#FFFFFF;--accent-soft:#E9E6FB;--mint:#1E9E80;--mint-soft:#DDF4EC;
+  --sun:#FFC53D;--sun-soft:#FFF3D1;--care:#B3261E;--care-soft:#FCE8E6;
+  --q-r:#FFD9D3;--q-y:#FFF0BC;--q-b:#D6E3FF;--q-g:#D2F1E2;
+  color-scheme:light;box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#121429;--surface:#1B1E3A;--surface-2:#242849;--ink:#EEF0FF;--muted:#A9AECD;--line:#363C66;
+    --accent:#A193FF;--accent-ink:#15123A;--accent-soft:#2D2A5A;--mint:#52D7B5;--mint-soft:#173A3A;
+    --sun:#FFD166;--sun-soft:#3A3320;--care:#FF9C93;--care-soft:#3E1F25;
+    --q-r:#4D2A31;--q-y:#4A4022;--q-b:#24324F;--q-g:#1D3F35;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121429;--surface:#1B1E3A;--surface-2:#242849;--ink:#EEF0FF;--muted:#A9AECD;--line:#363C66;
+  --accent:#A193FF;--accent-ink:#15123A;--accent-soft:#2D2A5A;--mint:#52D7B5;--mint-soft:#173A3A;
+  --sun:#FFD166;--sun-soft:#3A3320;--care:#FF9C93;--care-soft:#3E1F25;
+  --q-r:#4D2A31;--q-y:#4A4022;--q-b:#24324F;--q-g:#1D3F35;
+  color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.6}
+.wrap{max-width:760px;margin:0 auto;padding:20px 18px 40px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:800;font-size:22px;letter-spacing:-.01em}
+.stage{font-size:14px;color:var(--muted)}
+.trail{display:flex;align-items:center;margin:22px 0 24px}
+.trail .dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:13px;font-weight:700;color:var(--muted);background:var(--surface);flex:none}
+.trail .seg{flex:1;height:3px;background:var(--line)}
+.trail .dot.done{background:var(--mint);border-color:var(--mint);color:var(--surface)}
+.trail .seg.done{background:var(--mint)}
+.trail .dot.now{border-color:var(--accent);color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:clamp(20px,5vw,40px)}
+.sticker{display:inline-block;background:var(--sun);color:#2A2200;font-weight:700;padding:5px 13px;border-radius:9px;transform:rotate(-2deg);font-size:15px}
+h1{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:800;font-size:clamp(28px,6vw,42px);line-height:1.1;margin:16px 0 14px;letter-spacing:-.015em}
+h1:focus{outline:none}
+h2{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:600;font-size:22px;line-height:1.25;margin:0 0 8px}
+h3{font-size:18px;margin:20px 0 6px}
+p{margin:0 0 12px}
+.lead{font-size:19px}
+.count{color:var(--muted);font-size:15px;font-weight:700}
+.helper{font-size:15px;color:var(--muted)}
+label,legend{display:block;font-weight:700;margin:18px 0 7px}
+fieldset{border:0;padding:0;margin:0}
+input[type=text],textarea,select{width:100%;background:var(--surface-2);border:1.5px solid var(--line);border-radius:12px;padding:13px 14px;color:var(--ink);font:inherit}
+textarea{resize:vertical;min-height:96px}
+input[type=text]:focus,textarea:focus,select:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.grid.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}
+.opt{font:inherit;text-align:left;background:var(--surface-2);border:2px solid var(--line);border-radius:14px;padding:13px 14px;color:var(--ink);cursor:pointer;min-height:54px;transition:border-color .15s,background .15s}
+.opt:hover{border-color:var(--accent)}
+.opt[aria-pressed="true"],.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.chip{font:inherit;font-size:16px;background:var(--surface-2);border:1.5px solid var(--line);border-radius:999px;padding:9px 15px;color:var(--ink);cursor:pointer}
+.chip:hover{border-color:var(--accent)}
+.card{background:var(--surface-2);border-radius:16px;padding:18px 20px;margin:16px 0}
+.card p:last-child{margin-bottom:0}
+.rules p{padding-left:16px;border-left:3px solid var(--mint)}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:400;margin:10px 0;cursor:pointer}
+.check input{width:20px;height:20px;margin-top:3px;accent-color:var(--accent);flex:none}
+.check.big{font-weight:700;margin-top:22px}
+.big{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:800;font-size:56px;line-height:1;text-align:center;color:var(--accent);margin:8px 0}
+input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer;height:32px}
+input[type=range].unset{opacity:.45}
+.scale{display:flex;justify-content:space-between;color:var(--muted);font-size:14px}
+details.deeper{margin:18px 0;border:1.5px dashed var(--line);border-radius:14px;padding:4px 16px 12px}
+details.deeper summary{cursor:pointer;font-weight:700;padding:10px 0}
+.note{background:var(--sun-soft);border-radius:14px;padding:14px 16px;margin:16px 0}
+.care{background:var(--care-soft);border-radius:14px;padding:14px 16px;margin:16px 0}
+.actions{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-top:28px}
+.actions .right{display:flex;gap:10px;flex-wrap:wrap;margin-left:auto}
+button.primary,button.secondary,button.ghost{font:inherit;font-weight:700;border-radius:12px;padding:12px 20px;cursor:pointer}
+button.primary{background:var(--accent);color:var(--accent-ink);border:2px solid var(--accent)}
+button.secondary{background:transparent;color:var(--ink);border:2px solid var(--line)}
+button.ghost{background:transparent;color:var(--muted);border:2px solid transparent;text-decoration:underline;text-underline-offset:3px}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.link{font:inherit;font-size:15px;background:none;border:0;color:var(--accent);cursor:pointer;text-decoration:underline;padding:4px}
+
+/* cuadro de energía y agrado */
+.meterwrap{display:grid;grid-template-columns:22px minmax(0,360px);gap:6px;justify-content:center;margin:18px 0 10px}
+.meter-y{writing-mode:vertical-rl;transform:rotate(180deg);display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.meter{width:100%;height:auto;display:block;border-radius:16px;touch-action:none;cursor:crosshair;border:1.5px solid var(--line);user-select:none}
+.meter .qr{fill:var(--q-r)}.meter .qy{fill:var(--q-y)}.meter .qb{fill:var(--q-b)}.meter .qg{fill:var(--q-g)}
+.meter .ax{stroke:var(--muted);stroke-opacity:.35;stroke-width:1.5;stroke-dasharray:4 5}
+.meter .ql{font-size:34px;opacity:.5}
+.meter .pinhalo{fill:var(--accent);opacity:.22}
+.meter .pindot{fill:var(--accent);stroke:var(--surface);stroke-width:3}
+.meter-x{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-top:4px}
+.qname{font-weight:700}
+
+/* constelación */
+.sky{width:100%;height:auto;background:#1C2050;border-radius:16px;display:block;margin:14px 0}
+.sky .off{fill:#6D73A8}
+.sky .on path{fill:#FFD166}
+.sky text{fill:#EEF0FF;font-size:11px}
+.sky .sl{stroke:#FFD166;stroke-opacity:.45;stroke-width:1.2}
+.sky .new{animation:pop .55s ease-out;transform-box:fill-box;transform-origin:center}
+@keyframes pop{0%{transform:scale(0)}70%{transform:scale(1.35)}100%{transform:scale(1)}}
+
+/* batería */
+.battery{position:relative;display:flex;gap:4px;padding:6px;border:3px solid var(--ink);border-radius:10px;max-width:330px;margin:8px auto 14px}
+.battery i{position:absolute;right:-11px;top:30%;width:7px;height:40%;background:var(--ink);border-radius:0 3px 3px 0}
+.battery span{flex:1;height:34px;border-radius:4px;background:var(--line);transition:background .2s}
+.battery span.on{background:var(--mint)}
+.battery.low span.on{background:#F08A5D}
+.battery.mid span.on{background:var(--sun)}
+
+/* chat */
+.phone{border:1.5px solid var(--line);border-radius:20px;overflow:hidden;margin:16px 0;background:var(--surface-2)}
+.phone-top{padding:10px 16px;font-weight:700;font-size:14px;border-bottom:1px solid var(--line);background:var(--surface)}
+.chat{padding:14px;display:flex;flex-direction:column;gap:8px;min-height:110px}
+.msg{max-width:82%;padding:9px 13px;border-radius:16px;font-size:16px;line-height:1.4}
+.msg b{display:block;font-size:12px;color:var(--accent)}
+.msg.them{background:var(--surface);border:1px solid var(--line);align-self:flex-start;border-bottom-left-radius:4px}
+.msg.me{background:var(--accent);color:var(--accent-ink);align-self:flex-end;border-bottom-right-radius:4px}
+.msg.sys{align-self:center;color:var(--muted);font-size:14px;font-style:italic;text-align:center;max-width:100%;padding:2px 8px}
+.msg.in{animation:rise .3s ease-out}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.typing{align-self:flex-start;display:flex;gap:4px;padding:11px 14px;background:var(--surface);border:1px solid var(--line);border-radius:16px}
+.typing span{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:blink 1s infinite}
+.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+.chatskip{display:block;margin:-8px 0 0 auto}
+.pending,.gone{display:none!important}
+
+/* mapa de personas */
+.netwrap{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:20px;align-items:start;margin:10px 0}
+.net{width:100%;height:auto;overflow:visible;touch-action:none;user-select:none}
+.net:focus{outline:none}
+.net .ring{fill:none;stroke:var(--line);stroke-width:1.5}
+.net .ring.r1{fill:var(--mint-soft)}
+.net .me{fill:var(--accent)}
+.net .metxt{fill:var(--accent-ink);font-weight:700;font-size:14px}
+.net .rl{fill:var(--muted);font-size:11px}
+.net .pg{cursor:grab}
+.net .pg.dragging{cursor:grabbing;opacity:.85}
+.net .pd{fill:var(--mint);stroke:var(--surface);stroke-width:2}
+.net .pt{fill:var(--ink);font-size:12px}
+.netform input,.netform select{margin-bottom:12px}
+.netform label{margin-top:0}
+.plist{list-style:none;padding:0;margin:14px 0 0}
+.plist li{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 8px;border-bottom:1px solid var(--line);padding:6px 0}
+.plist small{color:var(--muted)}
+
+/* cápsula */
+.capsule{transition:transform .9s ease-in,opacity .9s ease-in;transform-origin:center bottom}
+.capsule textarea{background:var(--sun-soft);border-color:var(--sun);min-height:140px;line-height:1.7}
+.capsule.sealing{transform:translateY(30px) scale(.5);opacity:0}
+.sealed{text-align:center;font-weight:700;font-size:19px;margin:18px 0}
+.sealed .env{font-size:58px;display:block;line-height:1.2}
+
+/* respiración */
+.breathbox{position:relative;width:210px;height:210px;margin:18px auto 10px}
+.breath{position:absolute;inset:38px;border-radius:50%;background:var(--mint-soft);border:3px solid var(--mint);transition:transform 4s ease-in-out}
+.breathtxt{position:absolute;inset:0;display:grid;place-items:center;font-weight:700;font-size:18px;text-align:center}
+.center{text-align:center}
+
+/* cierre */
+.bar{display:grid;grid-template-columns:minmax(0,1fr) 130px 28px;gap:10px;align-items:center;margin:8px 0;font-size:15px}
+.bt{height:10px;background:var(--line);border-radius:6px;overflow:hidden}
+.bt span{display:block;height:100%;background:var(--mint);border-radius:6px}
+.bv{text-align:right;font-weight:700}
+blockquote{margin:6px 0 0;padding:4px 0 4px 16px;border-left:3px solid var(--sun);font-size:18px}
+.badges{display:flex;flex-wrap:wrap;gap:12px}
+.badge{display:flex;flex-direction:column;align-items:center;width:76px;font-size:13px;text-align:center;gap:4px}
+.badge .bi{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:26px;background:var(--sun-soft);border:2px solid var(--sun);transform:rotate(-5deg)}
+.badge.off .bi{filter:grayscale(1);opacity:.35;border-color:var(--line);background:var(--surface-2)}
+.radarcard{display:grid;grid-template-columns:150px 1fr;gap:18px;align-items:center}
+.mini{width:150px;height:150px;border-radius:12px;display:block}
+.mini .qr{fill:var(--q-r)}.mini .qy{fill:var(--q-y)}.mini .qb{fill:var(--q-b)}.mini .qg{fill:var(--q-g)}
+.mini .pre{fill:var(--surface);stroke:var(--accent);stroke-width:3}
+.mini .post{fill:var(--accent)}
+.mini .arr{stroke:var(--accent);stroke-width:2;stroke-dasharray:4 3}
+.preview{background:var(--surface-2);border-radius:16px;padding:6px 20px 16px;margin-top:10px}
+.preview h3:first-child{margin-top:14px}
+.preview ul{margin:4px 0 10px;padding-left:20px}
+.footer{font-size:13px;color:var(--muted);margin:18px 2px;line-height:1.6}
+
+/* insignia emergente */
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,160%);background:var(--ink);color:var(--surface);padding:10px 20px 10px 12px;border-radius:999px;font-weight:700;display:flex;gap:10px;align-items:center;transition:transform .35s ease-out;z-index:20;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+#toast.show{transform:translate(-50%,0)}
+#toast .te{font-size:24px;width:38px;height:38px;border-radius:50%;background:var(--sun);display:grid;place-items:center}
+#print{display:none}
+
+@media (max-width:600px){
+  .grid.two{grid-template-columns:1fr}
+  .netwrap{grid-template-columns:1fr}
+  .bar{grid-template-columns:minmax(0,1fr) 80px 24px}
+  .radarcard{grid-template-columns:1fr;justify-items:center}
+  .wrap{padding:14px 12px 30px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{
+  body{background:#fff;color:#000}
+  .wrap,#toast{display:none!important}
+  #print{display:block;font-size:13px;padding:10px}
+  #print h1{font-size:24px;margin:0 0 6px}
+  #print .bt{background:#ddd}#print .bt span{background:#555}
+  #print *{color:#000!important}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="top">
+    <div class="brand">Mi bitácora</div><div class="language-switch" role="group" aria-label="Language"><button type="button" data-lang="es" aria-pressed="true" onclick="changeBitacoraLanguage(this.dataset.lang)">Español</button><button type="button" data-lang="en" aria-pressed="false" onclick="changeBitacoraLanguage(this.dataset.lang)">English</button></div>
+    <span class="stage" id="stage"></span>
+  </header>
+  <nav class="trail" id="trail" aria-label="Avance"></nav>
+  <section class="panel" id="app"></section>
+  <p class="footer">Actividad de exploración personal para hacer con un psicólogo o psicóloga. No es una prueba diagnóstica y no entrega puntajes. Tus respuestas se guardan cifradas en la plataforma clínica y el profesional responsable podrá consultar todas las respuestas registradas.</p>
+</main>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="print"></div>
+
+<style>.language-switch{display:flex;gap:5px;margin-left:auto}.language-switch button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px;font-size:13px;cursor:pointer}.language-switch button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink)}</style><script>(function(){const dictionary={"Mi bitácora":"My Journal","Antes de partir":"Before you begin","Una bitácora para conocerte un poco más":"A journal to get to know yourself","Comenzar":"Start","Volver":"Back","Continuar":"Continue","Quién ve lo que escribes":"Who can see what you write","Entendí y quiero seguir":"I understand and want to continue","¿Cómo está tu clima por dentro hoy?":"How do you feel inside today?","Misión 1: radar":"Mission 1: Mood radar","Misión 2: fortalezas":"Mission 2: Strengths","Misión 3: batería":"Mission 3: Confidence","Misión 4: historias":"Mission 4: Stories","Misión 5: tu gente":"Mission 5: Your people","Misión 6: brújula":"Mission 6: Compass","Misión 7: cápsula del tiempo":"Mission 7: Time capsule","Tu constelación":"Your constellation","¿Cuánta carga de confianza tienes?":"How confident do you feel?","¿Qué harías tú?":"What would you do?","¿Quiénes están de tu lado?":"Who is on your side?","Lo que te importa de verdad":"What really matters to you","Un mensaje para ti, dentro de un mes":"A message to yourself one month from now","Saltar misión":"Skip mission","Saltar esta historia":"Skip story","Prefiero no responder":"Prefer not to answer","Siguiente":"Next","Anterior":"Previous","Imprimir resumen":"Print summary","Ver informe completo":"View full report","Tu bitácora completa":"Your complete journal","Resumen completo":"Full summary","Empezar de nuevo":"Start over","¿Dónde lo notas en el cuerpo?":"Where do you feel it in your body?","¿Quieres contar qué pasó? (opcional)":"Would you like to share what happened? (optional)","¿Qué te gustaría que los demás entendieran mejor de ti?":"What would you like others to understand better about you?","¿Hubo algo de tus respuestas que te sorprendió?":"Did anything in your answers surprise you?","Gracias por darte este tiempo":"Thank you for taking this time","Tus insignias":"Your badges","Tu brújula":"Your compass","Tu cápsula del tiempo":"Your time capsule","Tu clima: antes y después":"Your mood: before and after","Baterías de confianza":"Confidence batteries","Mapa de personas":"People map","Fortalezas":"Strengths","Historias":"Stories","Brújula":"Compass","Cápsula del tiempo":"Time capsule","Informe":"Report","Lo que me sorprendió":"What surprised me","Agregar al mapa":"Add to map","Quitar":"Remove","Acercar":"Move closer","Alejar":"Move farther","Muy cerca":"Very close","Cerca":"Close","Un poco más lejos":"A little farther","Persona":"Person","Otra":"Other","Sin respuesta":"No answer","Poca energía":"Low energy","Mucha energía":"High energy","Alegría":"Joy","Enojo":"Anger","Tristeza":"Sadness","Calma":"Calm","Confusión":"Confusion","Vergüenza":"Embarrassment","Entusiasmo":"Enthusiasm","Frustración":"Frustration","Nervios":"Nervousness","Preocupación":"Worry","Estrés":"Stress","Cansancio":"Tiredness","Aburrimiento":"Boredom","Soledad":"Loneliness","Gratitud":"Gratitude","Creatividad":"Creativity","Curiosidad":"Curiosity","Valentía":"Courage","Paciencia":"Patience","Responsabilidad":"Responsibility","Amabilidad":"Kindness","Perseverancia":"Perseverance","Lealtad":"Loyalty","Imaginación":"Imagination","Cabeza":"Head","Garganta":"Throat","Pecho":"Chest","Estómago":"Stomach","Repetir":"Repeat","Listo":"Done","Empezar":"Start","Ver mi bitácora":"View my journal","Sellar cápsula":"Seal capsule","Mi mensaje":"My message","Tu apodo":"Your nickname"};let lang='es';try{lang=sessionStorage.getItem('bitacora_lang')||'es'}catch(e){}const original=new WeakMap();let running=false;function translate(value){const trim=value.trim();if(!trim)return value;let out=dictionary[trim]||trim;if(out===trim){for(const [es,en] of Object.entries(dictionary)){if(es.length>12&&out.includes(es))out=out.split(es).join(en)}}return value.replace(trim,out)}function apply(){if(running)return;running=true;try{document.documentElement.lang=lang;document.querySelectorAll('.language-switch button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===lang)));const root=document.querySelector('.wrap');if(!root)return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){if(n.parentElement&&n.parentElement.closest('textarea,script,style'))continue;const es=original.get(n)??n.nodeValue;original.set(n,es);const val=lang==='en'?translate(es):es;if(n.nodeValue!==val)n.nodeValue=val}root.querySelectorAll('[placeholder]').forEach(el=>{const es=el.dataset.originalPlaceholder||el.getAttribute('placeholder');el.dataset.originalPlaceholder=es;el.setAttribute('placeholder',lang==='en'?translate(es):es)})}finally{running=false}}window.changeBitacoraLanguage=function(v){lang=v==='en'?'en':'es';try{sessionStorage.setItem('bitacora_lang',lang)}catch(e){}apply()};document.addEventListener('DOMContentLoaded',()=>{apply();new MutationObserver(()=>{if(!running)queueMicrotask(apply)}).observe(document.querySelector('.wrap'),{childList:true,characterData:true,subtree:true})})})();</script>
+<script>
+const KEY='bitacora_v14';
+let clinicalReady=false;
+window.addEventListener('message',event=>{if(event.origin!==location.origin||event.source!==window.parent)return;const m=event.data;if(m?.type==='MI_UNIVERSO_INIT'){clinicalReady=true;if(m.answers&&typeof m.answers==='object'&&Array.isArray(m.answers.scenes)){S=m.answers;render()}else{S=fresh();render()}window.parent.postMessage({type:'MI_UNIVERSO_READY'},location.origin)}});
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const reduceMotion=()=>window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* contenidos */
+const QUAD={
+  y:{name:'Con energía y a gusto',emos:['Alegría','Entusiasmo','Orgullo','Emoción','Ganas de hacer cosas']},
+  r:{name:'Con energía, pero a disgusto',emos:['Enojo','Frustración','Nervios','Preocupación','Estrés']},
+  b:{name:'Con poca energía y a disgusto',emos:['Tristeza','Cansancio','Aburrimiento','Desánimo','Soledad']},
+  g:{name:'Con poca energía, pero a gusto',emos:['Calma','Tranquilidad','Alivio','Comodidad','Gratitud']}};
+const EXTRA=['Confusión','Vergüenza','No sé bien'];
+const BODY=['Cabeza','Garganta','Pecho','Estómago','Hombros o espalda','Manos o piernas','No lo noto en el cuerpo'];
+const STRENGTHS=['Creatividad','Humor','Curiosidad','Valentía','Paciencia','Responsabilidad','Amabilidad','Perseverancia','Saber escuchar','Lealtad','Imaginación','Talento práctico (deporte, música, arte…)','Otra'];
+const STAR_POS=[[40,42],[112,26],[184,52],[256,30],[302,78],[62,112],[142,96],[218,124],[290,150],[32,176],[108,170],[180,186],[254,196]];
+const VALUES=['Familia','Amistad','Aprender','Ayudar a otros','Crear cosas','Justicia','Fe o espiritualidad','Naturaleza y animales','Deporte o movimiento','Libertad','Tranquilidad','Otra'];
+const CONF=['Participar en clases','Conocer a alguien nuevo','Intentar algo que me cuesta','Decir lo que pienso aunque otros piensen distinto','Pedir ayuda cuando la necesito','Reconocer algo bueno de mí','Mostrarme como soy en redes sociales'];
+const SCENES=[
+  {t:'Un error frente al curso',ctx:'Clase de Historia',chat:[
+    {who:'Profe',text:'¿Alguien sabe en qué año llegó Colón a América?'},
+    {me:1,text:'¿En 1942?'},
+    {sys:1,text:'Se escuchan risas en la sala.'},
+    {who:'Alguien del curso',text:'jajaja 1942 😂'}],
+   c:['Me quedo en silencio el resto de la clase','Me río también, para que no se note','Pienso que a cualquiera le puede pasar','Me da rabia con quienes se rieron']},
+  {t:'Las historias del fin de semana',ctx:'Instagram · domingo, 19:40',chat:[
+    {sys:1,text:'Nueva historia de @cami.r'},
+    {who:'@cami.r',text:'📸 Seis personas del curso en el mall, riéndose'},
+    {who:'@benja_09',text:'«el mejor domingo 🔥»'},
+    {sys:1,text:'A ti nadie te avisó.'}],
+   c:['Pienso que no les caigo bien','Le pregunto a alguien del grupo qué pasó','Dejo el celular y hago otra cosa','Me quedo revisando las fotos un buen rato']},
+  {t:'En visto',ctx:'Grupo «2°B oficial» · 31 participantes',chat:[
+    {me:1,text:'oigan alguien tiene la guía de mate? la necesito pa mañana'},
+    {sys:1,text:'Leído por 23'},
+    {sys:1,text:'3 horas después…'},
+    {sys:1,text:'Nadie ha respondido.'}],
+   c:['Borro el mensaje','Pienso que dije algo mal','Lo dejo pasar: a veces la gente no contesta','Le escribo a alguien por privado']},
+  {t:'Algo que no sale',ctx:'Tu pieza, en la tarde',chat:[
+    {sys:1,text:'Llevas una hora tratando de aprender una canción en la guitarra.'},
+    {who:'Video tutorial',text:'«Es súper fácil, la van a sacar en cinco minutos»'},
+    {sys:1,text:'El cambio de acorde sigue sin salirte.'}],
+   c:['Lo dejo por ahora','Busco otra forma o pido ayuda','Me comparo con alguien a quien le sale fácil','Insisto hasta que me salga']},
+  {t:'Una discusión en casa',ctx:'Casa · 20:30',chat:[
+    {sys:1,text:'Estás en mitad de una partida con tus amigos.'},
+    {who:'Un adulto de tu casa',text:'¡Ven a ayudarme a poner la mesa, ahora!'},
+    {me:1,text:'Espera, estoy terminando'},
+    {who:'Un adulto de tu casa',text:'¡Siempre lo mismo contigo!'}],
+   c:['Me encierro en mi pieza','Digo algo de lo que después me arrepiento','Hago lo que me piden, pero con rabia','Más tarde busco hablar con calma']}
+];
+const RINGS=['Muy cerca','Cerca','Un poco más lejos'];
+const LISTS={emos:[...QUAD.y.emos,...QUAD.r.emos,...QUAD.b.emos,...QUAD.g.emos,...EXTRA],body:BODY,strengths:STRENGTHS,values:VALUES};
+const STEPS=['inicio','acuerdo','emociones','fortalezas','confianza','historias','red','importa','mensaje','pausa','cierre','compartir'];
+const MISSION={emociones:1,fortalezas:2,confianza:3,historias:4,red:5,importa:6,mensaje:7};
+const BADGES={emociones:['📡','Radar'],fortalezas:['✨','Constelación'],confianza:['🔋','Batería'],historias:['💬','Historias'],red:['🫂','Mi gente'],importa:['🧭','Brújula'],mensaje:['✉️','Cápsula']};
+const RISK=/(suicid|matarme|me quiero morir|quiero morirme|no quiero vivir|no quiero seguir viviendo|desaparecer para siempre|cortarme|me corto|hacerme da[ñn]o|me hago da[ñn]o|autolesi|me pegan|me golpean|me tocan|abus[oa])/i;
+
+/* estado */
+function shuffle(n){const a=[...Array(n).keys()];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function fresh(){return{step:0,alias:'',assent:false,
+  moodPre:{pt:null,emos:[],body:[],why:''},moodPost:{pt:null,emos:[]},
+  strengths:[],strengthOther:'',strengthExample:'',
+  conf:CONF.map(()=>null),confIdx:0,
+  scenes:SCENES.map(s=>({order:shuffle(s.c.length),choice:null,other:'',thought:'',feeling:'',skipped:false,seen:false})),sceneIdx:0,
+  network:[],netNoteShown:false,wish:'',
+  values:[],valueOther:'',valueWhy:'',message:'',
+  breathDone:false,surprise:'',skipped:{},badges:[],ui:{},
+  share:{emociones:true,fortalezas:true,confianza:true,historias:true,red:true,importa:true,mensaje:true,cierre:true}}}
+function load(){return null}
+function save(){if(clinicalReady)window.parent.postMessage({type:'MI_UNIVERSO_SAVE',state:S,complete:S.step>=11},location.origin)}
+let S=load()||fresh();
+window.addEventListener('beforeunload',e=>{if(S.step>0&&STEPS[S.step]!=='compartir'){e.preventDefault();e.returnValue=''}});
+
+function getPath(p){return p.split('.').reduce((o,k)=>o==null?o:o[k],S)}
+function setPath(p,v){const k=p.split('.');let o=S;for(let i=0;i<k.length-1;i++)o=o[k[i]];o[k[k.length-1]]=v}
+function realList(arr,other){return arr.map(v=>v==='Otra'?(other.trim()||'Otra'):v)}
+const clamp=(v,a=-1,b=1)=>Math.max(a,Math.min(b,v));
+const quadOf=pt=>pt.y>=0?(pt.x>=0?'y':'r'):(pt.x>=0?'g':'b');
+const sc5=v=>Math.round(v*5);
+
+/* piezas de interfaz */
+function head(st,title){return `<span class="sticker">${st}</span><h1 id="h" tabindex="-1">${title}</h1>`}
+function actions(left,right){return `<div class="actions"><div>${left||''}</div><div class="right">${right||''}</div></div>`}
+function b(label,act,cls='primary',extra=''){return `<button type="button" class="${cls}" data-act="${act}" ${extra}>${label}</button>`}
+function fid(p){return 'f_'+p.replace(/\W/g,'_')}
+function ta(path,label,ph=''){return `<label for="${fid(path)}">${label}</label><textarea id="${fid(path)}" data-bind="${path}" placeholder="${esc(ph)}">${esc(getPath(path))}</textarea>`}
+function inp(path,label,ph='',max=60){return `<label for="${fid(path)}">${label}</label><input type="text" id="${fid(path)}" data-bind="${path}" maxlength="${max}" placeholder="${esc(ph)}" value="${esc(getPath(path))}">`}
+function picks(list,path,max,subset){
+  const L=LISTS[list],arr=getPath(path),show=subset||L,full=arr.length>=max;
+  const words={3:'tres',4:'cuatro'};
+  return `<div class="chips">${show.map(v=>{const i=L.indexOf(v);
+    return `<button type="button" class="chip" aria-pressed="${arr.includes(v)}" data-act="toggle" data-list="${list}" data-path="${path}" data-i="${i}" data-max="${max}" data-fid="${path}-${i}">${esc(v)}</button>`}).join('')}</div>`+
+    (full&&max<L.length?`<p class="helper" role="status">Ya elegiste ${words[max]||max}. Para cambiar una, desmarca otra primero.</p>`:'')}
+
+function describePt(pt){if(!pt)return 'sin marcar';
+  const e=Math.abs(pt.y)>.6?(pt.y>0?'mucha energía':'muy poca energía'):(pt.y>=0?'algo de energía':'poca energía');
+  const a=Math.abs(pt.x)>.6?(pt.x>0?'muy a gusto':'muy a disgusto'):(pt.x>=0?'más bien a gusto':'más bien a disgusto');
+  return `${e}, ${a}`}
+
+function meter(path){const pt=getPath(path).pt;const px=pt?(pt.x+1)*150:150,py=pt?(1-pt.y)*150:150;
+  return `<div class="meterwrap"><div class="meter-y" aria-hidden="true"><span>Poca energía</span><span>Mucha energía</span></div>
+  <div><svg class="meter" viewBox="0 0 300 300" data-meter="${path}" data-fid="meter-${path}" tabindex="0" role="slider"
+   aria-label="Cuadro de cómo te sientes. Usa las flechas para mover el punto." aria-valuetext="${describePt(pt)}">
+   <rect class="qr" x="0" y="0" width="150" height="150"/><rect class="qy" x="150" y="0" width="150" height="150"/>
+   <rect class="qb" x="0" y="150" width="150" height="150"/><rect class="qg" x="150" y="150" width="150" height="150"/>
+   <line class="ax" x1="150" y1="0" x2="150" y2="300"/><line class="ax" x1="0" y1="150" x2="300" y2="150"/>
+   <g aria-hidden="true"><text class="ql" x="75" y="87" text-anchor="middle">😤</text><text class="ql" x="225" y="87" text-anchor="middle">😄</text>
+   <text class="ql" x="75" y="237" text-anchor="middle">😔</text><text class="ql" x="225" y="237" text-anchor="middle">😌</text></g>
+   <g class="pin" transform="translate(${px},${py})" ${pt?'':'style="display:none"'}><circle class="pinhalo" r="18"/><circle class="pindot" r="9"/></g>
+  </svg><div class="meter-x" aria-hidden="true"><span>A disgusto</span><span>A gusto</span></div></div></div>`}
+
+function emoNames(path){const m=getPath(path);
+  if(!m.pt)return `<p class="helper">Toca o arrastra en el cuadro (también sirven las flechas del teclado). Después aparecerán palabras para ponerle nombre a lo que sientes.</p>`;
+  const q=quadOf(m.pt),all=S.ui['all_'+path];
+  const show=all?LISTS.emos:[...new Set([...QUAD[q].emos,...m.emos,...EXTRA])];
+  return `<p><span class="qname">${QUAD[q].name}.</span> ¿Qué palabras le quedan mejor? Elige hasta tres.</p>
+  ${picks('emos',path+'.emos',3,show)}
+  <button type="button" class="link" data-act="allEmos" data-path="${path}">${all?'Ver menos palabras':'Ver todas las emociones'}</button>`}
+
+function starPath(x,y,r){let d='';for(let k=0;k<10;k++){const a=-Math.PI/2+k*Math.PI/5,rr=k%2?r*.45:r;d+=(k?'L':'M')+(x+Math.cos(a)*rr).toFixed(1)+' '+(y+Math.sin(a)*rr).toFixed(1)}return d+'Z'}
+function shortStrength(v){if(v==='Otra')return (S.strengthOther.trim()||'Otra').slice(0,16);return v.startsWith('Talento')?'Talento práctico':v}
+function constellation(){const sel=S.strengths;
+  let g=`<svg class="sky" viewBox="0 0 340 222" role="img" aria-label="Tu constelación: ${sel.length?esc(realList(sel,S.strengthOther).join(', ')):'todavía sin estrellas'}">`;
+  const pts=sel.map(v=>STAR_POS[STRENGTHS.indexOf(v)]);
+  for(let k=1;k<pts.length;k++)g+=`<line class="sl" x1="${pts[k-1][0]}" y1="${pts[k-1][1]}" x2="${pts[k][0]}" y2="${pts[k][1]}"/>`;
+  STRENGTHS.forEach((v,i)=>{const [x,y]=STAR_POS[i];
+    g+=sel.includes(v)?`<g class="on ${S.ui.newStar===v?'new':''}"><path d="${starPath(x,y,10)}"/><text x="${x}" y="${y+23}" text-anchor="middle">${esc(shortStrength(v))}</text></g>`:`<circle class="off" cx="${x}" cy="${y}" r="2.5"/>`});
+  return g+'</svg>'}
+
+function battery(path){const v=getPath(path),n=typeof v==='number'?v:0;
+  return `<div class="battery ${n<=3?'low':n<=6?'mid':''}" data-battery="${fid(path)}" aria-hidden="true">${Array.from({length:10},(_,k)=>`<span class="${k<n?'on':''}"></span>`).join('')}<i></i></div>`}
+
+function netSVG(){const cx=170,cy=170,R=[26,62,112,162],mid=[0,44,87,137];
+  let g=`<svg class="net" id="netsvg" viewBox="-60 -6 460 352" tabindex="-1" data-fid="net" role="img" aria-label="Mapa de personas: ${S.network.length?S.network.length+' en total':'todavía vacío'}">`;
+  for(let r=3;r>=1;r--)g+=`<circle class="ring r${r}" cx="${cx}" cy="${cy}" r="${R[r]}"/>`;
+  [1,2,3].forEach(r=>{g+=`<text class="rl" x="${cx}" y="${cy-R[r]+14}" text-anchor="middle">${RINGS[r-1]}</text>`});
+  g+=`<circle class="me" cx="${cx}" cy="${cy}" r="${R[0]}"/><text class="metxt" x="${cx}" y="${cy+5}" text-anchor="middle">Tú</text>`;
+  S.network.forEach((p,i)=>{const cs=Math.cos(p.ang),sn=Math.sin(p.ang),x=cx+cs*mid[p.ring],y=cy+sn*mid[p.ring];
+    const lab=p.role.length>14?p.role.slice(0,13)+'…':p.role;
+    const an=cs>.25?'start':cs<-.25?'end':'middle';
+    const lx=x+(an==='start'?12:an==='end'?-12:0),ly=y+(an==='middle'?(sn>0?24:-14):4);
+    g+=`<g class="pg" data-person="${i}" data-x="${x.toFixed(1)}" data-y="${y.toFixed(1)}"><circle class="pd" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="10"/><text class="pt" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="${an}">${esc(lab)}</text></g>`});
+  return g+'</svg>'}
+
+function chatHTML(i,animate){const s=SCENES[i];
+  return `<div class="phone"><div class="phone-top">${esc(s.ctx)}</div><div class="chat" id="chat">${s.chat.map(m=>
+    `<div class="msg ${m.me?'me':m.sys?'sys':'them'} ${animate?'pending':''}">${m.who?`<b>${esc(m.who)}</b>`:''}${esc(m.text)}</div>`).join('')}
+    <div class="typing gone" id="typing" aria-hidden="true"><span></span><span></span><span></span></div></div></div>
+    ${animate?`<button type="button" class="link chatskip" data-act="chatAll">Mostrar todo</button>`:''}`}
+
+function confBars(){return CONF.map((c,i)=>{const v=S.conf[i],n=typeof v==='number';
+  return `<div class="bar"><span>${c}</span><span class="bt"><span style="width:${n?v*10:0}%"></span></span><span class="bv">${n?v:'–'}</span></div>`}).join('')}
+
+function miniMeter(){const a=S.moodPre.pt,z=S.moodPost.pt;if(!a&&!z)return '';
+  const P=p=>[((p.x+1)*75).toFixed(1),((1-p.y)*75).toFixed(1)];
+  let g=`<svg class="mini" viewBox="0 0 150 150" aria-hidden="true"><rect class="qr" width="75" height="75"/><rect class="qy" x="75" width="75" height="75"/><rect class="qb" y="75" width="75" height="75"/><rect class="qg" x="75" y="75" width="75" height="75"/>`;
+  if(a&&z){const [x1,y1]=P(a),[x2,y2]=P(z);g+=`<line class="arr" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`}
+  if(a){const [x,y]=P(a);g+=`<circle class="pre" cx="${x}" cy="${y}" r="7"/>`}
+  if(z){const [x,y]=P(z);g+=`<circle class="post" cx="${x}" cy="${y}" r="7"/>`}
+  return g+'</svg>'}
+
+function badgesHTML(){return `<div class="badges">${Object.entries(BADGES).map(([k,[e,n]])=>`<div class="badge ${S.badges.includes(k)?'':'off'}"><span class="bi" aria-hidden="true">${e}</span>${n}</div>`).join('')}</div>`}
+
+/* vistas */
+const V={
+inicio(){return head('Antes de partir','Una bitácora para conocerte un poco más')+
+`<p class="lead">Son siete misiones cortas sobre lo que sientes, lo que se te da bien, lo que te importa y cómo reaccionas en algunas situaciones. Toma más o menos 15 minutos.</p>
+<p>No hay respuestas correctas ni notas. Puedes saltar cualquier pregunta o volver atrás cuando quieras. Al terminar cada misión ganas una insignia, aunque la hayas saltado.</p>
+${inp('alias','¿Cómo quieres que te llame la bitácora? (opcional)','Tu apodo',30)}`+actions('',b('Comenzar','next'))},
+
+acuerdo(){return head('Lo que tienes que saber','Quién ve lo que escribes')+
+`<div class="rules">
+<p>Tus respuestas se guardan cifradas en la plataforma clínica para que puedas retomar esta actividad. El profesional responsable podrá consultar el informe con todas las respuestas registradas.</p>
+<p>Tu psicólogo o psicóloga recibirá el informe completo de las respuestas registradas, incluso si omites alguna pregunta. La plataforma conserva las respuestas para reanudar la actividad.</p>
+<p>Lo que conversan en sesión es confidencial. Hay una excepción: si cuentas algo que muestra que tu vida o la de otra persona corre peligro, o que alguien te está haciendo daño, tendrá que avisarle a un adulto que pueda protegerte. Si eso pasa, primero te lo dirá a ti.</p>
+<p>Si en algún momento algo te incomoda o te sientes mal, puedes parar y decírselo a tu psicólogo o psicóloga.</p>
+</div>
+<label class="check big"><input type="checkbox" id="assent" ${S.assent?'checked':''}> Entendí y quiero seguir</label>`+
+actions(b('Volver','back','secondary'),b('Continuar','next','primary',S.assent?'':'disabled'))},
+
+emociones(){const m=S.moodPre;return head('Misión 1: radar','¿Cómo está tu clima por dentro hoy?')+
+`<p>Marca en el cuadro dónde estás ahora. Hacia arriba, más energía; hacia la derecha, más a gusto.</p>
+${meter('moodPre')}${emoNames('moodPre')}
+${m.pt?`<fieldset><legend>¿Dónde lo notas en el cuerpo?</legend>${picks('body','moodPre.body',BODY.length)}</fieldset>`:''}
+${ta('moodPre.why','¿Quieres contar qué pasó? (opcional)','Puedes escribir lo que quieras, o nada.')}
+<div id="care"></div>`+actions(b('Volver','back','secondary'),b('Saltar misión','skip','ghost')+b('Continuar','next'))},
+
+fortalezas(){return head('Misión 2: fortalezas','Tu constelación')+
+`<p>Cada cualidad que elijas se enciende como una estrella. Elige hasta cuatro que sientas tuyas. Si te cuesta, piensa qué diría de ti un buen amigo o una buena amiga.</p>
+${constellation()}${picks('strengths','strengths',4)}
+${S.strengths.includes('Otra')?inp('strengthOther','¿Cuál es esa otra cualidad?','Escríbela aquí',40):''}
+${ta('strengthExample','¿Te acuerdas de una vez en que usaste alguna?','Algo chico también cuenta.')}
+<div id="care"></div>`+actions(b('Volver','back','secondary'),b('Saltar misión','skip','ghost')+b('Continuar','next'))},
+
+confianza(){const i=S.confIdx,path='conf.'+i,v=S.conf[i],set=typeof v==='number',n=fid(path);
+return head('Misión 3: batería','¿Cuánta carga de confianza tienes?')+
+`<p class="count">Situación ${i+1} de ${CONF.length}</p>
+<div class="card"><h2>${CONF[i]}</h2></div>
+<div class="big" id="${n}" aria-hidden="true">${set?v:'–'}</div>${battery(path)}
+<label for="r${n}" class="center">Mueve el control para cargar la batería</label>
+<input id="r${n}" type="range" min="0" max="10" step="1" value="${set?v:5}" class="${set?'':'unset'}" data-range="${path}" data-num="${n}">
+<div class="scale"><span>0 Nada</span><span>5 A veces</span><span>10 Mucha</span></div>
+${v==='skip'?'<p class="helper">Marcaste «Prefiero no responder». Si cambias de idea, mueve el control.</p>':''}
+<p class="helper">La carga describe cómo te sientes hoy frente a esto. No mide cuánto vales.</p>`+
+actions(b('Anterior','back','secondary'),b('Prefiero no responder','confSkip','ghost')+b(i<CONF.length-1?'Siguiente':'Continuar','next'))},
+
+historias(){const i=S.sceneIdx,s=SCENES[i],a=S.scenes[i],anim=!a.seen&&!reduceMotion();
+const opts=a.order.map(k=>`<button type="button" class="opt" aria-pressed="${a.choice===k}" data-act="scene" data-i="${k}" data-fid="sc-${i}-${k}">${esc(s.c[k])}</button>`).join('')+
+`<button type="button" class="opt" aria-pressed="${a.choice===-1}" data-act="scene" data-i="-1" data-fid="sc-${i}-o">Otra cosa</button>`;
+return head('Misión 4: historias','¿Qué harías tú?')+
+`<p class="count">Historia ${i+1} de ${SCENES.length}: ${s.t}</p>${chatHTML(i,anim)}
+<div class="after-chat ${anim?'pending':''}">
+<div class="grid two" role="group" aria-label="Posibles reacciones">${opts}</div>
+${a.choice===-1?inp(`scenes.${i}.other`,'¿Qué harías?','Escríbelo con tus palabras',140):''}
+<details class="deeper" ${a.thought||a.feeling?'open':''}><summary>Si quieres, ve un poco más allá</summary>
+${inp(`scenes.${i}.thought`,'¿Qué pasaría por tu cabeza?','Por ejemplo: «seguro piensan que…»',160)}
+${inp(`scenes.${i}.feeling`,'¿Qué sentirías? ¿Dónde lo notarías en el cuerpo?','',160)}
+</details>
+<div id="care"></div>
+<p class="helper">Todas estas reacciones le pasan a mucha gente. Lo interesante es conversar por qué elegiste la tuya.</p></div>`+
+actions(b('Anterior','back','secondary'),b('Saltar esta historia','sceneSkip','ghost')+b(i<SCENES.length-1?'Siguiente historia':'Continuar','next'))},
+
+red(){const empty=!S.network.length,warn=S.netNoteShown&&empty;return head('Misión 5: tu gente','¿Quiénes están de tu lado?')+
+`<p>Pon en el mapa a las personas con las que puedes hablar o con quienes cuentas. No hace falta escribir nombres: basta con «mi abuela», «un profe» o «amiga del básquetbol». Después puedes arrastrarlas para acercarlas o alejarlas.</p>
+<div class="netwrap">${netSVG()}
+<div class="netform">
+<label for="pRole">Persona</label><input type="text" id="pRole" maxlength="28" placeholder="Por ejemplo: mi tía" data-fid="prole">
+<label for="pRing">¿Qué tan cerca la sientes?</label>
+<select id="pRing">${RINGS.map((r,k)=>`<option value="${k+1}">${r}</option>`).join('')}</select>
+<button type="button" class="secondary" data-act="addPerson">Agregar al mapa</button>
+${S.network.length?`<ul class="plist">${S.network.map((p,k)=>`<li><span>${esc(p.role)} <small>(${RINGS[p.ring-1].toLowerCase()})</small></span><span>
+${p.ring>1?`<button type="button" class="link" data-act="ring" data-i="${k}" data-d="-1" data-fid="rg-${k}-a">Acercar</button>`:''}
+${p.ring<3?`<button type="button" class="link" data-act="ring" data-i="${k}" data-d="1" data-fid="rg-${k}-b">Alejar</button>`:''}
+<button type="button" class="link" data-act="delPerson" data-i="${k}" aria-label="Quitar ${esc(p.role)}">Quitar</button></span></li>`).join('')}</ul>`:''}
+</div></div>
+${warn?`<div class="note" role="status" tabindex="-1" data-fid="netnote"><p>A veces cuesta pensar en alguien, y eso le pasa a más gente de la que parece. Es un buen tema para conversar con tu psicólogo o psicóloga: entre los dos pueden pensar quién podría estar en tu mapa.</p></div>`:''}
+${ta('wish','¿Qué te gustaría que los demás entendieran mejor de ti?','Si quieres, cuéntalo aquí…')}
+<div id="care"></div>`+actions(b('Volver','back','secondary'),b('Saltar misión','skip','ghost')+b(warn?'Seguir de todas formas':'Continuar','next'))},
+
+importa(){return head('Misión 6: brújula','Lo que te importa de verdad')+
+`<p>Elige hasta tres cosas que para ti tienen mucho valor. Son como el norte de tu brújula.</p>
+${picks('values','values',3)}
+${S.values.includes('Otra')?inp('valueOther','¿Qué otra cosa?','Escríbela aquí',40):''}
+${ta('valueWhy','Piensa en una persona, una causa o algo que quieras lograr. ¿Por qué o por quién vale la pena esforzarte?','Puede ser algo grande o algo de todos los días.')}
+<div id="care"></div>`+actions(b('Volver','back','secondary'),b('Saltar misión','skip','ghost')+b('Continuar','next'))},
+
+mensaje(){return head('Misión 7: cápsula del tiempo','Un mensaje para ti, dentro de un mes')+
+`<p>Escribe algo que quieras leer en un mes. Cuando lo selles, la cápsula queda guardada hasta tu próxima sesión.</p>
+<div class="capsule" id="capsule">${ta('message','Mi mensaje','Querido yo del futuro: me gustaría que te acordaras de que…')}</div>
+<div class="sealed gone" id="sealed" role="status"><span class="env" aria-hidden="true">✉️</span>Cápsula sellada</div>
+<p class="helper">También puedes dejarla en blanco.</p>
+<div id="care"></div>`+actions(b('Volver','back','secondary'),b('Saltar misión','skip','ghost')+b('Sellar cápsula','seal'))},
+
+pausa(){return head('Antes de terminar','Un minuto para bajar las revoluciones')+
+`<p>Algunas preguntas pueden mover emociones. Sigue el círculo: toma aire mientras crece y suéltalo despacio mientras se achica. Son tres respiraciones.</p>
+<div class="breathbox"><div class="breath" id="breath"></div><div class="breathtxt" id="breathTxt" aria-live="polite">${S.breathDone?'Listo':'Cuando quieras'}</div></div>
+<p class="center"><button type="button" class="secondary" id="breathBtn" data-act="breathe">${S.breathDone?'Repetir':'Empezar'}</button></p>
+<h2>¿Y ahora, cómo está tu clima por dentro?</h2>
+${meter('moodPost')}${emoNames('moodPost')}`+
+actions(b('Volver','back','secondary'),b('Ver mi bitácora','next'))},
+
+cierre(){
+const st=realList(S.strengths,S.strengthOther),vl=realList(S.values,S.valueOther);
+const tags=a=>`<div class="chips">${a.map(x=>`<span class="chip" aria-pressed="true">${esc(x)}</span>`).join('')}</div>`;
+const mood=m=>m.pt?`${QUAD[quadOf(m.pt)].name}${m.emos.length?': '+esc(m.emos.join(', ')):''}`:'sin marcar';
+return head('Bitácora completa',S.alias?`${esc(S.alias)}, gracias por darte este tiempo`:'Gracias por darte este tiempo')+
+`<p>Lo que sientes va cambiando con los días. Y tu valor no depende de acertar siempre.</p>
+<div class="card"><h2>Tus insignias</h2>${badgesHTML()}</div>
+${S.moodPre.pt||S.moodPost.pt?`<div class="card radarcard">${miniMeter()}<div><h2>Tu clima: antes y después</h2><p>○ Al empezar: ${mood(S.moodPre)}</p><p>● Al terminar: ${mood(S.moodPost)}</p></div></div>`:''}
+<div class="card"><h2>Tu constelación</h2>${st.length?constellation():'<p>Todavía la estás descubriendo, y eso está bien.</p>'}</div>
+${vl.length?`<div class="card"><h2>Tu brújula</h2>${tags(vl)}</div>`:''}
+${S.message.trim()?`<div class="card"><h2>Tu cápsula del tiempo</h2><blockquote>${esc(S.message)}</blockquote></div>`:''}
+<div class="card"><h2>Tus baterías de confianza</h2>${confBars()}<p class="helper">Es un mapa para conversar, no un puntaje.</p></div>
+${ta('surprise','¿Hubo algo de tus respuestas que te sorprendió?','')}
+<div id="care"></div>`+actions(b('Empezar de nuevo','reset','secondary'),b('Ver informe completo','next'))},
+
+compartir(){S.share={emociones:true,fortalezas:true,confianza:true,historias:true,red:true,importa:true,mensaje:true,cierre:true};return head('Informe','Tu bitácora completa')+
+`<p>Tu psicólogo o psicóloga podrá revisar todas las respuestas registradas, incluso las preguntas que preferiste dejar en blanco. Este resumen es para que también puedas revisarlas e imprimirlas.</p><h2 style="margin-top:22px">Resumen completo</h2><div class="preview" id="preview">${summaryHTML()}</div>`+
+actions(b('Volver','back','secondary'),b('Imprimir resumen','print'))}
+};
+
+function sceneAnswer(i){const a=S.scenes[i];if(a.skipped)return 'Prefirió saltarla';if(a.choice===null)return 'Sin respuesta';if(a.choice===-1)return 'Otra: '+(a.other.trim()||'sin detalle');return SCENES[i].c[a.choice]}
+function moodText(m){if(!m.pt)return 'sin marcar';return `${QUAD[quadOf(m.pt)].name} (energía ${sc5(m.pt.y)}, agrado ${sc5(m.pt.x)}, en escala de −5 a 5)${m.emos.length?'. Palabras: '+esc(m.emos.join(', ')):''}`}
+
+function summaryHTML(){S.share={emociones:true,fortalezas:true,confianza:true,historias:true,red:true,importa:true,mensaje:true,cierre:true};
+  const sk=k=>S.skipped[k]?'<p><em>Prefirió saltar esta misión.</em></p>':'';
+  const q=t=>t&&t.trim()?`«${esc(t.trim())}»`:'';
+  let h=`<h3>${S.alias?esc(S.alias):'Sin apodo'} · ${new Date().toLocaleDateString('es-CL')}</h3>`;
+  if(!Object.values(S.share).some(Boolean))return h+'<p>No marcaste ninguna parte para compartir.</p>';
+  if(S.share.emociones){h+=`<h3>Clima por dentro</h3>${sk('emociones')}${miniMeter()}<p>Al empezar: ${moodText(S.moodPre)}.${S.moodPre.body.length?' En el cuerpo: '+esc(S.moodPre.body.join(', '))+'.':''}</p>${S.moodPre.why.trim()?`<p>Contó: ${q(S.moodPre.why)}</p>`:''}<p>Al terminar: ${moodText(S.moodPost)}.</p>`}
+  if(S.share.fortalezas){const st=realList(S.strengths,S.strengthOther);h+=`<h3>Fortalezas</h3>${sk('fortalezas')}<p>${st.length?esc(st.join(', ')):'No eligió ninguna por ahora.'}</p>${S.strengthExample.trim()?`<p>Ejemplo: ${q(S.strengthExample)}</p>`:''}`}
+  if(S.share.confianza){h+=`<h3>Baterías de confianza</h3>${confBars()}${S.conf.some(v=>typeof v!=='number')?'<p>Las marcadas con «–» quedaron sin responder o prefirió no responderlas.</p>':''}`}
+  if(S.share.historias){h+=`<h3>Historias</h3><ul>${SCENES.map((s,i)=>{const a=S.scenes[i];return `<li><strong>${s.t}:</strong> ${esc(sceneAnswer(i))}${a.thought.trim()?`. Pensaría: ${q(a.thought)}`:''}${a.feeling.trim()?`. Sentiría: ${q(a.feeling)}`:''}</li>`}).join('')}</ul>`}
+  if(S.share.red){h+=`<h3>Mapa de personas</h3>${sk('red')}${S.network.length?`<ul>${[1,2,3].map(r=>{const ps=S.network.filter(p=>p.ring===r);return ps.length?`<li>${RINGS[r-1]}: ${esc(ps.map(p=>p.role).join(', '))}</li>`:''}).join('')}</ul>`:'<p>No ubicó personas en el mapa.</p>'}${S.wish.trim()?`<p>Le gustaría que entendieran: ${q(S.wish)}</p>`:''}`}
+  if(S.share.importa){const vl=realList(S.values,S.valueOther);h+=`<h3>Brújula</h3>${sk('importa')}<p>${vl.length?esc(vl.join(', ')):'Sin respuesta.'}</p>${S.valueWhy.trim()?`<p>Por qué o por quién: ${q(S.valueWhy)}</p>`:''}`}
+  if(S.share.mensaje){h+=`<h3>Cápsula del tiempo</h3>${sk('mensaje')}<p>${q(S.message)||'La dejó en blanco.'}</p>`}
+  if(S.share.cierre&&S.surprise.trim()){h+=`<h3>Lo que me sorprendió</h3><p>${q(S.surprise)}</p>`}
+  return h}
+
+/* insignias */
+let toastTimer=null;
+function earn(id){if(!MISSION[id]||S.badges.includes(id))return;S.badges.push(id);const [e,n]=BADGES[id];
+  const t=$('#toast');t.innerHTML=`<span class="te" aria-hidden="true">${e}</span>Insignia ganada: ${n}`;t.classList.add('show');
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2400)}
+
+/* navegación */
+function goStep(n,dir){S.step=n;const id=STEPS[n];
+  if(id==='confianza')S.confIdx=dir>0?0:CONF.length-1;
+  if(id==='historias')S.sceneIdx=dir>0?0:SCENES.length-1;
+  save();render()}
+function advance(){const id=STEPS[S.step];
+  if(id==='acuerdo'&&!S.assent)return;
+  if(id==='confianza'&&S.confIdx<CONF.length-1){S.confIdx++;save();return render()}
+  if(id==='historias'&&S.sceneIdx<SCENES.length-1){S.sceneIdx++;save();return render()}
+  if(id==='red'&&!S.network.length&&!S.netNoteShown){S.netNoteShown=true;save();return render('netnote')}
+  if(MISSION[id]){delete S.skipped[id];earn(id)}
+  if(S.step<STEPS.length-1)goStep(S.step+1,1)}
+function retreat(){const id=STEPS[S.step];
+  if(id==='confianza'&&S.confIdx>0){S.confIdx--;save();return render()}
+  if(id==='historias'&&S.sceneIdx>0){S.sceneIdx--;save();return render()}
+  if(S.step>0)goStep(S.step-1,-1)}
+
+let timers=[];
+const later=(fn,ms)=>timers.push(setTimeout(fn,ms));
+function clearTimers(){timers.forEach(clearTimeout);timers=[]}
+
+function playChat(i){const msgs=[...document.querySelectorAll('#chat .msg.pending')],ty=$('#typing'),chat=$('#chat');let k=0;
+  const step=()=>{if(k>=msgs.length)return finishChat(i);const m=msgs[k],sys=m.classList.contains('sys');
+    if(!sys){chat.appendChild(ty);ty.classList.remove('gone')}
+    later(()=>{ty.classList.add('gone');m.classList.remove('pending');m.classList.add('in');k++;later(step,sys?250:400)},sys?650:1100)};
+  later(step,350)}
+function finishChat(i){clearTimers();document.querySelectorAll('#chat .msg.pending').forEach(m=>m.classList.remove('pending'));
+  const ty=$('#typing');if(ty)ty.classList.add('gone');
+  document.querySelectorAll('.after-chat').forEach(e=>e.classList.remove('pending'));
+  const sk=document.querySelector('.chatskip');if(sk)sk.remove();
+  S.scenes[i].seen=true;save()}
+
+function startBreath(){const c=$('#breath'),t=$('#breathTxt'),btn=$('#breathBtn');if(!c)return;
+  clearTimers();btn.disabled=true;let cycle=0;
+  const inhale=()=>{t.textContent='Toma aire';c.style.transitionDuration='4s';c.style.transform='scale(1.4)';later(exhale,4000)};
+  const exhale=()=>{t.textContent='Suelta despacio';c.style.transitionDuration='6s';c.style.transform='scale(1)';
+    later(()=>{cycle++;if(cycle<3)inhale();else{t.textContent='Listo';S.breathDone=true;save();btn.disabled=false;btn.textContent='Repetir'}},6000)};
+  inhale()}
+
+function seal(){const cap=$('#capsule'),done=$('#sealed');
+  app.querySelectorAll('.actions button').forEach(x=>x.disabled=true);
+  if(reduceMotion()){advance();return}
+  cap.classList.add('sealing');later(()=>{cap.classList.add('gone');done.classList.remove('gone')},900);later(advance,1900)}
+
+function act(a,d){const id=STEPS[S.step];
+  switch(a){
+    case 'next':return advance();
+    case 'back':return retreat();
+    case 'skip':S.skipped[id]=true;earn(id);return goStep(S.step+1,1);
+    case 'toggle':{const arr=getPath(d.path),v=LISTS[d.list][+d.i],k=arr.indexOf(v);
+      if(k>=0)arr.splice(k,1);else if(arr.length<+d.max){arr.push(v);if(d.list==='strengths')S.ui.newStar=v}
+      save();render(d.fid);S.ui.newStar=null;return}
+    case 'allEmos':S.ui['all_'+d.path]=!S.ui['all_'+d.path];save();return render('meter-'+d.path);
+    case 'confSkip':S.conf[S.confIdx]='skip';return advance();
+    case 'scene':{const s=S.scenes[S.sceneIdx];s.choice=+d.i;s.skipped=false;save();return render(d.fid)}
+    case 'sceneSkip':{const s=S.scenes[S.sceneIdx];s.skipped=true;s.choice=null;return advance()}
+    case 'chatAll':return finishChat(S.sceneIdx);
+    case 'addPerson':{const r=$('#pRole'),role=r.value.trim();if(!role){r.focus();return}
+      const ring=+$('#pRing').value,same=S.network.filter(p=>p.ring===ring).length;
+      S.network.push({role,ring,ang:-Math.PI/2+.55+same*1.15});save();return render('prole')}
+    case 'ring':{const p=S.network[+d.i];p.ring=clamp(p.ring+ +d.d,1,3);save();return render('net')}
+    case 'delPerson':S.network.splice(+d.i,1);save();return render('prole');
+    case 'seal':return seal();
+    case 'breathe':return startBreath();
+    case 'reset':if(confirm('¿Empezar de nuevo? Se reemplazarán las respuestas guardadas en la plataforma.')){S=fresh();save();render()}return;
+    case 'print':return doPrint();
+    case 'json':return exportJSON();
+  }}
+
+function checkRisk(v){const box=$('#care');if(!box||box.dataset.on)return;
+  if(RISK.test(v)){box.dataset.on='1';box.innerHTML=`<div class="care" role="status"><p>Lo que escribiste suena importante, y no tienes por qué cargar con esto sin ayuda. Si quieres, puedes parar aquí y conversarlo ahora con tu psicólogo o psicóloga.</p></div>`}}
+
+function setRange(el){const v=Number(el.value);setPath(el.dataset.range,v);el.classList.remove('unset');
+  const n=document.getElementById(el.dataset.num);if(n)n.textContent=v;
+  const bt=document.querySelector(`[data-battery="${el.dataset.num}"]`);
+  if(bt){bt.querySelectorAll('span').forEach((s,k)=>s.classList.toggle('on',k<v));bt.classList.toggle('low',v<=3);bt.classList.toggle('mid',v>3&&v<=6)}
+  save()}
+
+function renderTrail(){const id=STEPS[S.step],m=MISSION[id]||0,after=S.step>STEPS.indexOf('mensaje');
+  const st=[];for(let i=1;i<=7;i++)st.push(after||i<m?'done':i===m?'now':'');
+  $('#trail').innerHTML=st.map((s,i)=>(i?`<span class="seg ${st[i-1]==='done'&&s!==''?'done':''}"></span>`:'')+`<span class="dot ${s}" aria-hidden="true">${i+1}</span>`).join('');
+  $('#stage').textContent=m?`Misión ${m} de 7`:(S.step<2?'Inicio':'Cierre');
+  $('#trail').setAttribute('aria-label',m?`Misión ${m} de 7`:'Avance')}
+
+function render(focusId){clearTimers();const id=STEPS[S.step];
+  app.innerHTML=V[id]();renderTrail();
+  app.querySelectorAll('[data-bind]').forEach(el=>checkRisk(el.value));
+  if(id==='historias'&&app.querySelector('#chat .msg.pending'))playChat(S.sceneIdx);
+  const el=focusId&&app.querySelector(`[data-fid="${focusId}"]`);
+  if(el){el.focus({preventScroll:false});return}
+  window.scrollTo(0,0);const h=$('#h');if(h)h.focus({preventScroll:true})}
+
+function doPrint(){$('#print').innerHTML=`<h1>Mi bitácora</h1><p>Actividad exploratoria no validada, versión 12 a 15 años. No es una prueba diagnóstica.</p>`+summaryHTML();window.print()}
+
+function exportJSON(){
+  const md=m=>m.pt?{cuadrante:QUAD[quadOf(m.pt)].name,energia:sc5(m.pt.y),agrado:sc5(m.pt.x),emociones:m.emos,...(m.body?{cuerpo:m.body}:{}),...(m.why!==undefined?{conto:m.why}:{})}:'sin marcar';
+  const o={tipo:'Actividad exploratoria no validada, versión 12 a 15 años. No es diagnóstico.',fecha:new Date().toISOString(),apodo:S.alias||null,misionesSaltadas:Object.keys(S.skipped)};
+  if(S.share.emociones)o.climaPorDentro={inicio:md(S.moodPre),final:md(S.moodPost),escala:'energía y agrado de −5 a 5'};
+  if(S.share.fortalezas)o.fortalezas={elegidas:realList(S.strengths,S.strengthOther),ejemplo:S.strengthExample};
+  if(S.share.confianza)o.confianza=CONF.map((c,i)=>({situacion:c,valor:typeof S.conf[i]==='number'?S.conf[i]:(S.conf[i]==='skip'?'prefirió no responder':'sin respuesta')}));
+  if(S.share.historias)o.historias=SCENES.map((s,i)=>({historia:s.t,reaccion:sceneAnswer(i),pensamiento:S.scenes[i].thought,sentimiento:S.scenes[i].feeling}));
+  if(S.share.red)o.mapaDePersonas={personas:S.network.map(p=>({persona:p.role,cercania:RINGS[p.ring-1]})),quisieraQueEntendieran:S.wish};
+  if(S.share.importa)o.brujula={valores:realList(S.values,S.valueOther),porQueOPorQuien:S.valueWhy};
+  if(S.share.mensaje)o.capsula=S.message;
+  if(S.share.cierre)o.loQueLeSorprendio=S.surprise;
+  const blob=new Blob([JSON.stringify(o,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='bitacora_autoconocimiento.json';
+  document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1500)}
+
+/* arrastre: cuadro de emociones y mapa de personas */
+function toSvg(svg,e){const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;const m=svg.getScreenCTM();return m?p.matrixTransform(m.inverse()):{x:0,y:0}}
+let drag=null;
+function meterMove(e){const q=toSvg(drag.svg,e),m=getPath(drag.path);
+  m.pt={x:clamp(q.x/150-1),y:clamp(1-q.y/150)};
+  const pin=drag.svg.querySelector('.pin');pin.style.display='';pin.setAttribute('transform',`translate(${(m.pt.x+1)*150},${(1-m.pt.y)*150})`)}
+const app=$('#app');
+app.addEventListener('pointerdown',e=>{
+  const ms=e.target.closest('svg[data-meter]');
+  if(ms){drag={type:'meter',svg:ms,path:ms.dataset.meter};ms.setPointerCapture(e.pointerId);meterMove(e);e.preventDefault();return}
+  const pg=e.target.closest('.pg');
+  if(pg){drag={type:'person',svg:pg.ownerSVGElement,g:pg,i:+pg.dataset.person,ox:+pg.dataset.x,oy:+pg.dataset.y};pg.classList.add('dragging');drag.svg.setPointerCapture(e.pointerId);e.preventDefault()}});
+app.addEventListener('pointermove',e=>{if(!drag)return;
+  if(drag.type==='meter')return meterMove(e);
+  const q=toSvg(drag.svg,e);drag.g.setAttribute('transform',`translate(${q.x-drag.ox},${q.y-drag.oy})`)});
+function endDrag(e){if(!drag)return;const d=drag;drag=null;
+  if(d.type==='meter'){save();return render('meter-'+d.path)}
+  const q=toSvg(d.svg,e),dx=q.x-170,dy=q.y-170,dist=Math.hypot(dx,dy),p=S.network[d.i];
+  if(Math.hypot(q.x-d.ox,q.y-d.oy)>6){p.ring=dist<=62?1:dist<=112?2:3;p.ang=Math.atan2(dy,dx)}
+  save();render('net')}
+app.addEventListener('pointerup',endDrag);
+app.addEventListener('pointercancel',endDrag);
+
+/* eventos generales */
+app.addEventListener('click',e=>{const el=e.target.closest('[data-act]');if(el&&!el.disabled)act(el.dataset.act,el.dataset);
+  if(e.target.matches('input[type=range]'))setRange(e.target)});
+app.addEventListener('input',e=>{const el=e.target;
+  if(el.dataset.bind){setPath(el.dataset.bind,el.value);save();checkRisk(el.value)}
+  if(el.dataset.range)setRange(el)});
+app.addEventListener('change',e=>{const el=e.target;
+  if(el.id==='assent'){S.assent=el.checked;save();const n=app.querySelector('[data-act="next"]');if(n)n.disabled=!el.checked}
+  if(el.dataset.share){S.share[el.dataset.share]=el.checked;save();$('#preview').innerHTML=summaryHTML()}});
+app.addEventListener('keydown',e=>{
+  if(e.target.id==='pRole'&&e.key==='Enter'){e.preventDefault();return act('addPerson',{})}
+  const ms=e.target.closest&&e.target.closest('svg[data-meter]');
+  const dirs={ArrowLeft:[-.1,0],ArrowRight:[.1,0],ArrowUp:[0,.1],ArrowDown:[0,-.1]};
+  if(ms&&dirs[e.key]){e.preventDefault();const m=getPath(ms.dataset.meter),pt=m.pt||{x:0,y:0};
+    m.pt={x:clamp(+(pt.x+dirs[e.key][0]).toFixed(2)),y:clamp(+(pt.y+dirs[e.key][1]).toFixed(2))};save();render('meter-'+ms.dataset.meter)}});
+
+render();
+</script>
+</body>
+</html>

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { createMeetEvent } from '@/lib/google-meet'
+import { z } from 'zod'
 
 export async function GET(req: NextRequest) {
   const session = await auth()
@@ -79,7 +81,17 @@ export async function POST(req: NextRequest) {
   const session = await auth()
   if (!session?.user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
-  const { therapistId, scheduledAt, sessionType } = await req.json()
+  if (session.user.role !== 'PATIENT') return NextResponse.json({ error: 'Solo pacientes pueden reservar' }, { status: 403 })
+  if (req.headers.get('origin') !== new URL(req.url).origin) return NextResponse.json({ error: 'Origen no autorizado' }, { status: 403 })
+  const parsed = z.object({ therapistId: z.string().uuid(), scheduledAt: z.string(), sessionType: z.enum(['VIDEO', 'CHAT', 'HYBRID']).optional() }).safeParse(await req.json().catch(() => null))
+  if (!parsed.success || !Number.isFinite(Date.parse(parsed.data.scheduledAt))) return NextResponse.json({ error: 'Datos de reserva inválidos' }, { status: 400 })
+  const { therapistId, scheduledAt, sessionType } = parsed.data
+  const when = new Date(scheduledAt)
+  if (when <= new Date() || when.getTime() > Date.now() + 365 * 86400000) return NextResponse.json({ error: 'Fecha fuera de rango' }, { status: 400 })
+  const therapist = await prisma.user.findFirst({ where: { id: therapistId, role: 'THERAPIST', isActive: true }, select: { id: true } })
+  if (!therapist) return NextResponse.json({ error: 'Terapeuta no disponible' }, { status: 400 })
+  const collision = await prisma.appointment.count({ where: { therapistId, status: { in: ['PENDING','CONFIRMED'] }, scheduledAt: { gte: new Date(when.getTime()-59*60000), lte: new Date(when.getTime()+59*60000) } } })
+  if (collision) return NextResponse.json({ error: 'Horario ya reservado' }, { status: 409 })
 
   // Check if this is the patient first session ever
   const citasExistentes = await prisma.appointment.count({
@@ -118,5 +130,16 @@ export async function POST(req: NextRequest) {
     })
   }
 
-  return NextResponse.json({ appointment, esPrimeraSesion }, { status: 201 })
+  let meetStatus: 'created' | 'pending' | 'not-applicable' = 'not-applicable'
+  if (status === 'CONFIRMED' && sessionType !== 'CHAT') {
+    try {
+      const meet = await createMeetEvent(appointment)
+      await prisma.appointment.update({ where: { id: appointment.id }, data: { dailyRoomUrl: meet.url, dailyRoomName: meet.eventId } })
+      meetStatus = 'created'
+    } catch (error) {
+      console.error('Meet event pending:', error instanceof Error ? error.message : 'unknown')
+      meetStatus = 'pending'
+    }
+  }
+  return NextResponse.json({ appointment, esPrimeraSesion, meetStatus }, { status: 201 })
 }

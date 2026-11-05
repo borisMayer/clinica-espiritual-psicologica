@@ -384,3 +384,23 @@ model SessionNote {
 
   @@map("session_notes")
 }
+
+// Mi Universo: actividades exploratorias; no generan diagnósticos.
+model MiUniversoEvaluation {
+ id String @id @default(uuid())
+ code String
+ clinicianId String
+ tokenHash String @unique
+ status String @default("ACTIVE")
+ step Int @default(0)
+ encryptedAnswers String @db.Text
+ consentAt DateTime?
+ assentAt DateTime?
+ expiresAt DateTime
+ completedAt DateTime?
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ @@index([clinicianId, createdAt])
+ @@index([status, expiresAt])
+ @@map("mi_universo_evaluations")
+}

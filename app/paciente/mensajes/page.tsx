@@ -1,13 +1,16 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import { usePortalLocale } from '@/lib/use-portal-locale'
 
 type Message = {
   id: string; content: string; sentAt: string; status: string
-  sender: { id: string; name: string; role: string }
+  sender: { id: string; name: string; role: string }; receiver: { id: string; name: string; role: string }
 }
 type Terapeuta = { id: string; name: string }
 
 export default function MensajesPage() {
+ const lang=usePortalLocale()
+ const tr=(es:string,en:string)=>lang==='en'?en:es
   const [messages, setMessages] = useState<Message[]>([])
   const [terapeutas, setTerapeutas] = useState<Terapeuta[]>([])
   const [selectedTerapeuta, setSelectedTerapeuta] = useState('')
@@ -47,21 +50,21 @@ export default function MensajesPage() {
   }
 
   const filtered = messages.filter(m =>
-    m.sender.id === selectedTerapeuta || m.sender.id === userId
+    (m.sender.id === selectedTerapeuta && m.receiver?.id === userId) || (m.sender.id === userId && m.receiver?.id === selectedTerapeuta)
   )
 
   return (
     <div className="flex flex-col h-[calc(100vh-120px)]">
       <div className="mb-6">
-        <h1 style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold text-[#1a2e1e]">Mensajes</h1>
-        <p className="text-[#8a9b8e] text-sm mt-1">Comunicación segura con tu terapeuta</p>
+        <h1 style={{fontFamily:'Georgia,serif'}} className="text-3xl font-bold text-[#1a2e1e]">{tr("Mensajes","Messages")}</h1>
+        <p className="text-[#8a9b8e] text-sm mt-1">{tr("Comunicación segura con tu terapeuta","Secure communication with your therapist")}</p>
       </div>
 
       {terapeutas.length === 0 ? (
         <div className="flex-1 bg-white rounded-2xl border border-[#e8dfd0] flex items-center justify-center">
           <div className="text-center">
             <div className="text-4xl mb-4">💬</div>
-            <p className="text-[#8a9b8e] text-sm">No tienes terapeutas asignados aún.</p>
+            <p className="text-[#8a9b8e] text-sm">{tr('No tienes terapeutas asignados aún.','You have no assigned therapists yet.')}</p>
           </div>
         </div>
       ) : (
@@ -86,7 +89,7 @@ export default function MensajesPage() {
               </div>
               <div>
                 <p className="font-semibold text-[#1a2e1e] text-sm">{terapeutas.find(t => t.id === selectedTerapeuta)?.name}</p>
-                <p className="text-[#8a9b8e] text-xs">Terapeuta · Mensajes encriptados</p>
+                <p className="text-[#8a9b8e] text-xs">{tr('Terapeuta · Mensajería privada','Therapist · Private messaging')}</p>
               </div>
             </div>
           )}
@@ -94,11 +97,11 @@ export default function MensajesPage() {
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-5 space-y-4">
             {loading ? (
-              <div className="text-center py-8 text-[#8a9b8e] text-sm">Cargando mensajes...</div>
+              <div className="text-center py-8 text-[#8a9b8e] text-sm">{tr('Cargando mensajes...','Loading messages...')}</div>
             ) : filtered.length === 0 ? (
               <div className="text-center py-12">
                 <div className="text-3xl mb-3">💬</div>
-                <p className="text-[#8a9b8e] text-sm">No hay mensajes aún. Inicia la conversación.</p>
+                <p className="text-[#8a9b8e] text-sm">{tr("No hay mensajes aún. Inicia la conversación.","No messages yet. Start the conversation.")}</p>
               </div>
             ) : (
               filtered.map(m => {
@@ -115,7 +118,7 @@ export default function MensajesPage() {
                         {m.content}
                       </div>
                       <span className="text-[#b0a898] text-xs mt-1 px-1">
-                        {new Date(m.sentAt).toLocaleTimeString('es', { hour:'2-digit', minute:'2-digit' })}
+                        {new Date(m.sentAt).toLocaleTimeString(lang==='en'?'en-US':'es-CL', { hour:'2-digit', minute:'2-digit' })}
                       </span>
                     </div>
                   </div>
@@ -129,12 +132,12 @@ export default function MensajesPage() {
           <form onSubmit={handleSend} className="flex gap-3 p-4 border-t border-[#e8dfd0]">
             <input
               value={text} onChange={e => setText(e.target.value)}
-              placeholder="Escribe un mensaje..."
+              placeholder={tr("Escribe un mensaje...","Write a message...")}
               className="flex-1 px-4 py-2.5 border border-[#e8dfd0] rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#4a7c59]"
             />
             <button type="submit" disabled={!text.trim() || sending}
               className="bg-[#4a7c59] text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-[#3d6849] transition-colors disabled:opacity-50">
-              {sending ? '...' : 'Enviar'}
+              {sending ? '...' : tr('Enviar','Send')}
             </button>
           </form>
         </div>
